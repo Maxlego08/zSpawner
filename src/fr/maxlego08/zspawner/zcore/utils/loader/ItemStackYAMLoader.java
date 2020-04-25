@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.loader;
+package fr.maxlego08.zspawner.zcore.utils.loader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +11,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import fr.maxlego08.template.exceptions.ItemEnchantException;
-import fr.maxlego08.template.exceptions.ItemFlagException;
-import fr.maxlego08.template.zcore.logger.Logger;
-import fr.maxlego08.template.zcore.logger.Logger.LogType;
-import fr.maxlego08.template.zcore.utils.ZUtils;
+import fr.maxlego08.zspawner.exceptions.ItemEnchantException;
+import fr.maxlego08.zspawner.exceptions.ItemFlagException;
+import fr.maxlego08.zspawner.zcore.logger.Logger;
+import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
+import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
 public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
 

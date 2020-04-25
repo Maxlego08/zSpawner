@@ -1,10 +1,10 @@
-package fr.maxlego08.template.zcore.utils.storage;
+package fr.maxlego08.zspawner.zcore.utils.storage;
 
 import java.io.File;
 import java.lang.reflect.Type;
 
-import fr.maxlego08.template.zcore.ZPlugin;
-import fr.maxlego08.template.zcore.logger.Logger.LogType;
+import fr.maxlego08.zspawner.zcore.ZPlugin;
+import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 
 public class Persist {
 

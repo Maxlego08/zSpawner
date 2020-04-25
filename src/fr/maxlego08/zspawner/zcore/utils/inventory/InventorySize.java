@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.inventory;
+package fr.maxlego08.zspawner.zcore.utils.inventory;
 
 public enum InventorySize {
 

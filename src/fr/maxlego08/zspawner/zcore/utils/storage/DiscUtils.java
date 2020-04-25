@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.storage;
+package fr.maxlego08.zspawner.zcore.utils.storage;
 
 import java.io.File;
 import java.io.FileInputStream;

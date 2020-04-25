@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.loader;
+package fr.maxlego08.zspawner.zcore.utils.loader;
 
 import java.util.List;
 
@@ -6,8 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.material.MaterialData;
 
-import fr.maxlego08.template.zcore.utils.ZUtils;
-import fr.maxlego08.template.zcore.utils.inventory.Button;
+import fr.maxlego08.zspawner.zcore.utils.ZUtils;
+import fr.maxlego08.zspawner.zcore.utils.inventory.Button;
 
 @SuppressWarnings("deprecation")
 public class ButtonLoader extends ZUtils implements Loader<Button> {

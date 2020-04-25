@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.plugins;
+package fr.maxlego08.zspawner.zcore.utils.plugins;
 
 public enum Plugins {
 

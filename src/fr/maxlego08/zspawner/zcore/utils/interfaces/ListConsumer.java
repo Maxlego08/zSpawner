@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.interfaces;
+package fr.maxlego08.zspawner.zcore.utils.interfaces;
 
 import java.util.Collection;
 

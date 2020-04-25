@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.players;
+package fr.maxlego08.zspawner.zcore.utils.players;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,8 +10,8 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
-import fr.maxlego08.template.zcore.ZPlugin;
-import fr.maxlego08.template.zcore.utils.interfaces.StringConsumer;
+import fr.maxlego08.zspawner.zcore.ZPlugin;
+import fr.maxlego08.zspawner.zcore.utils.interfaces.StringConsumer;
 
 public class BarApi {
 

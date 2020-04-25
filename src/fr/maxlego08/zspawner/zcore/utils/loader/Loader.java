@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.loader;
+package fr.maxlego08.zspawner.zcore.utils.loader;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 

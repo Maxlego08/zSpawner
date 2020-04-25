@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.players;
+package fr.maxlego08.zspawner.zcore.utils.players;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

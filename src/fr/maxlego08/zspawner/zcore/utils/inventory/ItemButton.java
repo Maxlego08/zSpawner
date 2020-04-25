@@ -1,4 +1,4 @@
-package fr.maxlego08.template.zcore.utils.inventory;
+package fr.maxlego08.zspawner.zcore.utils.inventory;
 
 import java.util.Arrays;
 import java.util.function.Consumer;
@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import fr.maxlego08.template.zcore.utils.builder.ItemBuilder;
+import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
 public class ItemButton {
 
