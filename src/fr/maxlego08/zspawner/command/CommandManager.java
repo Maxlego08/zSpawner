@@ -15,7 +15,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import fr.maxlego08.zspawner.Template;
+import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
@@ -25,10 +25,10 @@ import fr.maxlego08.zspawner.zcore.utils.commands.CommandType;
 
 public class CommandManager extends ZUtils implements CommandExecutor {
 
-	private final Template main;
+	private final ZSpawnerPlugin main;
 	private final List<VCommand> commands = new ArrayList<VCommand>();
 
-	public CommandManager(Template template) {
+	public CommandManager(ZSpawnerPlugin template) {
 		this.main = template;
 	}
 

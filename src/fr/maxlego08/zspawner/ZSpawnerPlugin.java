@@ -4,7 +4,6 @@ import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
 import fr.maxlego08.zspawner.listener.AdapterListener;
 import fr.maxlego08.zspawner.save.Config;
-import fr.maxlego08.zspawner.scoreboard.ScoreBoardManager;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
 
@@ -15,7 +14,7 @@ import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
  * @author Maxlego08
  *
  */
-public class Template extends ZPlugin {
+public class ZSpawnerPlugin extends ZPlugin {
 
 	@Override
 	public void onEnable() {
@@ -28,7 +27,7 @@ public class Template extends ZPlugin {
 			return;
 		inventoryManager = InventoryManager.getInstance();
 
-		scoreboardManager = new ScoreBoardManager(1000);
+//		scoreboardManager = new ScoreBoardManager(1000);
 		
 		/* Add Listener */
 

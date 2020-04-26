@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.maxlego08.zspawner.Template;
+import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.exceptions.InventoryOpenException;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
@@ -21,7 +21,7 @@ import fr.maxlego08.zspawner.zcore.utils.inventory.ItemButton;
 public abstract class VInventory extends ZUtils implements Cloneable{
 
 	protected int id;
-	protected Template plugin;
+	protected ZSpawnerPlugin plugin;
 	protected Map<Integer, ItemButton> items = new HashMap<Integer, ItemButton>();
 	protected Player player;
 	protected int page;
@@ -166,7 +166,7 @@ public abstract class VInventory extends ZUtils implements Cloneable{
 		return guiName;
 	}
 
-	protected InventoryResult preOpenInventory(Template main, Player player, int page, Object... args) throws InventoryOpenException{
+	protected InventoryResult preOpenInventory(ZSpawnerPlugin main, Player player, int page, Object... args) throws InventoryOpenException{
 		
 		this.page = page;
 		this.args = args;
@@ -176,11 +176,11 @@ public abstract class VInventory extends ZUtils implements Cloneable{
 		return openInventory(main, player, page, args);
 	}
 	
-	public abstract InventoryResult openInventory(Template main, Player player, int page, Object... args) throws InventoryOpenException;
+	public abstract InventoryResult openInventory(ZSpawnerPlugin main, Player player, int page, Object... args) throws InventoryOpenException;
 
-	protected abstract void onClose(InventoryCloseEvent event, Template plugin, Player player);
+	protected abstract void onClose(InventoryCloseEvent event, ZSpawnerPlugin plugin, Player player);
 
-	protected abstract void onDrag(InventoryDragEvent event, Template plugin, Player player);
+	protected abstract void onDrag(InventoryDragEvent event, ZSpawnerPlugin plugin, Player player);
 
 	@Override
 	protected VInventory clone()  {

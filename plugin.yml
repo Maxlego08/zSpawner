@@ -1,5 +1,5 @@
-name: TemplatePlugin
+name: zSpawner
 author: Maxlego08
-main: fr.maxlego08.template.Template
-version: 0.0.2.2
+main: fr.maxlego08.zspawner.ZSpawnerPlugin
+version: DEV-3.0.0.0
 commands:

@@ -7,7 +7,7 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.maxlego08.zspawner.Template;
+import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
 import fr.maxlego08.zspawner.zcore.utils.commands.Arguments;
 import fr.maxlego08.zspawner.zcore.utils.commands.CommandType;
@@ -304,7 +304,7 @@ public abstract class VCommand extends Arguments {
 		return parent == null ? defaultParent : parent.parentCount(defaultParent + 1);
 	}
 
-	public CommandType prePerform(Template main, CommandSender commandSender, String[] args) {
+	public CommandType prePerform(ZSpawnerPlugin main, CommandSender commandSender, String[] args) {
 
 		// On met à jour le nombre d'argument en fonction du nombre de parent
 
@@ -348,7 +348,7 @@ public abstract class VCommand extends Arguments {
 	/**
 	 * method that allows you to execute the command
 	 */
-	protected abstract CommandType perform(Template main);
+	protected abstract CommandType perform(ZSpawnerPlugin main);
 
 	public boolean sameSubCommands() {
 		if (parent == null)

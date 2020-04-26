@@ -27,16 +27,16 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import fr.maxlego08.zspawner.Template;
+import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
 @SuppressWarnings("deprecation")
 public class AdapterListener extends ZUtils implements Listener {
 
-	private final Template template;
+	private final ZSpawnerPlugin template;
 
-	public AdapterListener(Template template) {
+	public AdapterListener(ZSpawnerPlugin template) {
 		this.template = template;
 	}
 

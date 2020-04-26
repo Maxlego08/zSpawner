@@ -2,15 +2,15 @@ package fr.maxlego08.zspawner.zcore.utils.commands;
 
 import java.util.function.BiConsumer;
 
-import fr.maxlego08.zspawner.Template;
+import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.command.VCommand;
 
 public class ZCommand extends VCommand {
 
-	private BiConsumer<VCommand, Template> command;
+	private BiConsumer<VCommand, ZSpawnerPlugin> command;
 
 	@Override
-	public CommandType perform(Template main) {
+	public CommandType perform(ZSpawnerPlugin main) {
 		
 		if (command != null){
 			command.accept(this, main);
@@ -19,7 +19,7 @@ public class ZCommand extends VCommand {
 		return CommandType.SUCCESS;
 	}
 
-	public VCommand setCommand(BiConsumer<VCommand, Template> command) {
+	public VCommand setCommand(BiConsumer<VCommand, ZSpawnerPlugin> command) {
 		this.command = command;
 		return this;
 	}

@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import fr.maxlego08.zspawner.Template;
+import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.exceptions.InventoryOpenException;
 import fr.maxlego08.zspawner.zcore.utils.inventory.InventoryResult;
 import fr.maxlego08.zspawner.zcore.utils.inventory.InventorySize;
@@ -48,7 +48,7 @@ public abstract class PaginateInventory<T> extends VInventory {
 	}
 
 	@Override
-	public InventoryResult openInventory(Template main, Player player, int page, Object... args)
+	public InventoryResult openInventory(ZSpawnerPlugin main, Player player, int page, Object... args)
 			throws InventoryOpenException {
 
 		if (defaultSlot > inventorySize || nextSlot > inventorySize || previousSlot > inventorySize

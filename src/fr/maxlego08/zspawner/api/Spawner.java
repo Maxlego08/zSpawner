@@ -57,4 +57,10 @@ public interface Spawner {
 	 */
 	void delete();
 	
+	/**
+	 * 
+	 * @param location
+	 */
+	void place(Location location);
+	
 }

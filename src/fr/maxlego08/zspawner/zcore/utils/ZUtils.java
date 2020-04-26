@@ -33,7 +33,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permissible;
 
-import fr.maxlego08.zspawner.Template;
+import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.enums.Message;
@@ -54,7 +54,7 @@ import net.minecraft.server.v1_15_R1.PacketPlayOutTitle.EnumTitleAction;
 public abstract class ZUtils {
 
 	private static transient List<String> teleportPlayers = new ArrayList<String>();
-	protected transient Template plugin = (Template) ZPlugin.z();
+	protected transient ZSpawnerPlugin plugin = (ZSpawnerPlugin) ZPlugin.z();
 
 	/**
 	 * @param location
