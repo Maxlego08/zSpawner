@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
+import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
 import fr.maxlego08.zspawner.zcore.utils.commands.Arguments;
 import fr.maxlego08.zspawner.zcore.utils.commands.CommandType;
@@ -23,7 +24,7 @@ public abstract class VCommand extends Arguments {
 	/**
 	 * Mother command of this command
 	 */
-	private VCommand parent;
+	protected VCommand parent;
 
 	/**
 	 * Are all sub commands used
@@ -99,6 +100,10 @@ public abstract class VCommand extends Arguments {
 	 */
 	public boolean isIgnoreParent() {
 		return ignoreParent;
+	}
+
+	public List<VCommand> getSubVCommands() {
+		return subVCommands;
 	}
 
 	public CommandSender getSender() {
@@ -200,6 +205,17 @@ public abstract class VCommand extends Arguments {
 	 */
 	protected VCommand setDescription(String description) {
 		this.description = description;
+		return this;
+	}
+	
+	/**
+	 * Mettre la description de la commande
+	 * 
+	 * @param description
+	 * @return
+	 */
+	protected VCommand setDescription(Message description) {
+		this.description = description.getMessage();
 		return this;
 	}
 

@@ -1,6 +1,9 @@
 package fr.maxlego08.zspawner;
 
+import fr.maxlego08.zspawner.api.Board;
+import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.command.CommandManager;
+import fr.maxlego08.zspawner.command.commands.CommandSpawner;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
 import fr.maxlego08.zspawner.listener.AdapterListener;
 import fr.maxlego08.zspawner.save.Config;
@@ -16,6 +19,9 @@ import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
  */
 public class ZSpawnerPlugin extends ZPlugin {
 
+	private SpawnerManager spawner;
+	private Board board;
+
 	@Override
 	public void onEnable() {
 
@@ -27,16 +33,22 @@ public class ZSpawnerPlugin extends ZPlugin {
 			return;
 		inventoryManager = InventoryManager.getInstance();
 
-//		scoreboardManager = new ScoreBoardManager(1000);
-		
-		/* Add Listener */
+		board = new BoardObject();
+		spawner = new ZSpawnerManager(board, this);
 
+		/* Commands */
+		registerCommand("zspawners", new CommandSpawner(), "spawners", "spawner");
+
+		/* Add Listener */
 		addListener(new AdapterListener(this));
 		addListener(inventoryManager);
+		addListener(new SpawnerListener(spawner));
 
 		/* Add Saver */
 		addSave(Config.getInstance());
 		addSave(new CooldownBuilder());
+		addSave(board);
+		addSave(spawner);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
