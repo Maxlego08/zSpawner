@@ -12,6 +12,7 @@ import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.SpawnerManager;
+import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerOpenInventoryEvent;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.enums.Message;
@@ -109,7 +110,38 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	@Override
 	public void addSpawner(CommandSender sender, Player target, EntityType type, int number) {
-		// TODO Auto-generated method stub
+
+		PlayerSpawner playerSpawner = getPlayer(target.getUniqueId());
+
+		SpawnerAddEvent event = new SpawnerAddEvent(sender, target, playerSpawner, type, number);
+		event.callEvent();
+
+		if (event.isCancelled())
+			return;
+
+		type = event.getType();
+		number = event.getAmount();
+
+		if (number < 0)
+			return;
+
+		for (int a = 0; a < number; a++) {
+			Spawner spawner = new SpawnerObject(target.getUniqueId(), type);
+			playerSpawner.addSpawner(spawner);
+		}
+
+		String message = Message.ADD_SPAWNER_SENDER.getMessage();
+		message = message.replace("%how%", String.valueOf(number));
+		message = message.replace("%type%", name(type.name()));
+		message = message.replace("%player%", target.getName());
+		
+		message(sender, message);
+		
+		message = Message.ADD_SPAWNER_RECEIVER.getMessage();
+		message = message.replace("%how%", String.valueOf(number));
+		message = message.replace("%type%", name(type.name()));
+		
+		message(target, message);
 
 	}
 

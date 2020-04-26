@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.command.VCommand;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
@@ -27,6 +28,7 @@ import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.gson.ItemStackAdapter;
 import fr.maxlego08.zspawner.zcore.utils.gson.LocationAdapter;
+import fr.maxlego08.zspawner.zcore.utils.gson.PlayerSpawnerAdapter;
 import fr.maxlego08.zspawner.zcore.utils.gson.PotionEffectAdapter;
 import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 import fr.maxlego08.zspawner.zcore.utils.storage.Saveable;
@@ -105,6 +107,7 @@ public abstract class ZPlugin extends JavaPlugin {
 				.excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
 				.registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter())
 				.registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter())
+				.registerTypeAdapter(PlayerSpawner.class, new PlayerSpawnerAdapter())
 				.registerTypeAdapter(Location.class, new LocationAdapter());
 	}
 

@@ -32,8 +32,13 @@ public enum Message {
 	DESCRIPTION_HELP("Show commands"),
 	DESCRIPTION_RELOAD("Reload plugin"),
 	DESCRIPTION_VERSION("Show plugin version"),
+	DESCRIPTION_ADD("Add spawner to player"),
 	
-	NO_SPAWNER("§cYou have no spawners !"), PLACING_SPAWNER("§cYou already place a spawner!"),
+	NO_SPAWNER("§cYou have no spawners !"), 
+	PLACING_SPAWNER("§cYou already place a spawner!"),
+	
+	ADD_SPAWNER_SENDER("§eYou have just given x§f%how% §6%type% §espawner to §f%player%§e."),
+	ADD_SPAWNER_RECEIVER("§eYou have just received x§f%how% §6%type% §espawner."), 
 	
 	;
 

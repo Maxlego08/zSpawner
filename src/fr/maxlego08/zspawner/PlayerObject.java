@@ -1,5 +1,6 @@
 package fr.maxlego08.zspawner;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,11 +12,27 @@ import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
 public class PlayerObject extends ZUtils implements PlayerSpawner {
-	private final UUID user;
 
+	private final UUID user;
+	private final List<Spawner> spawners;
+
+	/**
+	 * 
+	 * @param user
+	 */
 	public PlayerObject(UUID user) {
+		this(user, new ArrayList<>());
+	}
+
+	/**
+	 * 
+	 * @param user
+	 * @param spawners
+	 */
+	public PlayerObject(UUID user, List<Spawner> spawners) {
 		super();
 		this.user = user;
+		this.spawners = spawners;
 	}
 
 	@Override
@@ -25,13 +42,11 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	@Override
 	public List<Spawner> getSpawners() {
-		// TODO Auto-generated method stub
-		return null;
+		return spawners;
 	}
 
 	@Override
 	public List<Spawner> getShortSpawners() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -61,8 +76,7 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	@Override
 	public void addSpawner(Spawner spawner) {
-		// TODO Auto-generated method stub
-
+		spawners.add(spawner);
 	}
 
 	@Override
