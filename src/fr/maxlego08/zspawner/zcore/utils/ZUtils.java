@@ -696,6 +696,15 @@ public abstract class ZUtils {
 	 * @param player
 	 * @param message
 	 */
+	protected void message(CommandSender player, String message, Object... args) {
+		player.sendMessage(Message.PREFIX.msg() + " " + String.format(message, args));
+	}
+
+	/**
+	 * 
+	 * @param player
+	 * @param message
+	 */
 	protected void messageWO(CommandSender player, Message message) {
 		player.sendMessage(message.msg());
 	}
@@ -760,7 +769,7 @@ public abstract class ZUtils {
 	protected void createInventory(Player player, Inventory inventory, int page, Object... objects) {
 		plugin.getInventoryManager().createInventory(inventory, player, page, objects);
 	}
-	
+
 	/**
 	 * 
 	 * @param player
@@ -1020,7 +1029,6 @@ public abstract class ZUtils {
 		else
 			return "to much";
 	}
-	
 
 	/**
 	 * Permet de conter le nombre d'item
@@ -1036,7 +1044,6 @@ public abstract class ZUtils {
 				count += itemStack.getAmount();
 		return count;
 	}
-	
 
 	protected Enchantment enchantFromString(String str) {
 		for (Enchantment enchantment : Enchantment.values())
@@ -1080,7 +1087,6 @@ public abstract class ZUtils {
 			return BlockFace.WEST;
 		}
 	}
-	
 
 	/**
 	 * 
@@ -1153,7 +1159,6 @@ public abstract class ZUtils {
 			CooldownBuilder.addCooldown(cooldown, player, timer);
 		return false;
 	}
-	
 
 	/**
 	 * @param list
@@ -1192,7 +1197,7 @@ public abstract class ZUtils {
 		}
 		return str;
 	}
-	
+
 	/**
 	 * 
 	 * @param player
@@ -1204,21 +1209,24 @@ public abstract class ZUtils {
 	 */
 	public void sendTitle(Player player, String title, String subtitle, int start, int time, int end) {
 
-//		CraftPlayer craftPlayer = (CraftPlayer) player;
-//
-//		PacketPlayOutTitle packetTimes = new PacketPlayOutTitle(start, time, end);
-//		craftPlayer.getHandle().playerConnection.sendPacket(packetTimes);
-//
-//		if (title != null) {
-//			PacketPlayOutTitle packetTitle = new PacketPlayOutTitle(EnumTitleAction.TITLE,
-//					CraftChatMessage.fromString(title)[0], start, time, end);
-//			craftPlayer.getHandle().playerConnection.sendPacket(packetTitle);
-//		}
-//
-//		if (subtitle != null) {
-//			PacketPlayOutTitle packetSubtitle = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE,
-//					CraftChatMessage.fromString(subtitle)[0], start, time, end);
-//			craftPlayer.getHandle().playerConnection.sendPacket(packetSubtitle);
-//		}
+		// CraftPlayer craftPlayer = (CraftPlayer) player;
+		//
+		// PacketPlayOutTitle packetTimes = new PacketPlayOutTitle(start, time,
+		// end);
+		// craftPlayer.getHandle().playerConnection.sendPacket(packetTimes);
+		//
+		// if (title != null) {
+		// PacketPlayOutTitle packetTitle = new
+		// PacketPlayOutTitle(EnumTitleAction.TITLE,
+		// CraftChatMessage.fromString(title)[0], start, time, end);
+		// craftPlayer.getHandle().playerConnection.sendPacket(packetTitle);
+		// }
+		//
+		// if (subtitle != null) {
+		// PacketPlayOutTitle packetSubtitle = new
+		// PacketPlayOutTitle(EnumTitleAction.SUBTITLE,
+		// CraftChatMessage.fromString(subtitle)[0], start, time, end);
+		// craftPlayer.getHandle().playerConnection.sendPacket(packetSubtitle);
+		// }
 	}
 }

@@ -29,6 +29,7 @@ public abstract class PaginateInventory<T> extends VInventory {
 	protected boolean isReverse = false;
 	protected boolean disableDefaultClick = false;
 	protected Material previousMaterial = Material.ARROW;
+	protected int maxPage;
 
 	/**
 	 * 
@@ -37,13 +38,22 @@ public abstract class PaginateInventory<T> extends VInventory {
 	 */
 	public PaginateInventory(String inventoryName, int inventorySize) {
 		super();
+
+		inventorySize = inventorySize < 18 ? 18 : inventorySize > 54 ? 54 : inventorySize;
+		inventorySize = inventorySize >= 0 && inventorySize < 9 ? 9 : inventorySize;
+		inventorySize = inventorySize > 9 && inventorySize < 18 ? 18 : inventorySize;
+		inventorySize = inventorySize > 18 && inventorySize < 27 ? 27 : inventorySize;
+		inventorySize = inventorySize > 27 && inventorySize < 36 ? 36 : inventorySize;
+		inventorySize = inventorySize > 36 && inventorySize < 45 ? 45 : inventorySize;
+		inventorySize = inventorySize > 45 && inventorySize < 54 ? 54 : inventorySize;
+
 		this.inventoryName = inventoryName;
 		this.inventorySize = inventorySize;
-		
+
 		this.paginationSize = inventorySize - 9;
-		this.nextSlot = inventorySize - 3;
-		this.previousSlot = inventorySize - 5;
-		this.infoSlot = inventorySize - 4;
+		this.nextSlot = inventorySize - 4;
+		this.previousSlot = inventorySize - 6;
+		this.infoSlot = inventorySize - 5;
 	}
 
 	public PaginateInventory(String inventoryName, InventorySize inventorySize) {
@@ -65,8 +75,11 @@ public abstract class PaginateInventory<T> extends VInventory {
 
 		collections = preOpenInventory();
 
-		super.createInventory(inventoryName.replace("%mp%", String.valueOf(getMaxPage(collections))).replace("%p%",
-				String.valueOf(page)), inventorySize);
+		maxPage = getMaxPage(collections, paginationSize);
+
+		super.createInventory(
+				inventoryName.replace("%mp%", String.valueOf(maxPage)).replace("%p%", String.valueOf(page)),
+				inventorySize);
 
 		Pagination<T> pagination = new Pagination<>();
 		AtomicInteger slot = new AtomicInteger(defaultSlot);
@@ -87,7 +100,7 @@ public abstract class PaginateInventory<T> extends VInventory {
 			addItem(slot1, button.toItemStack())
 					.setClick(event -> createInventory(player, getId(), getPage() - 1, args));
 		}
-		if (getPage() != getMaxPage(collections)) {
+		if (getPage() != maxPage) {
 			Button button = Config.buttonNext;
 			int slot1 = button.getSlot() > inventorySize ? nextSlot : button.getSlot();
 			addItem(slot1, button.toItemStack())
