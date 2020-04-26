@@ -2,11 +2,12 @@ package fr.maxlego08.zspawner.zcore.utils.gson;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
@@ -14,21 +15,22 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-import fr.maxlego08.zspawner.PlayerObject;
-import fr.maxlego08.zspawner.api.PlayerSpawner;
+import fr.maxlego08.zspawner.SpawnerObject;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 
-public class PlayerSpawnerAdapter extends TypeAdapter<PlayerSpawner> {
+public class SpawnerAdapter extends TypeAdapter<Spawner> {
 
 	private static Type seriType = new TypeToken<Map<String, Object>>() {
 	}.getType();
 
 	private final String UUIDNAME = "uuid";
-	private final String SPAWNERS = "spawners";
+	private final String UUIDOWNER = "uuid";
+	private final String LOCATION = "location";
+	private final String TYPE = "type";
 
 	@Override
-	public PlayerSpawner read(JsonReader jsonReader) throws IOException {
+	public Spawner read(JsonReader jsonReader) throws IOException {
 		if (jsonReader.peek() == JsonToken.NULL) {
 			jsonReader.nextNull();
 			return null;
@@ -37,7 +39,7 @@ public class PlayerSpawnerAdapter extends TypeAdapter<PlayerSpawner> {
 	}
 
 	@Override
-	public void write(JsonWriter jsonWriter, PlayerSpawner playerSpawner) throws IOException {
+	public void write(JsonWriter jsonWriter, Spawner playerSpawner) throws IOException {
 		if (playerSpawner == null) {
 			jsonWriter.nullValue();
 			return;
@@ -50,10 +52,12 @@ public class PlayerSpawnerAdapter extends TypeAdapter<PlayerSpawner> {
 	 * @param playerSpawner
 	 * @return
 	 */
-	private String getRaw(PlayerSpawner playerSpawner) {
+	private String getRaw(Spawner spawner) {
 		Map<String, Object> serial = new HashMap<String, Object>();
-		serial.put(UUIDNAME, playerSpawner.getUser());
-		serial.put(SPAWNERS, playerSpawner.getSpawners());
+		serial.put(UUIDNAME, spawner.getUniqueId());
+		serial.put(UUIDOWNER, spawner.getOwner());
+		serial.put(LOCATION, spawner.getLocation());
+		serial.put(TYPE, spawner.getType().name());
 		return ZPlugin.z().getGson().toJson(serial);
 	}
 
@@ -62,12 +66,13 @@ public class PlayerSpawnerAdapter extends TypeAdapter<PlayerSpawner> {
 	 * @param raw
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
-	private PlayerSpawner fromRaw(String raw) {
+	private Spawner fromRaw(String raw) {
 		Map<String, Object> keys = ZPlugin.z().getGson().fromJson(raw, seriType);
 		UUID uuid = UUID.fromString((String) keys.get(UUIDNAME));
-		List<Spawner> spawners = new ArrayList<Spawner>((List<Spawner>) keys.get(SPAWNERS));
-		return new PlayerObject(uuid, spawners);
+		UUID owner = UUID.fromString((String) keys.get(UUIDOWNER));
+		Location location = (Location) keys.get(LOCATION);
+		EntityType type = EntityType.valueOf((String) keys.get(TYPE));
+		return new SpawnerObject(uuid, type, owner, location);
 	}
 
 }

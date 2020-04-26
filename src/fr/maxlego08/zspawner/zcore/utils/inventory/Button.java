@@ -4,9 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
+import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
 @SuppressWarnings("deprecation")
 public class Button extends ZUtils {
@@ -39,7 +42,7 @@ public class Button extends ZUtils {
 	 * @param item
 	 */
 	public Button(int slot, String name, Material item) {
-		this(slot, name, item, 0);
+		this(slot, item, name, 0);
 	}
 
 	/**
@@ -49,7 +52,7 @@ public class Button extends ZUtils {
 	 * @param item
 	 * @param lore
 	 */
-	public Button(int slot, String name, Material item, String... lore) {
+	public Button(int slot, Material item, String name, String... lore) {
 		this(slot, name, item, 0, Arrays.asList(lore));
 	}
 
@@ -61,7 +64,7 @@ public class Button extends ZUtils {
 	 * @param data
 	 * @param lore
 	 */
-	public Button(int slot, String name, Material item, int data, String... lore) {
+	public Button(int slot, Material item, String name, int data, String... lore) {
 		this(slot, name, item, data, Arrays.asList(lore));
 	}
 
@@ -91,6 +94,34 @@ public class Button extends ZUtils {
 	 */
 	public List<String> getLore() {
 		return lore;
+	}
+
+	public ItemStack toItemStack() {
+
+		ItemBuilder builder = new ItemBuilder(item.getItemType(), 1, item.getData());
+
+		builder.setName(name);
+		if (lore != null)
+			builder.setLore(lore);
+
+		return builder.build();
+	}
+	
+	public ItemStack toItemStack(PlayerSpawner spawner) {
+		
+		ItemBuilder builder = new ItemBuilder(item.getItemType(), 1, item.getData());
+		
+		builder.setName(name);
+		if (lore != null)
+			lore.forEach(line -> {
+				
+				line = line.replace("%spawners%", String.valueOf(spawner.getSpawners().size()));
+				line = line.replace("%shorting%", spawner.getShort().getName());
+				builder.addLine(line);
+				
+			});
+		
+		return builder.build();
 	}
 
 }

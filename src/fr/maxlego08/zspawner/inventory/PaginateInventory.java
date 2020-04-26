@@ -9,6 +9,8 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.exceptions.InventoryOpenException;
+import fr.maxlego08.zspawner.save.Config;
+import fr.maxlego08.zspawner.zcore.utils.inventory.Button;
 import fr.maxlego08.zspawner.zcore.utils.inventory.InventoryResult;
 import fr.maxlego08.zspawner.zcore.utils.inventory.InventorySize;
 import fr.maxlego08.zspawner.zcore.utils.inventory.ItemButton;
@@ -73,12 +75,16 @@ public abstract class PaginateInventory<T> extends VInventory {
 				itemButton.setClick((event) -> onClick(tmpItem, itemButton));
 		});
 
-		if (getPage() != 1)
-			addItem(previousSlot, Material.ARROW, "§f» §7Page précédente")
+		if (getPage() != 1) {
+			Button button = Config.buttonPrevious;
+			addItem(button.getSlot(), button.toItemStack())
 					.setClick(event -> createInventory(player, getId(), getPage() - 1, args));
-		if (getPage() != getMaxPage(collections))
-			addItem(nextSlot, Material.ARROW, "§f» §7Page suivante")
+		}
+		if (getPage() != getMaxPage(collections)) {
+			Button button = Config.buttonNext;
+			addItem(button.getSlot(), button.toItemStack())
 					.setClick(event -> createInventory(player, getId(), getPage() + 1, args));
+		}
 
 		postOpenInventory();
 

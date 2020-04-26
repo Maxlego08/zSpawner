@@ -1,6 +1,7 @@
 package fr.maxlego08.zspawner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -12,8 +13,10 @@ import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.SpawnerManager;
+import fr.maxlego08.zspawner.api.enums.InventoryType;
 import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerOpenInventoryEvent;
+import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
@@ -23,8 +26,9 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	private final transient Board board;
 	private final transient ZSpawnerPlugin plugin;
+	private transient Map<UUID, PlayerSpawner> players = new HashMap<UUID, PlayerSpawner>();
 
-	private static Map<UUID, PlayerSpawner> players = new HashMap<UUID, PlayerSpawner>();
+	private static Map<UUID, List<Spawner>> spawners = new HashMap<>();
 
 	public ZSpawnerManager(Board board, ZSpawnerPlugin plugin) {
 		super();
@@ -34,12 +38,16 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	@Override
 	public void save(Persist persist) {
+		spawners = new HashMap<>();
+		players.forEach((uuid, player) -> spawners.put(uuid, player.getSpawners()));
 		persist.save(this, "spawners");
 	}
 
 	@Override
 	public void load(Persist persist) {
 		persist.loadOrSaveDefault(this, ZSpawnerManager.class, "spawners");
+		players = new HashMap<UUID, PlayerSpawner>();
+		spawners.forEach((uuid, list) -> players.put(uuid, new PlayerObject(uuid, list)));
 	}
 
 	@Override
@@ -82,14 +90,16 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 				message(player, Message.PLACING_SPAWNER);
 			else {
 
-				SpawnerOpenInventoryEvent event = new SpawnerOpenInventoryEvent(Inventory.INVENTORY_SPAWNER,
-						playerSpawner, player);
+				Inventory inventory = Config.type == InventoryType.PAGINATE ? Inventory.INVENTORY_SPAWNER_PAGINATE
+						: Inventory.INVENTORY_SPAWNER;
+
+				SpawnerOpenInventoryEvent event = new SpawnerOpenInventoryEvent(inventory, playerSpawner, player);
 				event.callEvent();
 
 				if (event.isCancelled())
 					return;
 
-				createInventory(player, Inventory.INVENTORY_SPAWNER, 1, playerSpawner);
+				createInventory(player, inventory, 1, playerSpawner);
 			}
 
 		}
@@ -134,13 +144,13 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 		message = message.replace("%how%", String.valueOf(number));
 		message = message.replace("%type%", name(type.name()));
 		message = message.replace("%player%", target.getName());
-		
+
 		message(sender, message);
-		
+
 		message = Message.ADD_SPAWNER_RECEIVER.getMessage();
 		message = message.replace("%how%", String.valueOf(number));
 		message = message.replace("%type%", name(type.name()));
-		
+
 		message(target, message);
 
 	}

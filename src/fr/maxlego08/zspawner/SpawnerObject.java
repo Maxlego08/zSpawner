@@ -1,5 +1,7 @@
 package fr.maxlego08.zspawner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -7,10 +9,12 @@ import org.bukkit.Material;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
+import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
@@ -26,6 +30,14 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		this.uuid = UUID.randomUUID();
 		this.type = type;
 		this.owner = owner;
+	}
+
+	public SpawnerObject(UUID uuid, EntityType type, UUID owner, Location location) {
+		super();
+		this.uuid = uuid;
+		this.type = type;
+		this.owner = owner;
+		this.location = location;
 	}
 
 	@Override
@@ -50,8 +62,21 @@ public class SpawnerObject extends ZUtils implements Spawner {
 
 	@Override
 	public ItemStack getItemStack() {
-		// TODO Auto-generated method stub
-		return null;
+		@SuppressWarnings("deprecation")
+		ItemStack itemStack = new ItemStack(getMaterial(383), 1, type.getTypeId());
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		List<String> lore = new ArrayList<>();
+		Config.infos.forEach(string -> {
+			lore.add(string.replace("%location%", location == null ? "" : toLocation()).replace("%type%", type.name()));
+		});
+		itemMeta.setLore(lore);
+		itemStack.setItemMeta(itemMeta);
+		return itemStack;
+	}
+
+	public String toLocation() {
+		return name(location.getWorld().getName()) + " - " + location.getBlockX() + ", " + location.getBlockY() + ", "
+				+ location.getBlockZ();
 	}
 
 	@Override
@@ -66,14 +91,14 @@ public class SpawnerObject extends ZUtils implements Spawner {
 
 	@Override
 	public void delete() {
-		if (location != null){
-			
+		if (location != null) {
+
 			SpawnerDeleteEvent event = new SpawnerDeleteEvent(this);
 			event.callEvent();
-			
+
 			if (event.isCancelled())
 				return;
-			
+
 			location.getBlock().setType(Material.AIR);
 			location = null;
 		}
@@ -81,13 +106,13 @@ public class SpawnerObject extends ZUtils implements Spawner {
 
 	@Override
 	public void place(Location location) {
-		
+
 		SpawnerPlaceEvent event = new SpawnerPlaceEvent(this);
 		event.callEvent();
-		
+
 		if (event.isCancelled())
 			return;
-		
+
 		location.getBlock().setType(getMaterial(52));
 		CreatureSpawner creatureSpawner = (CreatureSpawner) location.getBlock().getState();
 		creatureSpawner.setSpawnedType(type);
@@ -96,4 +121,12 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		this.location = location;
 	}
 
+	public int comparePlace(){
+		return isPlace() ? 1 : 0;
+	}
+	
+	public int compareNotPlace(){
+		return isPlace() ? 0 : 1;
+	}
+	
 }

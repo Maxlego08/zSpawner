@@ -50,7 +50,7 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 	}
 
 	public ItemBuilder(Material material, int amount, int data) {
-		this(material, data, amount, null);
+		this(material, amount, data, null);
 	}
 
 	public ItemBuilder(Material material, int amount, int data, String name) {
@@ -245,6 +245,10 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 	 */
 	public Map<Enchantment, Integer> getEnchantments() {
 		return enchantments;
+	}
+
+	public void setLore(List<String> lore) {
+		this.lore = lore;
 	}
 
 }

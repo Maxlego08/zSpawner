@@ -63,4 +63,8 @@ public interface Spawner {
 	 */
 	void place(Location location);
 	
+	int comparePlace();
+	
+	int compareNotPlace();
+	
 }

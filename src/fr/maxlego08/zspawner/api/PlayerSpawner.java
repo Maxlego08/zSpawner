@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
+import fr.maxlego08.zspawner.api.enums.Short;
+
 public interface PlayerSpawner {
 
 	/**
@@ -44,6 +46,17 @@ public interface PlayerSpawner {
 	 */
 	Spawner getCurrentPlacingSpawner();
 
+	/**
+	 * 
+	 * @return
+	 */
+	Short getShort();
+	
+	/**
+	 * 
+	 */
+	void toggleShort();
+	
 	/**
 	 * 
 	 * @param spawner

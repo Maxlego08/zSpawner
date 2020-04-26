@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import fr.maxlego08.zspawner.api.PlayerSpawner;
+import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.command.VCommand;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
@@ -30,6 +31,7 @@ import fr.maxlego08.zspawner.zcore.utils.gson.ItemStackAdapter;
 import fr.maxlego08.zspawner.zcore.utils.gson.LocationAdapter;
 import fr.maxlego08.zspawner.zcore.utils.gson.PlayerSpawnerAdapter;
 import fr.maxlego08.zspawner.zcore.utils.gson.PotionEffectAdapter;
+import fr.maxlego08.zspawner.zcore.utils.gson.SpawnerAdapter;
 import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 import fr.maxlego08.zspawner.zcore.utils.storage.Saveable;
 import net.milkbowl.vault.economy.Economy;
@@ -108,6 +110,7 @@ public abstract class ZPlugin extends JavaPlugin {
 				.registerTypeHierarchyAdapter(ItemStack.class, new ItemStackAdapter())
 				.registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter())
 				.registerTypeAdapter(PlayerSpawner.class, new PlayerSpawnerAdapter())
+				.registerTypeAdapter(Spawner.class, new SpawnerAdapter())
 				.registerTypeAdapter(Location.class, new LocationAdapter());
 	}
 

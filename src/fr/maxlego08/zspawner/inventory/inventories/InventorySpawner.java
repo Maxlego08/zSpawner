@@ -33,4 +33,9 @@ public class InventorySpawner extends VInventory {
 
 	}
 
+	@Override
+	protected VInventory clone() {
+		return new InventorySpawner();
+	}
+	
 }

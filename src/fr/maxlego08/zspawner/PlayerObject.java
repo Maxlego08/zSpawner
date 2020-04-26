@@ -1,6 +1,7 @@
 package fr.maxlego08.zspawner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,12 +10,15 @@ import org.bukkit.entity.EntityType;
 
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
+import fr.maxlego08.zspawner.api.enums.Short;
+import fr.maxlego08.zspawner.api.event.SpawnerShortEvent;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
 public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	private final UUID user;
 	private final List<Spawner> spawners;
+	private Short typeShort = Short.PLACE;
 
 	/**
 	 * 
@@ -47,7 +51,20 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	@Override
 	public List<Spawner> getShortSpawners() {
-		return null;
+		
+		SpawnerShortEvent event = new SpawnerShortEvent(this, typeShort);
+		event.callEvent();
+		
+		if (event.isCancelled())
+			return spawners;
+		
+		typeShort = event.getType();
+		
+		List<Spawner> currentList = new ArrayList<>(spawners);
+		
+		Collections.sort(spawners, event.getComparator());
+		
+		return currentList;
 	}
 
 	@Override
@@ -108,5 +125,16 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public Short getShort() {
+		return typeShort;
+	}
+
+	@Override
+	public void toggleShort() {
+		typeShort = typeShort.next();
+	}
+	
 
 }
