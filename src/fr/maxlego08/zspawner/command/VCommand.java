@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
+import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
 import fr.maxlego08.zspawner.zcore.utils.commands.Arguments;
@@ -25,6 +26,7 @@ public abstract class VCommand extends Arguments {
 	 * Mother command of this command
 	 */
 	protected VCommand parent;
+	protected SpawnerManager manager;
 
 	/**
 	 * Are all sub commands used
@@ -352,6 +354,8 @@ public abstract class VCommand extends Arguments {
 		if (sender instanceof Player)
 			player = (Player) commandSender;
 
+		manager = main.getSpawner();
+		
 		try {
 			return perform(main);
 		} catch (Exception e) {

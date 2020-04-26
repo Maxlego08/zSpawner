@@ -22,7 +22,7 @@ public class CommandSpawnerHelp extends VCommand {
 
 		parent.getSubVCommands().forEach(command -> {
 
-			if (command.getDescription() != null && hasPermission(sender, command.getPermission()))
+			if (command.getDescription() != null && (command.getPermission() == null || hasPermission(sender, command.getPermission())))
 				message(sender, Message.COMMAND_SYNTAXE_HELP, command.getSyntaxe(), command.getDescription());
 
 		});

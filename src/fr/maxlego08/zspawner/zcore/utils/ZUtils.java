@@ -25,8 +25,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_15_R1.util.CraftChatMessage;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -47,8 +45,6 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.HoverEvent.Action;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_15_R1.PacketPlayOutTitle;
-import net.minecraft.server.v1_15_R1.PacketPlayOutTitle.EnumTitleAction;
 
 @SuppressWarnings("deprecation")
 public abstract class ZUtils {
@@ -1208,21 +1204,21 @@ public abstract class ZUtils {
 	 */
 	public void sendTitle(Player player, String title, String subtitle, int start, int time, int end) {
 
-		CraftPlayer craftPlayer = (CraftPlayer) player;
-
-		PacketPlayOutTitle packetTimes = new PacketPlayOutTitle(start, time, end);
-		craftPlayer.getHandle().playerConnection.sendPacket(packetTimes);
-
-		if (title != null) {
-			PacketPlayOutTitle packetTitle = new PacketPlayOutTitle(EnumTitleAction.TITLE,
-					CraftChatMessage.fromString(title)[0], start, time, end);
-			craftPlayer.getHandle().playerConnection.sendPacket(packetTitle);
-		}
-
-		if (subtitle != null) {
-			PacketPlayOutTitle packetSubtitle = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE,
-					CraftChatMessage.fromString(subtitle)[0], start, time, end);
-			craftPlayer.getHandle().playerConnection.sendPacket(packetSubtitle);
-		}
+//		CraftPlayer craftPlayer = (CraftPlayer) player;
+//
+//		PacketPlayOutTitle packetTimes = new PacketPlayOutTitle(start, time, end);
+//		craftPlayer.getHandle().playerConnection.sendPacket(packetTimes);
+//
+//		if (title != null) {
+//			PacketPlayOutTitle packetTitle = new PacketPlayOutTitle(EnumTitleAction.TITLE,
+//					CraftChatMessage.fromString(title)[0], start, time, end);
+//			craftPlayer.getHandle().playerConnection.sendPacket(packetTitle);
+//		}
+//
+//		if (subtitle != null) {
+//			PacketPlayOutTitle packetSubtitle = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE,
+//					CraftChatMessage.fromString(subtitle)[0], start, time, end);
+//			craftPlayer.getHandle().playerConnection.sendPacket(packetSubtitle);
+//		}
 	}
 }

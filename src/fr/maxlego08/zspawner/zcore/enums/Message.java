@@ -2,8 +2,8 @@ package fr.maxlego08.zspawner.zcore.enums;
 
 public enum Message {
 
-	PREFIX("§8(§6zKoth§8)", true),
-	PREFIX_REAL("§8(§6zKoth§8)", false),
+	PREFIX("§8(§6zSpawner§8)", true),
+	PREFIX_END("§8(§6zSpawner§8)", false),
 	
 	TELEPORT_MOVE("§cVous ne devez pas bouger !", false),
 	TELEPORT_MESSAGE("§7Téléportatio dans §3%s §7secondes !", false),
@@ -32,6 +32,8 @@ public enum Message {
 	DESCRIPTION_HELP("Show commands"),
 	DESCRIPTION_RELOAD("Reload plugin"),
 	DESCRIPTION_VERSION("Show plugin version"),
+	
+	NO_SPAWNER("§cYou have no spawners !"), PLACING_SPAWNER("§cYou already place a spawner!"),
 	
 	;
 

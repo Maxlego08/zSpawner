@@ -5,9 +5,11 @@ import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.command.commands.CommandSpawner;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
+import fr.maxlego08.zspawner.inventory.inventories.InventorySpawner;
 import fr.maxlego08.zspawner.listener.AdapterListener;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
+import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
 
 /**
@@ -39,6 +41,9 @@ public class ZSpawnerPlugin extends ZPlugin {
 		/* Commands */
 		registerCommand("zspawners", new CommandSpawner(), "spawners", "spawner");
 
+		/* Inventory */
+		registerInventory(Inventory.INVENTORY_SPAWNER, new InventorySpawner());
+
 		/* Add Listener */
 		addListener(new AdapterListener(this));
 		addListener(inventoryManager);
@@ -65,6 +70,10 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 		postDisable();
 
+	}
+	
+	public SpawnerManager getSpawner() {
+		return spawner;
 	}
 
 }

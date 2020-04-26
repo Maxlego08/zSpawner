@@ -2,7 +2,7 @@ package fr.maxlego08.zspawner.zcore.enums;
 
 public enum Inventory {
 
-	INVENTORY_TEST(1),
+	INVENTORY_SPAWNER(1),
 	
 	;
 	
