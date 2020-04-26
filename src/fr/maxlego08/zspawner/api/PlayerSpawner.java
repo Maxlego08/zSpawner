@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
-interface PlayerSpawner {
+public interface PlayerSpawner {
 
 	/**
 	 * 

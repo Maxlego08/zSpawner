@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.bukkit.Location;
 
-public interface Board {
+import fr.maxlego08.zspawner.zcore.utils.storage.Saveable;
+
+public interface Board extends Saveable {
 
 	/**
 	 * 
@@ -12,7 +14,7 @@ public interface Board {
 	 * @return
 	 */
 	boolean isSpawner(Location location);
-	
+
 	/**
 	 * 
 	 * @param location
@@ -27,7 +29,7 @@ public interface Board {
 	 * @return
 	 */
 	List<Spawner> getSpawners(int x, int z);
-	
+
 	/**
 	 * 
 	 * @param x
@@ -35,7 +37,7 @@ public interface Board {
 	 * @return
 	 */
 	int countSpawners(int x, int z);
-	
+
 	/**
 	 * 
 	 * @param location
@@ -48,5 +50,5 @@ public interface Board {
 	 * @param location
 	 */
 	void removeSpawner(Location location);
-	
+
 }

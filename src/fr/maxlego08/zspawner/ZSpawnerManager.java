@@ -15,16 +15,28 @@ import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 
 public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
+	private final transient Board board;
+	private final transient ZSpawnerPlugin plugin;
+
+	public ZSpawnerManager(Board board, ZSpawnerPlugin plugin) {
+		super();
+		this.board = board;
+		this.plugin = plugin;
+	}
+
 	@Override
 	public void save(Persist persist) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void load(Persist persist) {
-		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public PlayerSpawner getPlayer(UUID uuid) {
+		return null;
 	}
 
 	@Override
@@ -41,8 +53,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	@Override
 	public Board getBoard() {
-		// TODO Auto-generated method stub
-		return null;
+		return board;
 	}
 
 	@Override
@@ -85,12 +96,6 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 	public void removeSpawners(CommandSender sender, Player target, EntityType type) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public PlayerSpawner getPlayer(UUID uuid) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
