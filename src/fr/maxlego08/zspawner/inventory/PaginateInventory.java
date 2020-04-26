@@ -24,6 +24,7 @@ public abstract class PaginateInventory<T> extends VInventory {
 	protected int paginationSize = 45;
 	protected int nextSlot = 50;
 	protected int previousSlot = 48;
+	protected int infoSlot = 49;
 	protected int defaultSlot = 0;
 	protected boolean isReverse = false;
 	protected boolean disableDefaultClick = false;
@@ -38,6 +39,11 @@ public abstract class PaginateInventory<T> extends VInventory {
 		super();
 		this.inventoryName = inventoryName;
 		this.inventorySize = inventorySize;
+		
+		this.paginationSize = inventorySize - 9;
+		this.nextSlot = inventorySize - 3;
+		this.previousSlot = inventorySize - 5;
+		this.infoSlot = inventorySize - 4;
 	}
 
 	public PaginateInventory(String inventoryName, InventorySize inventorySize) {
@@ -77,12 +83,14 @@ public abstract class PaginateInventory<T> extends VInventory {
 
 		if (getPage() != 1) {
 			Button button = Config.buttonPrevious;
-			addItem(button.getSlot(), button.toItemStack())
+			int slot1 = button.getSlot() > inventorySize ? previousSlot : button.getSlot();
+			addItem(slot1, button.toItemStack())
 					.setClick(event -> createInventory(player, getId(), getPage() - 1, args));
 		}
 		if (getPage() != getMaxPage(collections)) {
 			Button button = Config.buttonNext;
-			addItem(button.getSlot(), button.toItemStack())
+			int slot1 = button.getSlot() > inventorySize ? nextSlot : button.getSlot();
+			addItem(slot1, button.toItemStack())
 					.setClick(event -> createInventory(player, getId(), getPage() + 1, args));
 		}
 

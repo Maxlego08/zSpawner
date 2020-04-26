@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import fr.maxlego08.zspawner.api.Spawner;
 
-public enum Short {
+public enum Sort {
 
 	PLACE("spawners placed", Comparator.comparingInt(Spawner::comparePlace)),
 
@@ -15,7 +15,7 @@ public enum Short {
 	private final String name;
 	private final Comparator<Spawner> comparator;
 
-	private Short(String name, Comparator<Spawner> comparator) {
+	private Sort(String name, Comparator<Spawner> comparator) {
 		this.name = name;
 		this.comparator = comparator;
 
@@ -35,16 +35,16 @@ public enum Short {
 		return comparator;
 	}
 
-	public Short next(){
+	public Sort next(){
 		switch (this) {
 		case PLACE:
-			return Short.PLACE_NO;
+			return Sort.PLACE_NO;
 		case PLACE_NO:
-			return Short.PLACE;
+			return Sort.PLACE;
 		default:
 			break;
 		}
-		return Short.PLACE;
+		return Sort.PLACE;
 	}
 	
 }

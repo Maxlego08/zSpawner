@@ -10,15 +10,15 @@ import org.bukkit.entity.EntityType;
 
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
-import fr.maxlego08.zspawner.api.enums.Short;
-import fr.maxlego08.zspawner.api.event.SpawnerShortEvent;
+import fr.maxlego08.zspawner.api.enums.Sort;
+import fr.maxlego08.zspawner.api.event.SpawnerSortEvent;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
 public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	private final UUID user;
 	private final List<Spawner> spawners;
-	private Short typeShort = Short.PLACE;
+	private Sort typeShort = Sort.PLACE;
 
 	/**
 	 * 
@@ -52,7 +52,7 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 	@Override
 	public List<Spawner> getShortSpawners() {
 		
-		SpawnerShortEvent event = new SpawnerShortEvent(this, typeShort);
+		SpawnerSortEvent event = new SpawnerSortEvent(this, typeShort);
 		event.callEvent();
 		
 		if (event.isCancelled())
@@ -127,7 +127,7 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 	}
 
 	@Override
-	public Short getShort() {
+	public Sort getShort() {
 		return typeShort;
 	}
 

@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
-import fr.maxlego08.zspawner.api.enums.Short;
+import fr.maxlego08.zspawner.api.enums.Sort;
 
 public interface PlayerSpawner {
 
@@ -50,7 +50,7 @@ public interface PlayerSpawner {
 	 * 
 	 * @return
 	 */
-	Short getShort();
+	Sort getShort();
 	
 	/**
 	 * 

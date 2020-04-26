@@ -31,7 +31,7 @@ public class Config implements Saveable {
 			"§f§l» §7a §bspawner §7that is not placed and then to §fbreak a block§7.", 
 			"§f§l» §7To remove a spawner you must click on a spawner placed", 
 			"",
-			"§f§l» §7You have §b%spawners% §fspawners",
+			"§f§l» §7You have §b%spawners% §7spawners",
 			"§f§l» §7Sort type§7: §b%sorting%",
 			"§f§l» §7Click to §bchange §7the sort type", 
 			"§7§m-------------------------------------");

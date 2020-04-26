@@ -4,12 +4,12 @@ import java.util.Comparator;
 
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
-import fr.maxlego08.zspawner.api.enums.Short;
+import fr.maxlego08.zspawner.api.enums.Sort;
 
-public class SpawnerShortEvent extends SpawnerEvent {
+public class SpawnerSortEvent extends SpawnerEvent {
 
 	private final PlayerSpawner playerSpawner;
-	private Short type;
+	private Sort type;
 	private Comparator<Spawner> comparator;
 
 	/**
@@ -17,7 +17,7 @@ public class SpawnerShortEvent extends SpawnerEvent {
 	 * @param playerSpawner
 	 * @param type
 	 */
-	public SpawnerShortEvent(PlayerSpawner playerSpawner, Short type) {
+	public SpawnerSortEvent(PlayerSpawner playerSpawner, Sort type) {
 		super();
 		this.playerSpawner = playerSpawner;
 		this.type = type;
@@ -34,7 +34,7 @@ public class SpawnerShortEvent extends SpawnerEvent {
 	/**
 	 * @return the type
 	 */
-	public Short getType() {
+	public Sort getType() {
 		return type;
 	}
 
@@ -42,7 +42,7 @@ public class SpawnerShortEvent extends SpawnerEvent {
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(Short type) {
+	public void setType(Sort type) {
 		this.type = type;
 	}
 

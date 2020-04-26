@@ -116,7 +116,7 @@ public class Button extends ZUtils {
 			lore.forEach(line -> {
 				
 				line = line.replace("%spawners%", String.valueOf(spawner.getSpawners().size()));
-				line = line.replace("%shorting%", spawner.getShort().getName());
+				line = line.replace("%sorting%", spawner.getShort().getName());
 				builder.addLine(line);
 				
 			});

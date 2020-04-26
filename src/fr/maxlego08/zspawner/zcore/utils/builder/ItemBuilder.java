@@ -104,6 +104,13 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 		lore.add(String.format(format, args));
 		return this;
 	}
+	
+	public ItemBuilder addLine(String format) {
+		if (lore == null)
+			lore = new ArrayList<>();
+		lore.add(format);
+		return this;
+	}
 
 	public ItemBuilder setLore(String... lores) {
 		this.lore = Arrays.asList(lores);

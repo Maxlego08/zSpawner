@@ -12,10 +12,13 @@ import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.inventory.PaginateInventory;
 import fr.maxlego08.zspawner.save.Config;
+import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.utils.inventory.Button;
 import fr.maxlego08.zspawner.zcore.utils.inventory.ItemButton;
 
 public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
+
+	private PlayerSpawner playerSpawner;
 
 	public InventorySpawnerPaginate() {
 		super(Config.inventoryName, Config.inventorySize);
@@ -34,7 +37,7 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 
 	@Override
 	public List<Spawner> preOpenInventory() {
-		PlayerSpawner playerSpawner = (PlayerSpawner) args[0];
+		playerSpawner = (PlayerSpawner) args[0];
 		return playerSpawner.getShortSpawners();
 	}
 
@@ -42,8 +45,12 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 	public void postOpenInventory() {
 
 		Button button = Config.buttonInformation;
-		addItem(button.getSlot(), button.toItemStack());
-		
+		int slot1 = button.getSlot() > inventorySize ? infoSlot : button.getSlot();
+		addItem(slot1, button.toItemStack(playerSpawner)).setClick(event -> {
+			playerSpawner.toggleShort();
+			createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
+		});
+
 	}
 
 	@Override
