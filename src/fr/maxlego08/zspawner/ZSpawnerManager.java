@@ -16,6 +16,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.FactionListener;
+import fr.maxlego08.zspawner.api.NMS;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.SpawnerManager;
@@ -26,11 +27,21 @@ import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
 import fr.maxlego08.zspawner.depends.NoFaction;
+import fr.maxlego08.zspawner.nms.NMS_1_10;
+import fr.maxlego08.zspawner.nms.NMS_1_11;
+import fr.maxlego08.zspawner.nms.NMS_1_12;
+import fr.maxlego08.zspawner.nms.NMS_1_13;
+import fr.maxlego08.zspawner.nms.NMS_1_14;
+import fr.maxlego08.zspawner.nms.NMS_1_15;
+import fr.maxlego08.zspawner.nms.NMS_1_7;
+import fr.maxlego08.zspawner.nms.NMS_1_8;
+import fr.maxlego08.zspawner.nms.NMS_1_9;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
+import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 
@@ -39,6 +50,8 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 	private final transient Board board;
 	private final transient ZSpawnerPlugin plugin;
 	private transient FactionListener factionListener;
+	private transient NMS nms;
+	private transient final double version = ItemDecoder.getNMSVersion();
 	private transient Map<UUID, PlayerSpawner> players = new HashMap<UUID, PlayerSpawner>();
 
 	private static Map<UUID, List<Spawner>> spawners = new HashMap<>();
@@ -56,6 +69,31 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 		Bukkit.getPluginManager().callEvent(event);
 		factionListener = event.getFactionListener();
 
+		/**
+		 * NMS
+		 */
+
+		if (version == 1.8) {
+			nms = new NMS_1_8();
+		} else if (version == 1.15) {
+			nms = new NMS_1_15();
+		} else if (version == 1.14) {
+			nms = new NMS_1_14();
+		} else if (version == 1.13) {
+			nms = new NMS_1_13();
+		} else if (version == 1.12) {
+			nms = new NMS_1_12();
+		} else if (version == 1.11) {
+			nms = new NMS_1_11();
+		} else if (version == 1.10) {
+			nms = new NMS_1_10();
+		} else if (version == 1.9) {
+			nms = new NMS_1_9();
+		} else if (version == 1.7) {
+			nms = new NMS_1_7();
+		}
+
+		Logger.info("Load " + nms.getClass().getName(), LogType.SUCCESS);
 	}
 
 	@Override
@@ -288,6 +326,11 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 	@Override
 	public boolean isBlacklist(Block block) {
 		return Config.blacklistMaterial.contains(block.getType());
+	}
+
+	@Override
+	public NMS getNMS() {
+		return nms;
 	}
 
 }

@@ -120,4 +120,10 @@ public interface SpawnerManager extends Saveable{
 	 */
 	boolean isBlacklist(Block block);
 	
+	/**
+	 * 
+	 * @return
+	 */
+	NMS getNMS();
+	
 }
