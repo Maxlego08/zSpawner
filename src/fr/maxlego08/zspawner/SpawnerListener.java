@@ -7,18 +7,23 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import fr.maxlego08.zspawner.api.Board;
+import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.listener.ListenerAdapter;
+import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 
 public class SpawnerListener extends ListenerAdapter {
 
 	private final SpawnerManager manager;
+	private final Board board;
 
 	public SpawnerListener(SpawnerManager manager) {
 		super();
 		this.manager = manager;
+		this.board = manager.getBoard();
 	}
 
 	@Override
@@ -56,7 +61,24 @@ public class SpawnerListener extends ListenerAdapter {
 
 		if (block.getType().equals(getMaterial(52))) {
 
-			
+			if (board.isSpawner(block.getLocation())) {
+
+				event.setCancelled(true);
+
+				Spawner spawner = board.getSpawner(block.getLocation());
+
+				if (spawner.isOwner(player)) {
+
+					if (Config.ownerCanBreakSpawner)
+						spawner.delete();
+					else
+						message(player, Message.SPAWNER_BREAK_OWNER);
+
+				} else
+					message(player, Message.SPAWNER_BREAK_OWNER_ERROR);
+
+			}
+
 		} else {
 			manager.placeSpawner(event, block, player);
 		}

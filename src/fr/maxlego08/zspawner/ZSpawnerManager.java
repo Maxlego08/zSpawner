@@ -52,6 +52,10 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 		persist.loadOrSaveDefault(this, ZSpawnerManager.class, "spawners");
 		players = new HashMap<UUID, PlayerSpawner>();
 		spawners.forEach((uuid, list) -> players.put(uuid, new PlayerObject(uuid, list)));
+		players.values().forEach(player -> player.getSpawners().forEach(spawner -> {
+			if (spawner.isPlace())
+				board.placeSpawner(spawner.getLocation(), spawner);
+		}));
 	}
 
 	@Override
@@ -171,7 +175,6 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	}
 
-
 	@Override
 	public void placeSpawner(BlockBreakEvent event, Block block, Player player) {
 
@@ -186,16 +189,16 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 			Spawner spawner = playerSpawner.getCurrentPlacingSpawner();
 			SpawnerPlaceEvent placeEvent = new SpawnerPlaceEvent(player, playerSpawner, spawner, block.getLocation());
-			
+
 			if (placeEvent.isCancelled())
 				return;
-			
+
 			Location finalLocation = placeEvent.getLocation() == null ? block.getLocation() : placeEvent.getLocation();
 			spawner.place(finalLocation);
 			event.setCancelled(true);
 			playerSpawner.placeSpawner();
 			board.placeSpawner(finalLocation, spawner);
-			
+
 			message(player, Message.PLACE_SPAWNER_SUCCESS);
 
 		}

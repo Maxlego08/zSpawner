@@ -44,6 +44,9 @@ public enum Message {
 	PLACE_SPAWNER_SUCCESS("§aYou have just placed a spawner"), 
 	PLACE_SPAWNER_START("§eYou have §f1 §eminute to place the spawner in your land !"),
 	
+	SPAWNER_BREAK_OWNER("§eYou can §6delete §eyour spawner with the command §f/spawners§e."),
+	SPAWNER_BREAK_OWNER_ERROR("§cOnly the owner of the spawner can break it."),
+	
 	REMOVE_SPAWNER("§bYou have removed a spawner !"), 
 	
 	;

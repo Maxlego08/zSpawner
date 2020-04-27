@@ -15,6 +15,7 @@ public class Config implements Saveable {
 	public transient static InventoryType type = InventoryType.PAGINATE;
 	public static int inventorySize = 54;
 	
+	public static boolean ownerCanBreakSpawner = false;
 	public static boolean displayInformation = true;
 	public static boolean displayRemoveAllButton = true;
 	

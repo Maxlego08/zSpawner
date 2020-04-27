@@ -58,7 +58,6 @@ public class ZSpawnerPlugin extends ZPlugin {
 		/* Add Saver */
 		addSave(Config.getInstance());
 		addSave(new CooldownBuilder());
-		addSave(board);
 		addSave(spawner);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));

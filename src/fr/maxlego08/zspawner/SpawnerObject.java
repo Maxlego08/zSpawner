@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -120,6 +121,11 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	
 	public int compareNotPlace(){
 		return isPlace() ? 0 : 1;
+	}
+
+	@Override
+	public boolean isOwner(Player player) {
+		return player == null ? false : player.getUniqueId().equals(owner);
 	}
 	
 }
