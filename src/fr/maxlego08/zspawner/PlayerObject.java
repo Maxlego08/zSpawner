@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.entity.EntityType;
 
@@ -104,21 +105,12 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	@Override
 	public void removeSpawner(Board board, EntityType type, int number) {
-		Iterator<Spawner> iterator = spawners.iterator();
-		int a = 0;
-		while (iterator.hasNext()) {
-			Spawner spawner = iterator.next();
-			
-			if (spawner.getType().equals(type))
-				continue;
-			
-			if (a > number)
-				return;
-			
-			spawner.delete(board);
-			iterator.remove();
-			a++;
-		}
+		AtomicInteger atomicInteger = new AtomicInteger();
+		this.spawners.stream().filter(sp -> sp.getType().equals(type) && atomicInteger.getAndIncrement() < number)
+				.forEach(spawner -> spawner.delete(board));
+		;
+		atomicInteger.set(0);
+		this.spawners.removeIf(sp -> sp.getType().equals(type) && atomicInteger.getAndIncrement() < number);
 	}
 
 	@Override
@@ -134,8 +126,9 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 		while (iterator.hasNext()) {
 			Spawner spawner = iterator.next();
 			spawner.delete(board);
-			iterator.remove();
 		}
+
+		this.spawners.clear();
 
 	}
 
