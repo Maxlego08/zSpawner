@@ -20,12 +20,12 @@ public class CommandSpawnerHelp extends VCommand {
 		if (parent == null)
 			return CommandType.SYNTAX_ERROR;
 
-		message(sender, Message.DESCRIPTION_HEADER);
+		messageWO(sender, Message.DESCRIPTION_HEADER);
 		parent.getSubVCommands().forEach(command -> {
 
 			if (command.getDescription() != null
 					&& (command.getPermission() == null || hasPermission(sender, command.getPermission())))
-				message(sender, Message.COMMAND_SYNTAXE_HELP, command.getSyntaxe(), command.getDescription());
+				messageWO(sender, Message.COMMAND_SYNTAXE_HELP, command.getSyntaxe(), command.getDescription());
 
 		});
 

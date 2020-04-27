@@ -5,14 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.FactionListener;
@@ -22,6 +26,7 @@ import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.api.enums.InventoryType;
 import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerGiveEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerOpenInventoryEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
@@ -43,6 +48,7 @@ import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
+import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 
 public class ZSpawnerManager extends ZUtils implements SpawnerManager {
@@ -51,6 +57,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 	private final transient ZSpawnerPlugin plugin;
 	private transient FactionListener factionListener;
 	private transient NMS nms;
+	private transient String KEY = "entitype";
 	private transient final double version = ItemDecoder.getNMSVersion();
 	private transient Map<UUID, PlayerSpawner> players = new HashMap<UUID, PlayerSpawner>();
 
@@ -221,7 +228,39 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	@Override
 	public void giveSpawner(CommandSender sender, Player target, EntityType type, int number) {
-		// TODO Auto-generated method stub
+
+		SpawnerGiveEvent event = new SpawnerGiveEvent(sender, target, type, number);
+		event.callEvent();
+
+		if (event.isCancelled())
+			return;
+
+		EntityType finalType = event.getType();
+		number = event.getAmount();
+
+		if (number < 0)
+			return;
+
+		ItemBuilder builder = new ItemBuilder(getMaterial(52), number,
+				Config.itemName.replace("%type%", name(finalType.name())));
+		List<String> lore = Config.itemLore.stream().map(str -> str.replace("%type%", name(finalType.name())))
+				.collect(Collectors.toList());
+		builder.setLore(lore);
+
+		ItemStack itemStack = nms.set(builder.build(), KEY, finalType);
+
+		give(target, itemStack);
+
+		String message = Message.GIVE_SPAWNER_SENDER.getMessage();
+		message = message.replace("%how%", String.valueOf(number));
+		message = message.replace("%type%", name(finalType.name()));
+		message = message.replace("%player%", target.getName());
+		message(sender, message);
+
+		message = Message.GIVE_SPAWNER_RECEIVER.getMessage();
+		message = message.replace("%how%", String.valueOf(number));
+		message = message.replace("%type%", name(finalType.name()));
+		message(target, message);
 
 	}
 
@@ -331,6 +370,33 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 	@Override
 	public NMS getNMS() {
 		return nms;
+	}
+
+	@Override
+	public void placeSpawner(BlockPlaceEvent event, Player player, ItemStack itemInHand, Block block) {
+
+		if (event.isCancelled())
+			return;
+
+		if (!factionListener.preBuild(player, block.getLocation())) {
+			event.setCancelled(true);
+			message(player, Message.PLACE_SPAWNER_ERROR);
+			return;
+		}
+
+		if (nms.has(itemInHand, KEY)) {
+
+			EntityType entityType = nms.get(itemInHand, KEY);
+			block.setType(getMaterial(52));
+			CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
+			creatureSpawner.setSpawnedType(entityType);
+			if (version != 1.8 && version != 1.7)
+				creatureSpawner.update();
+
+			message(player, Message.PLACE_SPAWNER.getMessage().replace("%type%", name(entityType.name())));
+
+		}
+
 	}
 
 }

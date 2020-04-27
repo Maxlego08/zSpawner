@@ -33,15 +33,20 @@ public enum Message {
 	DESCRIPTION_RELOAD("Reload plugin"),
 	DESCRIPTION_VERSION("Show plugin version"),
 	DESCRIPTION_ADD("Add spawner to player"),
+	DESCRIPTION_GIVE("Give spawner to player"),
 	DESCRIPTION_REMOVE("Remove spawner to player"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
 	NO_SPAWNER_TARGET("§f%s §chave no spawners !"), 
 	PLACING_SPAWNER("§cYou already place a spawner!"),
+	PLACE_SPAWNER("§eYou just placed a §f%type% §espawner§e."),
 	
 	ADD_SPAWNER_SENDER("§eYou have just given x§f%how% §6%type% §espawner to §f%player%§e."),
-	ADD_SPAWNER_RECEIVER("§eYou have just received x§f%how% §6%type% §espawner."),
+	ADD_SPAWNER_RECEIVER("§eYou have just received x§f%how% §6%type% §espawner §8(§f/spawners§8)"),
+	
+	GIVE_SPAWNER_SENDER("§eYou have just given x§f%how% §6%type% §espawner to §f%player%§e."),
+	GIVE_SPAWNER_RECEIVER("§eYou have just received x§f%how% §6%type% §espawner."),
 	
 	REMOVE_SPAWNER_SENDER("§eYou have just remove x§f%how% §6%type% §espawner to §f%player%§e."),
 	REMOVE_SPAWNER_RECEIVER("§eYou have just lost x§f%how% §6%type% §espawner."),

@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.Spawner;
@@ -80,6 +82,18 @@ public class SpawnerListener extends ListenerAdapter {
 
 		} else {
 			manager.placeSpawner(event, block, player);
+		}
+
+	}
+
+	@Override
+	protected void onBlockPlace(BlockPlaceEvent event, Player player) {
+
+		ItemStack itemInHand = event.getItemInHand();
+		if (itemInHand.getType().equals(getMaterial(52))) {
+
+			manager.placeSpawner(event, player, itemInHand, event.getBlock());
+			
 		}
 
 	}

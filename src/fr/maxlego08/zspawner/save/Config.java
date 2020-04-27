@@ -44,7 +44,18 @@ public class Config implements Saveable {
 	public static List<String> infos = new ArrayList<>();
 
 	public static List<Material> blacklistMaterial = Arrays.asList(Material.CHEST, Material.TRAPPED_CHEST,
-			Material.ENDER_CHEST, Material.FURNACE, Material.CAULDRON, Material.BEDROCK, Material.BREWING_STAND, Material.DROPPER, Material.DISPENSER);
+			Material.ENDER_CHEST, Material.FURNACE, Material.CAULDRON, Material.BEDROCK, Material.BREWING_STAND,
+			Material.DROPPER, Material.DISPENSER);
+
+	public static String itemName = "§eSpawner";
+	public static List<String> itemLore = Arrays.asList(
+			"§7§m-------------------------------------",
+			"§f§l» §7You have a §b%type% §7spawne.r",
+			"",
+			"§f§l» §7Just put the spawner on the ground §7to use it",
+			"§f§l» §7This spawner will not be in the §7/spawners§7.",
+			"§7§m-------------------------------------"
+			);
 
 	static {
 
