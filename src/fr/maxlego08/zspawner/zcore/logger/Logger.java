@@ -68,6 +68,8 @@ public class Logger {
 	}
 	
 	public String getColoredMessage(String message){
+		if (message == null)
+			return message;
 		return message.replace("<&>", "§");
 	}
 }

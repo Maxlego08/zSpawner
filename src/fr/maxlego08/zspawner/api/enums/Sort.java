@@ -6,9 +6,9 @@ import fr.maxlego08.zspawner.api.Spawner;
 
 public enum Sort {
 
-	PLACE("spawners placed", Comparator.comparingInt(Spawner::comparePlace)),
+	PLACE("spawners placed", Comparator.comparingInt(Spawner::comparePlace).reversed()),
 
-	PLACE_NO("spawners not placed", Comparator.comparingInt(Spawner::compareNotPlace)),
+	PLACE_NO("spawners not placed", Comparator.comparingInt(Spawner::compareNotPlace).reversed()),
 
 	;
 

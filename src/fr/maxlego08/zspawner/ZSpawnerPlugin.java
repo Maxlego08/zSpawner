@@ -12,6 +12,7 @@ import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
+import fr.maxlego08.zspawner.zcore.utils.Metrics;
 import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
 
 /**
@@ -27,6 +28,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 	private Board board;
 	private boolean isEnable = false;
 
+	@SuppressWarnings("unused")
 	@Override
 	public void onEnable() {
 
@@ -65,6 +67,8 @@ public class ZSpawnerPlugin extends ZPlugin {
 		postEnable();
 
 		isEnable = true;
+		
+		Metrics metrics = new Metrics(this);
 
 	}
 

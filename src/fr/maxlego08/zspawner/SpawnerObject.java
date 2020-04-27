@@ -1,7 +1,5 @@
 package fr.maxlego08.zspawner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -10,13 +8,13 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
+import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
 public class SpawnerObject extends ZUtils implements Spawner {
 
@@ -61,17 +59,17 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public ItemStack getItemStack() {
-		@SuppressWarnings("deprecation")
-		ItemStack itemStack = new ItemStack(getMaterial(383), 1, type.getTypeId());
-		ItemMeta itemMeta = itemStack.getItemMeta();
-		List<String> lore = new ArrayList<>();
+
+		ItemBuilder builder = new ItemBuilder(getMaterial(383), 1, type.getTypeId());
+		if (Config.glowPlaceSpawner && location != null)
+			builder.glow();
 		Config.infos.forEach(string -> {
-			lore.add(string.replace("%location%", location == null ? "non placé" : toLocation()).replace("%type%", type.name()));
+			builder.addLine(string.replace("%location%", location == null ? "non placé" : toLocation())
+					.replace("%type%", type.name()));
 		});
-		itemMeta.setLore(lore);
-		itemStack.setItemMeta(itemMeta);
-		return itemStack;
+		return builder.build();
 	}
 
 	public String toLocation() {
@@ -106,7 +104,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 
 	@Override
 	public void place(Location location) {
-		
+
 		location.getBlock().setType(getMaterial(52));
 		CreatureSpawner creatureSpawner = (CreatureSpawner) location.getBlock().getState();
 		creatureSpawner.setSpawnedType(type);
@@ -115,11 +113,11 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		this.location = location;
 	}
 
-	public int comparePlace(){
+	public int comparePlace() {
 		return isPlace() ? 1 : 0;
 	}
-	
-	public int compareNotPlace(){
+
+	public int compareNotPlace() {
 		return isPlace() ? 0 : 1;
 	}
 
@@ -127,5 +125,5 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	public boolean isOwner(Player player) {
 		return player == null ? false : player.getUniqueId().equals(owner);
 	}
-	
+
 }

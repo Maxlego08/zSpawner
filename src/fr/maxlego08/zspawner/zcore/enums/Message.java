@@ -26,7 +26,7 @@ public enum Message {
 	COMMAND_NO_PERMISSION("§cVous n'avez pas la permission d'exécuter cette commande.", true),
 	COMMAND_NO_CONSOLE("§cSeul un joueur peut exécuter cette commande.", true),
 	COMMAND_NO_ARG("§cImpossible de trouver la commande avec ses arguments.", true),
-	COMMAND_SYNTAXE_HELP("§a%s §b» §7%s", true),
+	COMMAND_SYNTAXE_HELP("§f%s §7» §b%s", true),
 	
 	
 	DESCRIPTION_HELP("Show commands"),
@@ -34,12 +34,17 @@ public enum Message {
 	DESCRIPTION_VERSION("Show plugin version"),
 	DESCRIPTION_ADD("Add spawner to player"),
 	DESCRIPTION_REMOVE("Remove spawner to player"),
+	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
+	NO_SPAWNER_TARGET("§f%s §chave no spawners !"), 
 	PLACING_SPAWNER("§cYou already place a spawner!"),
 	
 	ADD_SPAWNER_SENDER("§eYou have just given x§f%how% §6%type% §espawner to §f%player%§e."),
 	ADD_SPAWNER_RECEIVER("§eYou have just received x§f%how% §6%type% §espawner."),
+	
+	REMOVE_SPAWNER_SENDER("§eYou have just remove x§f%how% §6%type% §espawner to §f%player%§e."),
+	REMOVE_SPAWNER_RECEIVER("§eYou have just lost x§f%how% §6%type% §espawner."),
 	
 	PLACE_SPAWNER_SUCCESS("§aYou have just placed a spawner"), 
 	PLACE_SPAWNER_START("§eYou have §f1 §eminute to place the spawner in your land !"),

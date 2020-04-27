@@ -66,9 +66,7 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 		typeShort = event.getType();
 
 		List<Spawner> currentList = new ArrayList<>(spawners);
-
-		Collections.sort(spawners, event.getComparator());
-
+		Collections.sort(currentList, event.getComparator());
 		return currentList;
 	}
 

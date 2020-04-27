@@ -62,6 +62,8 @@ public class LocationAdapter extends TypeAdapter<Location> {
 	}
 
 	Location fromRaw(String raw) {
+		if (raw == null)
+			return null;
 		Map<String, Object> keys = ZPlugin.z().getGson().fromJson(raw, seriType);
 		World w = Bukkit.getWorld((String) keys.get(NAME));
 		return new Location(w, Double.parseDouble((String) keys.get(X)), Double.parseDouble((String) keys.get(Y)),

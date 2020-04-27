@@ -16,6 +16,7 @@ public class Config implements Saveable {
 	public static int inventorySize = 54;
 	
 	public static boolean ownerCanBreakSpawner = false;
+	public static boolean glowPlaceSpawner = true;
 	public static boolean displayInformation = true;
 	public static boolean displayRemoveAllButton = true;
 	
