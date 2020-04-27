@@ -25,6 +25,7 @@ public abstract class PaginateInventory<T> extends VInventory {
 	protected int nextSlot = 50;
 	protected int previousSlot = 48;
 	protected int infoSlot = 49;
+	protected int removeAllSlot = 45;
 	protected int defaultSlot = 0;
 	protected boolean isReverse = false;
 	protected boolean disableDefaultClick = false;
@@ -54,6 +55,7 @@ public abstract class PaginateInventory<T> extends VInventory {
 		this.nextSlot = inventorySize - 4;
 		this.previousSlot = inventorySize - 6;
 		this.infoSlot = inventorySize - 5;
+		this.removeAllSlot = inventorySize - 8;
 	}
 
 	public PaginateInventory(String inventoryName, InventorySize inventorySize) {

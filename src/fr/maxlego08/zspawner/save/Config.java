@@ -14,7 +14,10 @@ public class Config implements Saveable {
 
 	public transient static InventoryType type = InventoryType.PAGINATE;
 	public static int inventorySize = 54;
+	
 	public static boolean displayInformation = true;
+	public static boolean displayRemoveAllButton = true;
+	
 	public static String inventoryName = "§ezSpawner §6%p%§7/§6%mp%";
 	
 	public static Button buttonPrevious = new Button(48, "§6» §ePrevious", Material.ARROW);
@@ -34,6 +37,12 @@ public class Config implements Saveable {
 			"§f§l» §7You have §b%spawners% §7spawners",
 			"§f§l» §7Sort type§7: §b%sorting%",
 			"§f§l» §7Click to §bchange §7the sort type", 
+			"§7§m-------------------------------------");
+	
+	public static Button buttonRemoveAll = new Button(45, Material.ENDER_CHEST, "§eRemove all",
+			
+			"§7§m-------------------------------------", 
+			"§f§l» §7Click here to remove all your spawners",
 			"§7§m-------------------------------------");
 	
 	

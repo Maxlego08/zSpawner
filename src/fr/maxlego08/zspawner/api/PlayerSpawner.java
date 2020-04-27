@@ -3,7 +3,6 @@ package fr.maxlego08.zspawner.api;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 import fr.maxlego08.zspawner.api.enums.Sort;
@@ -86,5 +85,13 @@ public interface PlayerSpawner {
 	 */
 	void removeAll();
 
+	/**
+	 * 
+	 */
+	void deleteAllSpawners();
+	
+	/**
+	 * 
+	 */
 	void placeSpawner();
 }

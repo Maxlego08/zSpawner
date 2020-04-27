@@ -2,6 +2,7 @@ package fr.maxlego08.zspawner;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,6 +11,8 @@ import org.bukkit.entity.EntityType;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.enums.Sort;
+import fr.maxlego08.zspawner.api.event.SpawnerDeleteAllEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerRemoveAllEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerSortEvent;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
@@ -52,19 +55,19 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	@Override
 	public List<Spawner> getShortSpawners() {
-		
+
 		SpawnerSortEvent event = new SpawnerSortEvent(this, typeShort);
 		event.callEvent();
-		
+
 		if (event.isCancelled())
 			return spawners;
-		
+
 		typeShort = event.getType();
-		
+
 		List<Spawner> currentList = new ArrayList<>(spawners);
-		
+
 		Collections.sort(spawners, event.getComparator());
-		
+
 		return currentList;
 	}
 
@@ -108,7 +111,18 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	@Override
 	public void removeAll() {
-		// TODO Auto-generated method stub
+
+		SpawnerRemoveAllEvent event = new SpawnerRemoveAllEvent(this);
+		event.callEvent();
+
+		if (event.isCancelled())
+			return;
+
+		Iterator<Spawner> iterator = this.spawners.iterator();
+		while (iterator.hasNext()) {
+			iterator.next().delete();
+			iterator.remove();
+		}
 
 	}
 
@@ -127,6 +141,17 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 		placingCooldown = 0;
 		placingSpawner = null;
 	}
-	
+
+	@Override
+	public void deleteAllSpawners() {
+		
+		SpawnerDeleteAllEvent event = new SpawnerDeleteAllEvent(this);
+		event.callEvent();
+		
+		if (event.isCancelled())
+			return;
+		
+		this.spawners.forEach(Spawner::delete);
+	}
 
 }

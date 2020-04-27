@@ -11,7 +11,6 @@ import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerPrePlaceEvent;
-import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
 import fr.maxlego08.zspawner.inventory.PaginateInventory;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
@@ -35,28 +34,21 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 	@Override
 	public void onClick(Spawner object, ItemButton button) {
 
-		
 		if (object.isPlace()) {
 
-			SpawnerRemoveEvent event = new SpawnerRemoveEvent(player, object, playerSpawner);
-			event.callEvent();
-			
-			if (event.isCancelled())
-				return;
-			
 			object.delete();
 			message(player, Message.REMOVE_SPAWNER);
 			createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
-			
+
 			return;
 		}
 
 		SpawnerPrePlaceEvent event = new SpawnerPrePlaceEvent(player, object, playerSpawner);
 		event.callEvent();
-		
+
 		if (event.isCancelled())
 			return;
-		
+
 		playerSpawner.setCurrentPlacingSpawner(object);
 		player.closeInventory();
 		message(player, Message.PLACE_SPAWNER_START);
@@ -72,12 +64,23 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 	@Override
 	public void postOpenInventory() {
 
-		Button button = Config.buttonInformation;
-		int slot1 = button.getSlot() > inventorySize ? infoSlot : button.getSlot();
-		addItem(slot1, button.toItemStack(playerSpawner)).setClick(event -> {
-			playerSpawner.toggleShort();
-			createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
-		});
+		if (Config.displayInformation) {
+			Button button = Config.buttonInformation;
+			int slot1 = button.getSlot() > inventorySize ? infoSlot : button.getSlot();
+			addItem(slot1, button.toItemStack(playerSpawner)).setClick(event -> {
+				playerSpawner.toggleShort();
+				createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
+			});
+		}
+		
+		if (Config.displayRemoveAllButton) {
+			Button button = Config.buttonRemoveAll;
+			int slot1 = button.getSlot() > inventorySize ? removeAllSlot : button.getSlot();
+			addItem(slot1, button.toItemStack(playerSpawner)).setClick(event -> {
+				playerSpawner.deleteAllSpawners();
+				createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
+			});
+		}
 
 	}
 
