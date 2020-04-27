@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -13,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import fr.maxlego08.zspawner.api.Board;
+import fr.maxlego08.zspawner.api.FactionListener;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.SpawnerManager;
@@ -20,10 +23,14 @@ import fr.maxlego08.zspawner.api.enums.InventoryType;
 import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerOpenInventoryEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
+import fr.maxlego08.zspawner.depends.NoFaction;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.enums.Message;
+import fr.maxlego08.zspawner.zcore.logger.Logger;
+import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 
@@ -31,14 +38,24 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	private final transient Board board;
 	private final transient ZSpawnerPlugin plugin;
+	private transient FactionListener factionListener;
 	private transient Map<UUID, PlayerSpawner> players = new HashMap<UUID, PlayerSpawner>();
 
 	private static Map<UUID, List<Spawner>> spawners = new HashMap<>();
 
-	public ZSpawnerManager(Board board, ZSpawnerPlugin plugin) {
+	protected ZSpawnerManager(Board board, ZSpawnerPlugin plugin) {
 		super();
 		this.board = board;
 		this.plugin = plugin;
+
+		factionListener = new NoFaction();
+		if (factionListener instanceof NoFaction)
+			Logger.info("No faction plugin was detected.", LogType.SUCCESS);
+
+		SpawnerRegisterEvent event = new SpawnerRegisterEvent(factionListener);
+		Bukkit.getPluginManager().callEvent(event);
+		factionListener = event.getFactionListener();
+
 	}
 
 	@Override
@@ -194,9 +211,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 		if (number < 0)
 			return;
 
-		for (int a = 0; a < number; a++)
-			playerSpawner.removeSpawner(board, type);
-
+		playerSpawner.removeSpawner(board, type, number);
 
 		String message = Message.REMOVE_SPAWNER_SENDER.getMessage();
 		message = message.replace("%how%", String.valueOf(number));
@@ -210,7 +225,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 		message = message.replace("%type%", name(type.name()));
 
 		message(target, message);
-		
+
 	}
 
 	@Override
@@ -225,6 +240,17 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 		PlayerSpawner playerSpawner = getPlayer(uuid);
 		if (playerSpawner.isPlacing()) {
 
+			event.setCancelled(true);
+			if (!factionListener.preBuild(player, block.getLocation())) {
+				message(player, Message.PLACE_SPAWNER_ERROR);
+				return;
+			}
+
+			if (isBlacklist(block)) {
+				message(player, Message.PLACE_SPAWNER_ERROR_BLACKLIST);
+				return;
+			}
+
 			Spawner spawner = playerSpawner.getCurrentPlacingSpawner();
 			SpawnerPlaceEvent placeEvent = new SpawnerPlaceEvent(player, playerSpawner, spawner, block.getLocation());
 
@@ -233,7 +259,6 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 			Location finalLocation = placeEvent.getLocation() == null ? block.getLocation() : placeEvent.getLocation();
 			spawner.place(finalLocation);
-			event.setCancelled(true);
 			playerSpawner.placeSpawner();
 			board.placeSpawner(finalLocation, spawner);
 
@@ -241,6 +266,28 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 		}
 
+	}
+
+	@Override
+	public int count() {
+		AtomicInteger amount = new AtomicInteger();
+		players.values().forEach(player -> amount.getAndAdd(player.spawnerSize()));
+		return amount.get();
+	}
+
+	@Override
+	public FactionListener getFactionListener() {
+		return factionListener;
+	}
+
+	@Override
+	public void setFactionListener(FactionListener factionListener) {
+		this.factionListener = factionListener;
+	}
+
+	@Override
+	public boolean isBlacklist(Block block) {
+		return Config.blacklistMaterial.contains(block.getType());
 	}
 
 }

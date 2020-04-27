@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffect;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
@@ -51,6 +52,8 @@ public abstract class ZPlugin extends JavaPlugin {
 	protected InventoryManager inventoryManager;
 	protected ScoreBoardManager scoreboardManager;
 
+	private WorldGuardPlugin worldguard;
+
 	public ZPlugin() {
 		plugin = this;
 	}
@@ -69,6 +72,7 @@ public abstract class ZPlugin extends JavaPlugin {
 
 		if (getPlugin("Vault") != null)
 			economy = getProvider(Economy.class);
+		loadWorldguard();
 
 		return true;
 
@@ -112,6 +116,13 @@ public abstract class ZPlugin extends JavaPlugin {
 				.registerTypeAdapter(PlayerSpawner.class, new PlayerSpawnerAdapter())
 				.registerTypeAdapter(Spawner.class, new SpawnerAdapter())
 				.registerTypeAdapter(Location.class, new LocationAdapter());
+	}
+
+	private void loadWorldguard() {
+		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
+			worldguard = (WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+			log.log("You use the worldguard plugin !", LogType.SUCCESS);
+		}
 	}
 
 	/**
@@ -185,10 +196,8 @@ public abstract class ZPlugin extends JavaPlugin {
 	 * @param classz
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	protected <T> T getProvider(Class<T> classz) {
-		RegisteredServiceProvider<? extends Object> provider = getServer().getServicesManager()
-				.getRegistration(classz.getClass());
+		RegisteredServiceProvider<T> provider = getServer().getServicesManager().getRegistration(classz);
 		if (provider == null) {
 			log.log("Unable to retrieve the provider " + classz.toString(), LogType.WARNING);
 			return null;
@@ -267,6 +276,10 @@ public abstract class ZPlugin extends JavaPlugin {
 	 */
 	protected void registerInventory(Inventory inventory, VInventory vInventory) {
 		inventoryManager.addInventory(inventory, vInventory);
+	}
+
+	public WorldGuardPlugin getWorldguard() {
+		return worldguard;
 	}
 
 }

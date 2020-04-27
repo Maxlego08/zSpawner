@@ -98,19 +98,26 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	@Override
 	public void removeSpawner(Board board, Spawner spawner) {
-		board.removeSpawner(spawner);
-		spawner.delete();
+		spawner.delete(board);
 		spawners.remove(spawner);
 	}
 
 	@Override
-	public void removeSpawner(Board board, EntityType type) {
-		Iterator<Spawner> iterator = spawners.stream().filter(spawner -> spawner.getType().equals(type)).iterator();
+	public void removeSpawner(Board board, EntityType type, int number) {
+		Iterator<Spawner> iterator = spawners.iterator();
+		int a = 0;
 		while (iterator.hasNext()) {
 			Spawner spawner = iterator.next();
-			board.removeSpawner(spawner);
-			spawner.delete();
+			
+			if (spawner.getType().equals(type))
+				continue;
+			
+			if (a > number)
+				return;
+			
+			spawner.delete(board);
 			iterator.remove();
+			a++;
 		}
 	}
 
@@ -126,8 +133,7 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 		Iterator<Spawner> iterator = this.spawners.iterator();
 		while (iterator.hasNext()) {
 			Spawner spawner = iterator.next();
-			board.removeSpawner(spawner);
-			spawner.delete();
+			spawner.delete(board);
 			iterator.remove();
 		}
 
@@ -159,8 +165,7 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 			return;
 
 		this.spawners.forEach(spawner -> {
-			board.removeSpawner(spawner);
-			spawner.delete();
+			spawner.delete(board);
 		});
 	}
 

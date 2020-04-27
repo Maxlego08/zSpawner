@@ -9,6 +9,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
 import fr.maxlego08.zspawner.save.Config;
@@ -88,7 +89,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	}
 
 	@Override
-	public void delete() {
+	public void delete(Board board) {
 		if (location != null) {
 
 			SpawnerDeleteEvent event = new SpawnerDeleteEvent(this);
@@ -97,6 +98,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 			if (event.isCancelled())
 				return;
 
+			board.removeSpawner(this);
 			location.getBlock().setType(Material.AIR);
 			location = null;
 		}

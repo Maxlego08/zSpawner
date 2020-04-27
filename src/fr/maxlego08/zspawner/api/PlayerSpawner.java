@@ -76,9 +76,10 @@ public interface PlayerSpawner {
 
 	/**
 	 * 
+	 * @param number 
 	 * @param entityType
 	 */
-	void removeSpawner(Board board,EntityType type);
+	void removeSpawner(Board board,EntityType type, int number);
 
 	/**
 	 * Remove all spawners 

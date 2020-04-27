@@ -15,6 +15,8 @@ public class CommandSpawnerRemove extends VCommand {
 		this.setPermission(Permission.ZSPAWNER_REMOVE);
 		this.setDescription(Message.DESCRIPTION_REMOVE);
 
+		this.DEBUG = true;
+		
 		this.addSubCommand("remove");
 
 		this.addRequireArg("player");

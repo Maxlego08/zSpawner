@@ -36,8 +36,7 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 
 		if (object.isPlace()) {
 
-			manager.getBoard().removeSpawner(object);
-			object.delete();
+			object.delete(manager.getBoard());
 			message(player, Message.REMOVE_SPAWNER);
 			createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
 

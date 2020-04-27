@@ -1,7 +1,6 @@
 package fr.maxlego08.zspawner;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -70,7 +69,7 @@ public class SpawnerListener extends ListenerAdapter {
 				if (spawner.isOwner(player)) {
 
 					if (Config.ownerCanBreakSpawner)
-						spawner.delete();
+						spawner.delete(board);
 					else
 						message(player, Message.SPAWNER_BREAK_OWNER);
 

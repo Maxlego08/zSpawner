@@ -56,7 +56,7 @@ public interface Spawner {
 	/**
 	 * 
 	 */
-	void delete();
+	void delete(Board board);
 
 	/**
 	 * 

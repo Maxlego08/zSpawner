@@ -48,6 +48,8 @@ public enum Message {
 	
 	PLACE_SPAWNER_SUCCESS("§aYou have just placed a spawner"), 
 	PLACE_SPAWNER_START("§eYou have §f1 §eminute to place the spawner in your land !"),
+	PLACE_SPAWNER_ERROR("§cYou do not have permission to place the spawner here."),
+	PLACE_SPAWNER_ERROR_BLACKLIST("§cYou cannot place a spawner on this block"),
 	
 	SPAWNER_BREAK_OWNER("§eYou can §6delete §eyour spawner with the command §f/spawners§e."),
 	SPAWNER_BREAK_OWNER_ERROR("§cOnly the owner of the spawner can break it."),

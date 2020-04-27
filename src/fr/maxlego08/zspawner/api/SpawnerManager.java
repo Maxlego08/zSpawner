@@ -94,5 +94,30 @@ public interface SpawnerManager extends Saveable{
 	 * @param player
 	 */
 	void placeSpawner(BlockBreakEvent event, Block block, Player player);
+
+	/**
+	 * 
+	 * @return count spawner
+	 */
+	int count();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	FactionListener getFactionListener();
+	
+	/**
+	 * 
+	 * @param factionListener
+	 */
+	void setFactionListener(FactionListener factionListener);
+	
+	/**
+	 * 
+	 * @param block
+	 * @return
+	 */
+	boolean isBlacklist(Block block);
 	
 }

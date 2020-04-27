@@ -1,5 +1,7 @@
 package fr.maxlego08.zspawner;
 
+import java.util.concurrent.Callable;
+
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.command.CommandManager;
@@ -28,7 +30,6 @@ public class ZSpawnerPlugin extends ZPlugin {
 	private Board board;
 	private boolean isEnable = false;
 
-	@SuppressWarnings("unused")
 	@Override
 	public void onEnable() {
 
@@ -69,6 +70,12 @@ public class ZSpawnerPlugin extends ZPlugin {
 		isEnable = true;
 		
 		Metrics metrics = new Metrics(this);
+		metrics.addCustomChart(new Metrics.SingleLineChart("total_number_of_spawners", new Callable<Integer>() {
+			@Override
+			public Integer call() throws Exception {
+				return spawner.count();
+			}
+		}));
 
 	}
 
