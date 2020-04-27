@@ -10,9 +10,12 @@ import org.bukkit.inventory.ItemStack;
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
+import fr.maxlego08.zspawner.api.event.SpawnerPrePlaceEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
 import fr.maxlego08.zspawner.inventory.PaginateInventory;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
+import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.utils.inventory.Button;
 import fr.maxlego08.zspawner.zcore.utils.inventory.ItemButton;
 
@@ -31,7 +34,32 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 
 	@Override
 	public void onClick(Spawner object, ItemButton button) {
-		// TODO Auto-generated method stub
+
+		
+		if (object.isPlace()) {
+
+			SpawnerRemoveEvent event = new SpawnerRemoveEvent(player, object, playerSpawner);
+			event.callEvent();
+			
+			if (event.isCancelled())
+				return;
+			
+			object.delete();
+			message(player, Message.REMOVE_SPAWNER);
+			createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
+			
+			return;
+		}
+
+		SpawnerPrePlaceEvent event = new SpawnerPrePlaceEvent(player, object, playerSpawner);
+		event.callEvent();
+		
+		if (event.isCancelled())
+			return;
+		
+		playerSpawner.setCurrentPlacingSpawner(object);
+		player.closeInventory();
+		message(player, Message.PLACE_SPAWNER_START);
 
 	}
 

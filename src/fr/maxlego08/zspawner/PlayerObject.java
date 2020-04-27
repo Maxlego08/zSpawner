@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 import fr.maxlego08.zspawner.api.PlayerSpawner;
@@ -19,6 +18,8 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 	private final UUID user;
 	private final List<Spawner> spawners;
 	private Sort typeShort = Sort.PLACE;
+	private long placingCooldown = 0;
+	private Spawner placingSpawner;
 
 	/**
 	 * 
@@ -69,26 +70,23 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 	@Override
 	public boolean isPlacing() {
-		// TODO Auto-generated method stub
-		return false;
+		return placingCooldown != 0 && placingCooldown > System.currentTimeMillis();
 	}
 
 	@Override
 	public int spawnerSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return spawners.size();
 	}
 
 	@Override
 	public Spawner getCurrentPlacingSpawner() {
-		// TODO Auto-generated method stub
-		return null;
+		return placingSpawner;
 	}
 
 	@Override
 	public void setCurrentPlacingSpawner(Spawner spawner) {
-		// TODO Auto-generated method stub
-
+		this.placingSpawner = spawner;
+		this.placingCooldown = System.currentTimeMillis() + 1000 * 60;
 	}
 
 	@Override
@@ -109,18 +107,6 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 	}
 
 	@Override
-	public void setPlacing(long placeMs) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void placeSpawner(Location location) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void removeAll() {
 		// TODO Auto-generated method stub
 
@@ -134,6 +120,12 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 	@Override
 	public void toggleShort() {
 		typeShort = typeShort.next();
+	}
+
+	@Override
+	public void placeSpawner() {
+		placingCooldown = 0;
+		placingSpawner = null;
 	}
 	
 

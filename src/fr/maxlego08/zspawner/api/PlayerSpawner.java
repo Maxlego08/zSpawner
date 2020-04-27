@@ -82,19 +82,9 @@ public interface PlayerSpawner {
 	void removeSpawner(EntityType type);
 
 	/**
-	 * 
-	 * @param placeMs
-	 */
-	void setPlacing(long placeMs);
-
-	/**
-	 * 
-	 * @param location
-	 */
-	void placeSpawner(Location location);
-	
-	/**
 	 * Remove all spawners 
 	 */
 	void removeAll();
+
+	void placeSpawner();
 }

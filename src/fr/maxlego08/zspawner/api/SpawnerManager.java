@@ -2,9 +2,11 @@ package fr.maxlego08.zspawner.api;
 
 import java.util.UUID;
 
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 
 import fr.maxlego08.zspawner.zcore.utils.storage.Saveable;
 
@@ -92,5 +94,13 @@ public interface SpawnerManager extends Saveable{
 	 * @param type
 	 */
 	void removeSpawners(CommandSender sender, Player target, EntityType type);
+
+	/**
+	 * 
+	 * @param event
+	 * @param block
+	 * @param player
+	 */
+	void placeSpawner(BlockBreakEvent event, Block block, Player player);
 	
 }

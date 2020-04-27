@@ -70,7 +70,8 @@ public class SpawnerAdapter extends TypeAdapter<Spawner> {
 		Map<String, Object> keys = ZPlugin.z().getGson().fromJson(raw, seriType);
 		UUID uuid = UUID.fromString((String) keys.get(UUIDNAME));
 		UUID owner = UUID.fromString((String) keys.get(UUIDOWNER));
-		Location location = (Location) keys.get(LOCATION);
+		LocationAdapter adapter = new LocationAdapter();
+		Location location = adapter.fromRaw((String) keys.get(LOCATION));
 		EntityType type = EntityType.valueOf((String) keys.get(TYPE));
 		return new SpawnerObject(uuid, type, owner, location);
 	}

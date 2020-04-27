@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
+import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.exceptions.InventoryOpenException;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
@@ -29,6 +30,7 @@ public abstract class VInventory extends ZUtils implements Cloneable{
 	protected Inventory inventory;
 	protected String guiName;
 	protected boolean disableClick = true;
+	protected SpawnerManager manager;
 
 	/**
 	 * Id de l'inventaire
@@ -172,6 +174,7 @@ public abstract class VInventory extends ZUtils implements Cloneable{
 		this.args = args;
 		this.player = player;
 		this.plugin = main;
+		this.manager = main.getSpawner();
 		
 		return openInventory(main, player, page, args);
 	}

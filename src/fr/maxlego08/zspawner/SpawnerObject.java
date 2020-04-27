@@ -13,7 +13,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
-import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
@@ -67,7 +66,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		List<String> lore = new ArrayList<>();
 		Config.infos.forEach(string -> {
-			lore.add(string.replace("%location%", location == null ? "" : toLocation()).replace("%type%", type.name()));
+			lore.add(string.replace("%location%", location == null ? "non placé" : toLocation()).replace("%type%", type.name()));
 		});
 		itemMeta.setLore(lore);
 		itemStack.setItemMeta(itemMeta);
@@ -106,13 +105,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 
 	@Override
 	public void place(Location location) {
-
-		SpawnerPlaceEvent event = new SpawnerPlaceEvent(this);
-		event.callEvent();
-
-		if (event.isCancelled())
-			return;
-
+		
 		location.getBlock().setType(getMaterial(52));
 		CreatureSpawner creatureSpawner = (CreatureSpawner) location.getBlock().getState();
 		creatureSpawner.setSpawnedType(type);

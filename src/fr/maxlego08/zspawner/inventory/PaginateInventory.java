@@ -90,7 +90,7 @@ public abstract class PaginateInventory<T> extends VInventory {
 		tmpList.forEach(tmpItem -> {
 			ItemButton button = addItem(slotChange(slot.getAndIncrement()), buildItem(tmpItem));
 			ItemButton itemButton = createButton(button);
-			if (!disableClick)
+			if (!disableDefaultClick)
 				itemButton.setClick((event) -> onClick(tmpItem, itemButton));
 		});
 

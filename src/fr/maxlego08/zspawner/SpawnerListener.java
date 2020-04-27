@@ -1,6 +1,10 @@
 package fr.maxlego08.zspawner;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import fr.maxlego08.zspawner.api.SpawnerManager;
@@ -33,13 +37,29 @@ public class SpawnerListener extends ListenerAdapter {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
 						+ " §eCeci est une version de développement et non de production.");
 			}
-//			if (!useLastVersion && (player.hasPermission(Permission.ZHOPPER_RELOAD.getPermission())
-//					|| event.getPlayer().getName().startsWith("Maxlego")
-//					|| event.getPlayer().getName().startsWith("Sak"))) {
-//				message(player,
-//						"§cYou are not using the latest version of the plugin, remember to update the plugin quickly.");
-//			}
+			// if (!useLastVersion &&
+			// (player.hasPermission(Permission.ZHOPPER_RELOAD.getPermission())
+			// || event.getPlayer().getName().startsWith("Maxlego")
+			// || event.getPlayer().getName().startsWith("Sak"))) {
+			// message(player,
+			// "§cYou are not using the latest version of the plugin, remember
+			// to update the plugin quickly.");
+			// }
 		});
+
+	}
+
+	@Override
+	protected void onBlockBreak(BlockBreakEvent event, Player player) {
+
+		Block block = event.getBlock();
+
+		if (block.getType().equals(getMaterial(52))) {
+
+			
+		} else {
+			manager.placeSpawner(event, block, player);
+		}
 
 	}
 

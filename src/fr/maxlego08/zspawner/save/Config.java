@@ -12,7 +12,7 @@ import fr.maxlego08.zspawner.zcore.utils.storage.Saveable;
 
 public class Config implements Saveable {
 
-	public static InventoryType type = InventoryType.PAGINATE;
+	public transient static InventoryType type = InventoryType.PAGINATE;
 	public static int inventorySize = 54;
 	public static boolean displayInformation = true;
 	public static String inventoryName = "§ezSpawner §6%p%§7/§6%mp%";

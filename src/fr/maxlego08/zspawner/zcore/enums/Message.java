@@ -38,7 +38,12 @@ public enum Message {
 	PLACING_SPAWNER("§cYou already place a spawner!"),
 	
 	ADD_SPAWNER_SENDER("§eYou have just given x§f%how% §6%type% §espawner to §f%player%§e."),
-	ADD_SPAWNER_RECEIVER("§eYou have just received x§f%how% §6%type% §espawner."), 
+	ADD_SPAWNER_RECEIVER("§eYou have just received x§f%how% §6%type% §espawner."),
+	
+	PLACE_SPAWNER_SUCCESS("§aYou have just placed a spawner"), 
+	PLACE_SPAWNER_START("§eYou have §f1 §eminute to place the spawner in your land !"),
+	
+	REMOVE_SPAWNER("§bYou have removed a spawner !"), 
 	
 	;
 

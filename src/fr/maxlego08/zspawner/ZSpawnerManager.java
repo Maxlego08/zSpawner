@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
@@ -16,6 +18,7 @@ import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.api.enums.InventoryType;
 import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerOpenInventoryEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.enums.Message;
@@ -81,7 +84,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 		if (!exit(uuid))
 			message(player, Message.NO_SPAWNER);
-		else if (hasSpawner(uuid))
+		else if (!hasSpawner(uuid))
 			message(player, Message.NO_SPAWNER);
 		else {
 
@@ -170,6 +173,34 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 	@Override
 	public void removeSpawners(CommandSender sender, Player target, EntityType type) {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void placeSpawner(BlockBreakEvent event, Block block, Player player) {
+
+		// Verif de la permission de casser ici
+
+		UUID uuid = player.getUniqueId();
+		if (!hasSpawner(uuid))
+			return;
+
+		PlayerSpawner playerSpawner = getPlayer(uuid);
+		if (playerSpawner.isPlacing()) {
+
+			Spawner spawner = playerSpawner.getCurrentPlacingSpawner();
+			SpawnerPlaceEvent placeEvent = new SpawnerPlaceEvent(player, playerSpawner, spawner, block.getLocation());
+			
+			if (placeEvent.isCancelled())
+				return;
+			
+			spawner.place(placeEvent.getLocation() == null ? block.getLocation() : placeEvent.getLocation());
+			event.setCancelled(true);
+			playerSpawner.placeSpawner();
+			
+			message(player, Message.PLACE_SPAWNER_SUCCESS);
+
+		}
 
 	}
 
