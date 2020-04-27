@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -170,11 +171,6 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	}
 
-	@Override
-	public void removeSpawners(CommandSender sender, Player target, EntityType type) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void placeSpawner(BlockBreakEvent event, Block block, Player player) {
@@ -194,9 +190,11 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 			if (placeEvent.isCancelled())
 				return;
 			
-			spawner.place(placeEvent.getLocation() == null ? block.getLocation() : placeEvent.getLocation());
+			Location finalLocation = placeEvent.getLocation() == null ? block.getLocation() : placeEvent.getLocation();
+			spawner.place(finalLocation);
 			event.setCancelled(true);
 			playerSpawner.placeSpawner();
+			board.placeSpawner(finalLocation, spawner);
 			
 			message(player, Message.PLACE_SPAWNER_SUCCESS);
 

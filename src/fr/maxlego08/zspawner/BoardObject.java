@@ -14,7 +14,7 @@ import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 public class BoardObject implements Board {
 
 	private static Map<Location, Spawner> boards = new HashMap<Location, Spawner>();
-	
+
 	@Override
 	public boolean isSpawner(Location location) {
 		return boards.containsKey(location);
@@ -53,6 +53,12 @@ public class BoardObject implements Board {
 	@Override
 	public void load(Persist persist) {
 		persist.loadOrSaveDefault(this, BoardObject.class, "board");
+	}
+
+	@Override
+	public void removeSpawner(Spawner spawner) {
+		if (spawner.isPlace())
+			removeSpawner(spawner.getLocation());
 	}
 
 }

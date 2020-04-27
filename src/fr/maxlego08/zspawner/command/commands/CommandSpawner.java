@@ -15,6 +15,7 @@ public class CommandSpawner extends VCommand {
 		this.DEBUG = true;
 		
 		this.addSubCommand(new CommandSpawnerAdd());
+		this.addSubCommand(new CommandSpawnerRemove());
 		this.addSubCommand(new CommandSpawnerVersion());
 		this.addSubCommand(new CommandSpawnerReload());
 		this.addSubCommand(new CommandSpawnerHelp());

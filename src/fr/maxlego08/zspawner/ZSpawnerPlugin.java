@@ -11,6 +11,7 @@ import fr.maxlego08.zspawner.listener.AdapterListener;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
+import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
 
 /**
@@ -24,9 +25,12 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 	private SpawnerManager spawner;
 	private Board board;
+	private boolean isEnable = false;
 
 	@Override
 	public void onEnable() {
+
+		isEnable = false;
 
 		preEnable();
 
@@ -61,6 +65,8 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 		postEnable();
 
+		isEnable = true;
+
 	}
 
 	@Override
@@ -68,12 +74,16 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 		preDisable();
 
-		getSavers().forEach(saver -> saver.save(getPersist()));
+		if (isEnable)
+			getSavers().forEach(saver -> saver.save(getPersist()));
+		else {
+			getLog().log("Unable to save files, plugin did not load well.", LogType.WARNING);
+		}
 
 		postDisable();
 
 	}
-	
+
 	public SpawnerManager getSpawner() {
 		return spawner;
 	}

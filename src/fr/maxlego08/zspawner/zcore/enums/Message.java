@@ -33,6 +33,7 @@ public enum Message {
 	DESCRIPTION_RELOAD("Reload plugin"),
 	DESCRIPTION_VERSION("Show plugin version"),
 	DESCRIPTION_ADD("Add spawner to player"),
+	DESCRIPTION_REMOVE("Remove spawner to player"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
 	PLACING_SPAWNER("§cYou already place a spawner!"),

@@ -50,5 +50,11 @@ public interface Board extends Saveable {
 	 * @param location
 	 */
 	void removeSpawner(Location location);
+	
+	/**
+	 * 
+	 * @param spawner
+	 */
+	void removeSpawner(Spawner spawner);
 
 }

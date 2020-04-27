@@ -89,14 +89,6 @@ public interface SpawnerManager extends Saveable{
 	
 	/**
 	 * 
-	 * @param sender
-	 * @param target
-	 * @param type
-	 */
-	void removeSpawners(CommandSender sender, Player target, EntityType type);
-
-	/**
-	 * 
 	 * @param event
 	 * @param block
 	 * @param player

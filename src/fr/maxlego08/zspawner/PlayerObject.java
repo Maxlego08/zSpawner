@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.entity.EntityType;
 
+import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.enums.Sort;
@@ -98,19 +99,25 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 	}
 
 	@Override
-	public void removeSpawner(Spawner spawner) {
-		// TODO Auto-generated method stub
-
+	public void removeSpawner(Board board, Spawner spawner) {
+		board.removeSpawner(spawner);
+		spawner.delete();
+		spawners.remove(spawner);
 	}
 
 	@Override
-	public void removeSpawner(EntityType type) {
-		// TODO Auto-generated method stub
-
+	public void removeSpawner(Board board, EntityType type) {
+		Iterator<Spawner> iterator = spawners.stream().filter(spawner -> spawner.getType().equals(type)).iterator();
+		while (iterator.hasNext()) {
+			Spawner spawner = iterator.next();
+			board.removeSpawner(spawner);
+			spawner.delete();
+			iterator.remove();
+		}
 	}
 
 	@Override
-	public void removeAll() {
+	public void removeAll(Board board) {
 
 		SpawnerRemoveAllEvent event = new SpawnerRemoveAllEvent(this);
 		event.callEvent();
@@ -120,7 +127,9 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 
 		Iterator<Spawner> iterator = this.spawners.iterator();
 		while (iterator.hasNext()) {
-			iterator.next().delete();
+			Spawner spawner = iterator.next();
+			board.removeSpawner(spawner);
+			spawner.delete();
 			iterator.remove();
 		}
 
@@ -143,15 +152,18 @@ public class PlayerObject extends ZUtils implements PlayerSpawner {
 	}
 
 	@Override
-	public void deleteAllSpawners() {
-		
+	public void deleteAllSpawners(Board board) {
+
 		SpawnerDeleteAllEvent event = new SpawnerDeleteAllEvent(this);
 		event.callEvent();
-		
+
 		if (event.isCancelled())
 			return;
-		
-		this.spawners.forEach(Spawner::delete);
+
+		this.spawners.forEach(spawner -> {
+			board.removeSpawner(spawner);
+			spawner.delete();
+		});
 	}
 
 }

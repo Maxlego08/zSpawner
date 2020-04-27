@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
+import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerPrePlaceEvent;
@@ -36,6 +37,7 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 
 		if (object.isPlace()) {
 
+			manager.getBoard().removeSpawner(object);
 			object.delete();
 			message(player, Message.REMOVE_SPAWNER);
 			createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
@@ -77,7 +79,7 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 			Button button = Config.buttonRemoveAll;
 			int slot1 = button.getSlot() > inventorySize ? removeAllSlot : button.getSlot();
 			addItem(slot1, button.toItemStack(playerSpawner)).setClick(event -> {
-				playerSpawner.deleteAllSpawners();
+				playerSpawner.deleteAllSpawners(manager.getBoard());
 				createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
 			});
 		}
