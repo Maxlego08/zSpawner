@@ -12,6 +12,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -23,7 +24,7 @@ import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.commands.CommandType;
 
-public class CommandManager extends ZUtils implements CommandExecutor {
+public class CommandManager extends ZUtils implements CommandExecutor, TabCompleter {
 
 	private final ZSpawnerPlugin main;
 	private final List<VCommand> commands = new ArrayList<VCommand>();
@@ -51,6 +52,7 @@ public class CommandManager extends ZUtils implements CommandExecutor {
 	public VCommand addCommand(String string, VCommand command) {
 		commands.add(command.addSubCommand(string));
 		ZPlugin.z().getCommand(string).setExecutor(this);
+		ZPlugin.z().getCommand(string).setTabCompleter(this);
 		return command;
 	}
 
@@ -177,10 +179,48 @@ public class CommandManager extends ZUtils implements CommandExecutor {
 		return CommandType.DEFAULT;
 	}
 
+	/**
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param args
+	 * @return
+	 */
+	private List<String> proccessTab(CommandSender sender, VCommand command, String[] args) {
+
+		CommandType type = command.tabPerform(plugin, sender, args);
+		if (type.equals(CommandType.DEFAULT)) {
+
+			String startWith = args[0];
+
+			List<String> tabCompleter = new ArrayList<>();
+			for (VCommand vCommand : commands) {
+				if ((vCommand.getParent() != null && vCommand.getParent() == command)) {
+					String cmd = vCommand.getSubCommands().get(0);
+					if (startWith.length() == 0 || cmd.startsWith(startWith))
+						tabCompleter.add(cmd);
+				}
+			}
+			return tabCompleter.size() == 0 ? null : tabCompleter;
+
+		} else if (type.equals(CommandType.SUCCESS))
+			return command.toTab(plugin, sender, args);
+
+		return null;
+	}
+
+	/**
+	 * 
+	 * @return commands list
+	 */
 	public List<VCommand> getCommands() {
 		return commands;
 	}
 
+	/**
+	 * 
+	 * @return number of unique command
+	 */
 	private int getUniqueCommand() {
 		return (int) commands.stream().filter(command -> command.getParent() == null).count();
 	}
@@ -219,6 +259,25 @@ public class CommandManager extends ZUtils implements CommandExecutor {
 				ZPlugin.z().getPluginLoader().disablePlugin(ZPlugin.z());
 			}
 		});
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String str, String[] args) {
+
+		for (VCommand command : commands) {
+			if (command.getSubCommands().contains(cmd.getName().toLowerCase())) {
+				if ((args.length == 1 || command.isIgnoreParent()) && command.getParent() == null) {
+					return proccessTab(sender, command, args);
+				}
+			} else {
+				if (args.length >= 1 && command.getParent() != null
+						&& canExecute(args, cmd.getName().toLowerCase(), command)) {
+					return proccessTab(sender, command, args);
+				}
+			}
+		}
+
+		return null;
 	}
 
 }

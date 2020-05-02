@@ -366,6 +366,17 @@ public abstract class VCommand extends Arguments {
 	}
 
 	/**
+	 * 
+	 * @param plugin
+	 * @param sender
+	 * @param args
+	 * @return
+	 */
+	public CommandType tabPerform(ZSpawnerPlugin plugin, CommandSender sender, String[] args){
+		return CommandType.DEFAULT;
+	}
+	
+	/**
 	 * method that allows you to execute the command
 	 */
 	protected abstract CommandType perform(ZSpawnerPlugin main);
@@ -388,6 +399,10 @@ public abstract class VCommand extends Arguments {
 	public String toString() {
 		return "VCommand [permission=" + permission + ", subCommands=" + subCommands + ", consoleCanUse="
 				+ consoleCanUse + ", description=" + description + "]";
+	}
+
+	public List<String> toTab(ZSpawnerPlugin plugin, CommandSender sender2, String[] args) {
+		return null;
 	}
 
 }
