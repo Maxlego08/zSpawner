@@ -35,6 +35,7 @@ public enum Message {
 	DESCRIPTION_ADD("Add spawner to player"),
 	DESCRIPTION_GIVE("Give spawner to player"),
 	DESCRIPTION_REMOVE("Remove spawner to player"),
+	DESCRIPTION_REMOVE_ALL("Remove all spawners to player"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
@@ -50,6 +51,9 @@ public enum Message {
 	
 	REMOVE_SPAWNER_SENDER("§eYou have just remove x§f%how% §6%type% §espawner to §f%player%§e."),
 	REMOVE_SPAWNER_RECEIVER("§eYou have just lost x§f%how% §6%type% §espawner."),
+	
+	REMOVE_ALL_SPAWNER_SENDER("§eYou have just remove §fall §espawners to §f%player%§e."),
+	REMOVE_ALL_SPAWNER_RECEIVER("§eyou just lost §fall §eyour spawners."),
 	
 	PLACE_SPAWNER_SUCCESS("§aYou have just placed a spawner"), 
 	PLACE_SPAWNER_START("§eYou have §f1 §eminute to place the spawner in your land !"),

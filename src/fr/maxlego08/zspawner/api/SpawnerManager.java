@@ -136,5 +136,12 @@ public interface SpawnerManager extends Saveable{
 	 * @param block
 	 */
 	void placeSpawner(BlockPlaceEvent event, Player player, ItemStack itemInHand, Block block);
+
+	/**
+	 * 
+	 * @param sender
+	 * @param player
+	 */
+	void removeSpawnerAll(CommandSender sender, Player player);
 	
 }

@@ -30,6 +30,7 @@ import fr.maxlego08.zspawner.api.event.SpawnerGiveEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerOpenInventoryEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerRemoveAllEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
 import fr.maxlego08.zspawner.depends.NoFaction;
 import fr.maxlego08.zspawner.nms.NMS_1_10;
@@ -265,6 +266,36 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 	}
 
 	@Override
+	public void removeSpawnerAll(CommandSender sender, Player target) {
+
+		UUID uuid = target.getUniqueId();
+
+		if (!hasSpawner(uuid)) {
+			message(sender, Message.NO_SPAWNER_TARGET, target.getName());
+			return;
+		}
+
+		PlayerSpawner playerSpawner = getPlayer(uuid);
+
+		SpawnerRemoveAllEvent event = new SpawnerRemoveAllEvent(playerSpawner);
+		event.callEvent();
+
+		if (event.isCancelled())
+			return;
+
+		playerSpawner.removeAll(board);
+
+		String message = Message.REMOVE_ALL_SPAWNER_SENDER.getMessage();
+		message = message.replace("%player%", target.getName());
+
+		message(sender, message);
+
+		message = Message.REMOVE_ALL_SPAWNER_RECEIVER.getMessage();
+		message(target, message);
+
+	}
+
+	@Override
 	public void removeSpawner(CommandSender sender, Player target, EntityType type, int number) {
 
 		UUID uuid = target.getUniqueId();
@@ -398,5 +429,4 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 		}
 
 	}
-
 }
