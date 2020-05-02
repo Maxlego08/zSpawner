@@ -36,6 +36,8 @@ public enum Message {
 	DESCRIPTION_GIVE("Give spawner to player"),
 	DESCRIPTION_REMOVE("Remove spawner to player"),
 	DESCRIPTION_REMOVE_ALL("Remove all spawners to player"),
+	DESCRIPTION_INFO("See the spawner information that you pointed"),
+	DESCRIPTION_SEND("Send spawner to player"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
@@ -55,6 +57,10 @@ public enum Message {
 	REMOVE_ALL_SPAWNER_SENDER("§eYou have just remove §fall §espawners to §f%player%§e."),
 	REMOVE_ALL_SPAWNER_RECEIVER("§eyou just lost §fall §eyour spawners."),
 	
+	SEND_SPAWNER_PLAYER("§eYou just gave §fx1 §6%type% §eto §6%player%§e."),
+	SEND_SPAWNER_ERROR("§cYou can't send a spawner to yourself."),
+	SEND_SPAWNER_RECEIVER("§eYou have just received x§f1 §6%type% §espawner from §f%sender% §8(§f/spawners§8)"),
+	
 	PLACE_SPAWNER_SUCCESS("§aYou have just placed a spawner"), 
 	PLACE_SPAWNER_START("§eYou have §f1 §eminute to place the spawner in your land !"),
 	PLACE_SPAWNER_ERROR("§cYou do not have permission to place the spawner here."),
@@ -63,7 +69,9 @@ public enum Message {
 	SPAWNER_BREAK_OWNER("§eYou can §6delete §eyour spawner with the command §f/spawners§e."),
 	SPAWNER_BREAK_OWNER_ERROR("§cOnly the owner of the spawner can break it."),
 	
-	REMOVE_SPAWNER("§bYou have removed a spawner !"), 
+	REMOVE_SPAWNER("§eYou have removed a spawner !"), 
+	INFO_ERROR("§cYou must watch a block!"), 
+	INFO_ERROR_BOARD("§cThis spawner is natural!"), 
 	
 	;
 

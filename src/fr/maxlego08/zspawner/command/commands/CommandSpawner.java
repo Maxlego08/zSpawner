@@ -8,22 +8,24 @@ import fr.maxlego08.zspawner.zcore.utils.commands.CommandType;
 public class CommandSpawner extends VCommand {
 
 	public CommandSpawner() {
-		
+
 		this.setPermission(Permission.ZSPAWNER_USE);
 		this.setConsoleCanUse(false);
-		
+
 		this.DEBUG = true;
-		
+
 		this.addSubCommand(new CommandSpawnerAdd());
 		this.addSubCommand(new CommandSpawnerRemove());
 		this.addSubCommand(new CommandSpawnerRemoveAll());
 		this.addSubCommand(new CommandSpawnerGive());
 		this.addSubCommand(new CommandSpawnerVersion());
 		this.addSubCommand(new CommandSpawnerReload());
+		this.addSubCommand(new CommandSpawnerSend());
 		this.addSubCommand(new CommandSpawnerHelp());
-		
+		this.addSubCommand(new CommandSpawnerInfo());
+
 	}
-	
+
 	@Override
 	protected CommandType perform(ZSpawnerPlugin plugin) {
 		manager.openInventory(player);

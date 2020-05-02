@@ -32,6 +32,7 @@ import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveAllEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerSendEvent;
 import fr.maxlego08.zspawner.depends.NoFaction;
 import fr.maxlego08.zspawner.nms.NMS_1_10;
 import fr.maxlego08.zspawner.nms.NMS_1_11;
@@ -180,13 +181,66 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 
 	@Override
 	public void openSendInventory(Player player, Player target) {
-		// TODO Auto-generated method stub
+
+		UUID uuid = player.getUniqueId();
+
+		if (!exit(uuid))
+			message(player, Message.NO_SPAWNER);
+		else if (!hasSpawner(uuid))
+			message(player, Message.NO_SPAWNER);
+		else {
+
+			if (player.getName().equals(target.getName())) {
+				message(player, Message.SEND_SPAWNER_ERROR);
+				return;
+			}
+
+			PlayerSpawner playerSpawner = getPlayer(uuid);
+
+			SpawnerOpenInventoryEvent event = new SpawnerOpenInventoryEvent(Inventory.INVENTORY_SPAWNER_SEND,
+					playerSpawner, player);
+			event.callEvent();
+
+			if (event.isCancelled())
+				return;
+
+			createInventory(player, event.getInventory(), 1, playerSpawner, target);
+
+		}
 
 	}
 
 	@Override
 	public void sendSpawner(Player player, Player target, Spawner spawner) {
-		// TODO Auto-generated method stub
+
+		UUID uuid = player.getUniqueId();
+		spawner.delete(board);
+
+		PlayerSpawner playerSpawner = getPlayer(uuid);
+		PlayerSpawner targetPlayerSpawner = getPlayer(target.getUniqueId());
+		Spawner newSpawner = new SpawnerObject(target.getUniqueId(), spawner.getType());
+
+		SpawnerSendEvent event = new SpawnerSendEvent(player, target, playerSpawner, targetPlayerSpawner, spawner,
+				newSpawner);
+		event.callEvent();
+
+		if (event.isCancelled())
+			return;
+
+		playerSpawner.removeSpawner(board, spawner);
+		targetPlayerSpawner.addSpawner(newSpawner);
+
+		String message = Message.SEND_SPAWNER_PLAYER.getMessage();
+		message = message.replace("%type%", name(spawner.getType().name()));
+		message = message.replace("%player%", target.getName());
+
+		message(player, message);
+
+		message = Message.SEND_SPAWNER_RECEIVER.getMessage();
+		message = message.replace("%type%", name(spawner.getType().name()));
+		message = message.replace("%sender%", player.getName());
+
+		message(target, message);
 
 	}
 

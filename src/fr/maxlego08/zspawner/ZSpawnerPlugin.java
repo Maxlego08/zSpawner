@@ -1,20 +1,24 @@
 package fr.maxlego08.zspawner;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.command.commands.CommandSpawner;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
+import fr.maxlego08.zspawner.inventory.inventories.InventorySendSpawner;
 import fr.maxlego08.zspawner.inventory.inventories.InventorySpawner;
 import fr.maxlego08.zspawner.inventory.inventories.InventorySpawnerPaginate;
 import fr.maxlego08.zspawner.listener.AdapterListener;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
+import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.Metrics;
+import fr.maxlego08.zspawner.zcore.utils.UpdateChecker;
 import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
 
 /**
@@ -28,6 +32,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 	private SpawnerManager spawner;
 	private Board board;
+	private SpawnerListener listener;
 	private boolean isEnable = false;
 
 	@Override
@@ -52,11 +57,12 @@ public class ZSpawnerPlugin extends ZPlugin {
 		/* Inventory */
 		registerInventory(Inventory.INVENTORY_SPAWNER, new InventorySpawner());
 		registerInventory(Inventory.INVENTORY_SPAWNER_PAGINATE, new InventorySpawnerPaginate());
+		registerInventory(Inventory.INVENTORY_SPAWNER_SEND, new InventorySendSpawner());
 
 		/* Add Listener */
 		addListener(new AdapterListener(this));
 		addListener(inventoryManager);
-		addListener(new SpawnerListener(spawner));
+		addListener(listener = new SpawnerListener(spawner));
 
 		/* Add Saver */
 		addSave(Config.getInstance());
@@ -68,7 +74,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 		postEnable();
 
 		isEnable = true;
-		
+
 		Metrics metrics = new Metrics(this);
 		metrics.addCustomChart(new Metrics.SingleLineChart("total_number_of_spawners", new Callable<Integer>() {
 			@Override
@@ -76,6 +82,18 @@ public class ZSpawnerPlugin extends ZPlugin {
 				return spawner.count();
 			}
 		}));
+
+		UpdateChecker checker = new UpdateChecker(this, 69465);
+		AtomicBoolean atomicBoolean = new AtomicBoolean();
+		checker.getVersion(version -> {
+			atomicBoolean.set(this.getDescription().getVersion().equalsIgnoreCase(version));
+			listener.setUseLastVersion(atomicBoolean.get());
+			if (atomicBoolean.get())
+				Logger.info("There is not a new update available.");
+			else
+				Logger.info("There is a new update available. Your version: " + this.getDescription().getVersion()
+						+ ", Laste version: " + version);
+		});
 
 	}
 

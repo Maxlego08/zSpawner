@@ -23,6 +23,18 @@ public interface Spawner {
 
 	/**
 	 * 
+	 * @return
+	 */
+	long placedAt();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	long createAt();
+	
+	/**
+	 * 
 	 * @return location
 	 */
 	Location getLocation();

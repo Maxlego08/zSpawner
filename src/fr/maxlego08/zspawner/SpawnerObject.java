@@ -1,5 +1,7 @@
 package fr.maxlego08.zspawner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -21,6 +23,8 @@ public class SpawnerObject extends ZUtils implements Spawner {
 
 	private final UUID uuid;
 	private final EntityType type;
+	private final long createAt;
+	private long placedAt;
 	private UUID owner;
 	private Location location;
 
@@ -29,12 +33,15 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		this.uuid = UUID.randomUUID();
 		this.type = type;
 		this.owner = owner;
+		this.createAt = System.currentTimeMillis();
 	}
 
-	public SpawnerObject(UUID uuid, EntityType type, UUID owner, Location location) {
+	public SpawnerObject(UUID uuid, EntityType type, long createAt, long placedAt, UUID owner, Location location) {
 		super();
 		this.uuid = uuid;
 		this.type = type;
+		this.createAt = createAt;
+		this.placedAt = placedAt;
 		this.owner = owner;
 		this.location = location;
 	}
@@ -67,8 +74,15 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		if (Config.glowPlaceSpawner && location != null)
 			builder.glow();
 		Config.infos.forEach(string -> {
-			builder.addLine(string.replace("%location%", location == null ? "non placé" : toLocation())
-					.replace("%type%", type.name()));
+
+			SimpleDateFormat format = new SimpleDateFormat(Config.timeFormat);
+
+			string = string.replace("%location%", location == null ? "non placé" : toLocation());
+			string = string.replace("%type%", type.name());
+			string = string.replace("%create%", format.format(new Date(createAt)));
+			string = string.replace("%placed%", location == null ? "non placé" : format.format(new Date(placedAt)));
+
+			builder.addLine(string);
 		});
 		return builder.build();
 	}
@@ -112,6 +126,9 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		creatureSpawner.setSpawnedType(type);
 		if (ItemDecoder.getNMSVersion() != 1.8 && ItemDecoder.getNMSVersion() != 1.7)
 			creatureSpawner.update();
+
+		placedAt = System.currentTimeMillis();
+
 		this.location = location;
 	}
 
@@ -126,6 +143,16 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	@Override
 	public boolean isOwner(Player player) {
 		return player == null ? false : player.getUniqueId().equals(owner);
+	}
+
+	@Override
+	public long placedAt() {
+		return placedAt;
+	}
+
+	@Override
+	public long createAt() {
+		return createAt;
 	}
 
 }
