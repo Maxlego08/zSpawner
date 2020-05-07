@@ -28,6 +28,9 @@ public class Config implements Saveable {
 	public static boolean dropSpawnerOnExplose = false;
 	public static boolean sendMessageWhenSpawnerExplose = true;
 
+	public static boolean autoSave = true;
+	public static int autoSaveTime = 60;
+	
 	public static String inventoryName = "§ezSpawner §6%p%§7/§6%mp%";
 	public static String timeFormat = "dd/MM/yyyy hh:mm";
 

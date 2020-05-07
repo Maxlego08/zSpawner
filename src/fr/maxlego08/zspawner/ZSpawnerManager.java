@@ -483,4 +483,14 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 		}
 
 	}
+
+	@Override
+	public void remove(Spawner spawner) {
+		
+		UUID uuid = spawner.getOwner();
+		spawner.delete(board);
+		PlayerSpawner playerSpawner = getPlayer(uuid);
+		playerSpawner.removeSpawner(board, spawner);
+		
+	}
 }

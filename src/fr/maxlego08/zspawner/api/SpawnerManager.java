@@ -143,5 +143,11 @@ public interface SpawnerManager extends Saveable{
 	 * @param player
 	 */
 	void removeSpawnerAll(CommandSender sender, Player player);
+
+	/**
+	 * 
+	 * @param spawner
+	 */
+	void remove(Spawner spawner);
 	
 }

@@ -3,28 +3,34 @@ package fr.maxlego08.zspawner;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
+import fr.maxlego08.zspawner.api.Key;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.SpawnerManager;
+import fr.maxlego08.zspawner.api.event.SpawnerExplodeEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerExplodeNaturalEvent;
 import fr.maxlego08.zspawner.listener.ListenerAdapter;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
+import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
-public class SpawnerListener extends ListenerAdapter {
+public class SpawnerListener extends ListenerAdapter implements Key {
 
 	private final SpawnerManager manager;
 	private final Board board;
@@ -69,7 +75,7 @@ public class SpawnerListener extends ListenerAdapter {
 	@Override
 	public void onExplode(EntityExplodeEvent event, List<Block> blockList, Entity entity) {
 
-		if (Config.disableNaturalSpawnerExplosion || Config.disableSpawnerExplosion) {
+ 		if (!Config.disableNaturalSpawnerExplosion || !Config.disableSpawnerExplosion) {
 
 			Iterator<Block> iterator = blockList.iterator();
 			while (iterator.hasNext()) {
@@ -85,7 +91,7 @@ public class SpawnerListener extends ListenerAdapter {
 						else if (Config.dropSpawnerOnExplose) {
 
 							Spawner spawner = board.getSpawner(block2.getLocation());
-							spawner.delete(board);
+							manager.remove(spawner);
 
 							UUID owner = spawner.getOwner();
 							Player player = Bukkit.getPlayer(owner);
@@ -93,12 +99,44 @@ public class SpawnerListener extends ListenerAdapter {
 								message(player, Message.SPAWNER_BREAK_EXPLODE);
 							}
 
+							ItemStack itemStack = manager.getNMS().fromSpawner(spawner);
+
+							SpawnerExplodeEvent explodeEvent = new SpawnerExplodeEvent(spawner, itemStack);
+							explodeEvent.callEvent();
+
+							itemStack = explodeEvent.getItemStack();
+
+							block2.getWorld().dropItem(block2.getLocation(), itemStack);
+
 						}
 
 					} else {
 
 						if (Config.disableNaturalSpawnerExplosion)
 							iterator.remove();
+
+						else if (Config.dropNaturalSpawnerOnExplose) {
+
+							CreatureSpawner creatureSpawner = (CreatureSpawner) block2.getState();
+							EntityType finalType = creatureSpawner.getSpawnedType();
+
+							ItemBuilder builder = new ItemBuilder(getMaterial(52), 1,
+									Config.itemName.replace("%type%", name(finalType.name())));
+							List<String> lore = Config.itemLore.stream()
+									.map(str -> str.replace("%type%", name(finalType.name())))
+									.collect(Collectors.toList());
+							builder.setLore(lore);
+
+							ItemStack itemStack = manager.getNMS().set(builder.build(), KEY_TYPE, finalType);
+
+							SpawnerExplodeNaturalEvent explodeEvent = new SpawnerExplodeNaturalEvent(itemStack);
+							explodeEvent.callEvent();
+
+							itemStack = explodeEvent.getItemStack();
+
+							block2.getWorld().dropItem(block2.getLocation(), itemStack);
+
+						}
 
 					}
 

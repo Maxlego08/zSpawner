@@ -1,5 +1,7 @@
 package fr.maxlego08.zspawner;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -71,7 +73,8 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
-		postEnable();
+		if (Config.autoSave)
+			autoSave();
 
 		isEnable = true;
 
@@ -95,6 +98,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 						+ ", Laste version: " + version);
 		});
 
+		postEnable();
 	}
 
 	@Override
@@ -114,6 +118,16 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 	public SpawnerManager getSpawner() {
 		return spawner;
+	}
+
+	private void autoSave() {
+		final Timer timer = new Timer(true);
+		timer.scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				spawner.save(getPersist());
+			}
+		}, 1000 * 60 * Config.autoSaveTime, 1000 * 60 * Config.autoSaveTime);
 	}
 
 }
