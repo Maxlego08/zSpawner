@@ -89,7 +89,7 @@ public class SpawnerListener extends ListenerAdapter {
 
 							UUID owner = spawner.getOwner();
 							Player player = Bukkit.getPlayer(owner);
-							if (player != null && Config.sendMessageWhenSpawnerExplose){
+							if (player != null && Config.sendMessageWhenSpawnerExplose) {
 								message(player, Message.SPAWNER_BREAK_EXPLODE);
 							}
 

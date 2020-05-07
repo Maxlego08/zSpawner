@@ -3,8 +3,8 @@ package fr.maxlego08.zspawner.api;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-public interface NMS {
-
+public interface NMS extends Key{
+	
 	/**
 	 * 
 	 * @param itemStack
@@ -13,6 +13,15 @@ public interface NMS {
 	 * @return
 	 */
 	ItemStack set(ItemStack itemStack, String key, EntityType type);
+	
+	/**
+	 * 
+	 * @param itemStack
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+	ItemStack set(ItemStack itemStack, String key, boolean value);
 	
 	/**
 	 * 
@@ -29,5 +38,19 @@ public interface NMS {
 	 * @return
 	 */
 	boolean has(ItemStack itemStack, String key);
+	
+	/**
+	 * 
+	 * @param spawner
+	 * @return
+	 */
+	ItemStack fromSpawner(Spawner spawner);
+	
+	/**
+	 * 
+	 * @param itemStack
+	 * @return
+	 */
+	Spawner toSpawner(ItemStack itemStack);
 
 }

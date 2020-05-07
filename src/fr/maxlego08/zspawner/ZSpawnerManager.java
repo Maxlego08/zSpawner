@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.FactionListener;
+import fr.maxlego08.zspawner.api.Key;
 import fr.maxlego08.zspawner.api.NMS;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
@@ -53,13 +54,12 @@ import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 
-public class ZSpawnerManager extends ZUtils implements SpawnerManager {
+public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 	private final transient Board board;
 	private final transient ZSpawnerPlugin plugin;
 	private transient FactionListener factionListener;
 	private transient NMS nms;
-	private transient String KEY = "entitype";
 	private transient final double version = ItemDecoder.getNMSVersion();
 	private transient Map<UUID, PlayerSpawner> players = new HashMap<UUID, PlayerSpawner>();
 
@@ -302,7 +302,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 				.collect(Collectors.toList());
 		builder.setLore(lore);
 
-		ItemStack itemStack = nms.set(builder.build(), KEY, finalType);
+		ItemStack itemStack = nms.set(builder.build(), KEY_TYPE, finalType);
 
 		give(target, itemStack);
 
@@ -469,9 +469,9 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager {
 			return;
 		}
 
-		if (nms.has(itemInHand, KEY)) {
+		if (nms.has(itemInHand, KEY_TYPE)) {
 
-			EntityType entityType = nms.get(itemInHand, KEY);
+			EntityType entityType = nms.get(itemInHand, KEY_TYPE);
 			block.setType(getMaterial(52));
 			CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
 			creatureSpawner.setSpawnedType(entityType);
