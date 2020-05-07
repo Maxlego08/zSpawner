@@ -1,10 +1,17 @@
 package fr.maxlego08.zspawner;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -56,6 +63,50 @@ public class SpawnerListener extends ListenerAdapter {
 						"§cYou are not using the latest version of the plugin, remember to update the plugin quickly.");
 			}
 		});
+
+	}
+
+	@Override
+	public void onExplode(EntityExplodeEvent event, List<Block> blockList, Entity entity) {
+
+		if (Config.disableNaturalSpawnerExplosion || Config.disableSpawnerExplosion) {
+
+			Iterator<Block> iterator = blockList.iterator();
+			while (iterator.hasNext()) {
+
+				Block block2 = iterator.next();
+
+				if (block2.getType().equals(getMaterial(52))) {
+
+					if (board.isSpawner(block2.getLocation())) {
+
+						if (Config.disableSpawnerExplosion)
+							iterator.remove();
+						else if (Config.dropSpawnerOnExplose) {
+
+							Spawner spawner = board.getSpawner(block2.getLocation());
+							spawner.delete(board);
+
+							UUID owner = spawner.getOwner();
+							Player player = Bukkit.getPlayer(owner);
+							if (player != null && Config.sendMessageWhenSpawnerExplose){
+								message(player, Message.SPAWNER_BREAK_EXPLODE);
+							}
+
+						}
+
+					} else {
+
+						if (Config.disableNaturalSpawnerExplosion)
+							iterator.remove();
+
+					}
+
+				}
+
+			}
+
+		}
 
 	}
 

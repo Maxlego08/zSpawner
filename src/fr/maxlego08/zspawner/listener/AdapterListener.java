@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -38,6 +39,11 @@ public class AdapterListener extends ZUtils implements Listener {
 	@EventHandler
 	public void onConnect(PlayerJoinEvent event) {
 		template.getListenerAdapters().forEach(adapter -> adapter.onConnect(event, event.getPlayer()));
+	}
+	
+	@EventHandler
+	public void onExplode(EntityExplodeEvent event) {
+		template.getListenerAdapters().forEach(adapter -> adapter.onExplode(event, event.blockList(), event.getEntity()));
 	}
 
 	@EventHandler

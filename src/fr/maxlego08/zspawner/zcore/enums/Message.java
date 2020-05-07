@@ -69,6 +69,7 @@ public enum Message {
 	SPAWNER_BREAK_OWNER("§eYou can §6delete §eyour spawner with the command §f/spawners§e."),
 	SPAWNER_BREAK_OWNER_ERROR("§cOnly the owner of the spawner can break it."),
 	
+	SPAWNER_BREAK_EXPLODE("§cYour spawner just explode ! you loose it !"),
 	REMOVE_SPAWNER("§eYou have removed a spawner !"), 
 	INFO_ERROR("§cYou must watch a block!"), 
 	INFO_ERROR_BOARD("§cThis spawner is natural!"), 

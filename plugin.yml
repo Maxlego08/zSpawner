@@ -1,6 +1,6 @@
 name: zSpawner
 author: Maxlego08
 main: fr.maxlego08.zspawner.ZSpawnerPlugin
-version: DEV-3.0.0.0
+version: DEV-3.0.0.1
 softdepend: [Essentials]
 commands:

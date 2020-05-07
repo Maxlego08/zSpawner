@@ -21,6 +21,12 @@ public class Config implements Saveable {
 	public static boolean displayInformation = true;
 	public static boolean displayRemoveAllButton = true;
 	public static boolean disableMessageVersion = false;
+	
+	public static boolean disableSpawnerExplosion = true;
+	public static boolean disableNaturalSpawnerExplosion = true;
+	public static boolean dropNaturalSpawnerOnExplose = false;
+	public static boolean dropSpawnerOnExplose = false;
+	public static boolean sendMessageWhenSpawnerExplose = true;
 
 	public static String inventoryName = "§ezSpawner §6%p%§7/§6%mp%";
 	public static String timeFormat = "dd/MM/yyyy hh:mm";
