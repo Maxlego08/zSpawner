@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
+import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.command.CommandManager;
@@ -32,6 +33,7 @@ import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.gson.ItemStackAdapter;
+import fr.maxlego08.zspawner.zcore.utils.gson.LevelAdapter;
 import fr.maxlego08.zspawner.zcore.utils.gson.LocationAdapter;
 import fr.maxlego08.zspawner.zcore.utils.gson.PlayerSpawnerAdapter;
 import fr.maxlego08.zspawner.zcore.utils.gson.PotionEffectAdapter;
@@ -57,7 +59,7 @@ public abstract class ZPlugin extends JavaPlugin {
 
 	private WorldGuardPlugin worldguard;
 	private WorldGuard guard;
-	
+
 	private PlayerPoints playerPoints;
 	private PlayerPointsAPI playerPointsAPI;
 
@@ -82,7 +84,7 @@ public abstract class ZPlugin extends JavaPlugin {
 		loadWorldguard();
 		hookPlayerPoints();
 
-		if (worldguard != null) 
+		if (worldguard != null)
 			guard = new WorldGuard();
 
 		return true;
@@ -126,6 +128,7 @@ public abstract class ZPlugin extends JavaPlugin {
 				.registerTypeAdapter(PotionEffect.class, new PotionEffectAdapter())
 				.registerTypeAdapter(PlayerSpawner.class, new PlayerSpawnerAdapter())
 				.registerTypeAdapter(Spawner.class, new SpawnerAdapter())
+				.registerTypeAdapter(Level.class, new LevelAdapter())
 				.registerTypeAdapter(Location.class, new LocationAdapter());
 	}
 
@@ -292,7 +295,7 @@ public abstract class ZPlugin extends JavaPlugin {
 	public WorldGuardPlugin getWorldguard() {
 		return worldguard;
 	}
-	
+
 	public WorldGuard getGuard() {
 		return guard;
 	}
@@ -336,5 +339,4 @@ public abstract class ZPlugin extends JavaPlugin {
 		return playerPointsAPI;
 	}
 
-	
 }

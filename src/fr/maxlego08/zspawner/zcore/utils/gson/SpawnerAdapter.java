@@ -78,13 +78,13 @@ public class SpawnerAdapter extends TypeAdapter<Spawner> {
 		UUID owner = UUID.fromString((String) keys.get(UUIDOWNER));
 		LocationAdapter adapter = new LocationAdapter();
 		Location location = adapter.fromRaw((String) keys.get(LOCATION));
-		
+
 		Number d = (Number) keys.get(PLACE);
 		Number e = (Number) keys.get(CREATE);
-		Number levelNumber = (Number) keys.get(LEVEL);
+		Number levelNumber = (Number) keys.getOrDefault(LEVEL, null);
 		long placedAt = d.longValue();
 		long createAt = e.longValue();
-		int level = levelNumber.intValue();
+		int level = levelNumber == null ? 0 : levelNumber.intValue();
 
 		EntityType type = EntityType.valueOf((String) keys.get(TYPE));
 		return new SpawnerObject(uuid, type, createAt, placedAt, owner, location, level);
