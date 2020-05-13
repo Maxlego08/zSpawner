@@ -25,6 +25,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	private final EntityType type;
 	private final long createAt;
 	private long placedAt;
+	private int levelId;
 	private UUID owner;
 	private Location location;
 
@@ -36,7 +37,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		this.createAt = System.currentTimeMillis();
 	}
 
-	public SpawnerObject(UUID uuid, EntityType type, long createAt, long placedAt, UUID owner, Location location) {
+	public SpawnerObject(UUID uuid, EntityType type, long createAt, long placedAt, UUID owner, Location location, int levelId) {
 		super();
 		this.uuid = uuid;
 		this.type = type;
@@ -44,6 +45,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		this.placedAt = placedAt;
 		this.owner = owner;
 		this.location = location;
+		this.levelId = levelId;
 	}
 
 	@Override
@@ -153,6 +155,16 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	@Override
 	public long createAt() {
 		return createAt;
+	}
+
+	@Override
+	public int getLevelId() {
+		return levelId;
+	}
+
+	@Override
+	public void setLevel(int level) {
+		this.levelId = level;
 	}
 
 }

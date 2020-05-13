@@ -30,6 +30,7 @@ public class SpawnerAdapter extends TypeAdapter<Spawner> {
 	private final String TYPE = "type";
 	private final String PLACE = "place";
 	private final String CREATE = "create";
+	private final String LEVEL = "level";
 
 	@Override
 	public Spawner read(JsonReader jsonReader) throws IOException {
@@ -62,6 +63,7 @@ public class SpawnerAdapter extends TypeAdapter<Spawner> {
 		serial.put(TYPE, spawner.getType().name());
 		serial.put(CREATE, Long.valueOf(spawner.createAt()).longValue());
 		serial.put(PLACE, Long.valueOf(spawner.placedAt()).longValue());
+		serial.put(LEVEL, spawner.getLevelId());
 		return ZPlugin.z().getGson().toJson(serial);
 	}
 
@@ -79,11 +81,13 @@ public class SpawnerAdapter extends TypeAdapter<Spawner> {
 		
 		Number d = (Number) keys.get(PLACE);
 		Number e = (Number) keys.get(CREATE);
+		Number levelNumber = (Number) keys.get(LEVEL);
 		long placedAt = d.longValue();
 		long createAt = e.longValue();
+		int level = levelNumber.intValue();
 
 		EntityType type = EntityType.valueOf((String) keys.get(TYPE));
-		return new SpawnerObject(uuid, type, createAt, placedAt, owner, location);
+		return new SpawnerObject(uuid, type, createAt, placedAt, owner, location, level);
 	}
 
 }

@@ -94,5 +94,17 @@ public interface Spawner {
 	 * @return
 	 */
 	boolean isOwner(Player player);
+	
+	/**
+	 * 
+	 * @return level as id
+	 */
+	int getLevelId();
+	
+	/**
+	 * 
+	 * @param level
+	 */
+	void setLevel(int level);
 
 }
