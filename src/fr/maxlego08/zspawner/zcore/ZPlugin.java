@@ -21,6 +21,7 @@ import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.command.VCommand;
+import fr.maxlego08.zspawner.depends.WorldGuard;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
 import fr.maxlego08.zspawner.inventory.VInventory;
 import fr.maxlego08.zspawner.listener.ListenerAdapter;
@@ -53,6 +54,7 @@ public abstract class ZPlugin extends JavaPlugin {
 	protected ScoreBoardManager scoreboardManager;
 
 	private WorldGuardPlugin worldguard;
+	private WorldGuard guard;
 
 	public ZPlugin() {
 		plugin = this;
@@ -73,6 +75,9 @@ public abstract class ZPlugin extends JavaPlugin {
 		if (getPlugin("Vault") != null)
 			economy = getProvider(Economy.class);
 		loadWorldguard();
+
+		if (worldguard != null) 
+			guard = new WorldGuard();
 
 		return true;
 
@@ -280,6 +285,10 @@ public abstract class ZPlugin extends JavaPlugin {
 
 	public WorldGuardPlugin getWorldguard() {
 		return worldguard;
+	}
+	
+	public WorldGuard getGuard() {
+		return guard;
 	}
 
 }

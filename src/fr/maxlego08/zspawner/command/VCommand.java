@@ -51,6 +51,7 @@ public abstract class VCommand extends Arguments {
 	private boolean ignoreArgs = false;
 	protected boolean DEBUG = true;
 	protected boolean runAsync = false;
+	protected CommandType tabCompleter = CommandType.DEFAULT;
 
 	/**
 	 * This is the person who executes the command
@@ -97,6 +98,17 @@ public abstract class VCommand extends Arguments {
 		return consoleCanUse;
 	}
 
+	public CommandType getTabCompleter() {
+		return tabCompleter;
+	}
+	
+	/*
+	 * 
+	 */
+	protected void setTabCompletor(){
+		this.tabCompleter = CommandType.SUCCESS;
+	}
+	
 	/**
 	 * @return the ignoreParent
 	 */
