@@ -6,7 +6,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import fr.maxlego08.zspawner.api.Board;
-import fr.maxlego08.zspawner.api.SpawnerManager;
+import fr.maxlego08.zspawner.api.manager.LevelManager;
+import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.command.commands.CommandSpawner;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
@@ -33,6 +34,7 @@ import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
 public class ZSpawnerPlugin extends ZPlugin {
 
 	private SpawnerManager spawner;
+	private LevelManager levelManager;
 	private Board board;
 	private SpawnerListener listener;
 	private boolean isEnable = false;
@@ -51,6 +53,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 		inventoryManager = InventoryManager.getInstance();
 
 		board = new BoardObject();
+		levelManager = new LevelManagerObject();
 		spawner = new ZSpawnerManager(board, this);
 
 		/* Commands */
@@ -70,6 +73,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 		addSave(Config.getInstance());
 		addSave(new CooldownBuilder());
 		addSave(spawner);
+		addSave(levelManager);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
@@ -128,6 +132,10 @@ public class ZSpawnerPlugin extends ZPlugin {
 				spawner.save(getPersist());
 			}
 		}, 1000 * 60 * Config.autoSaveTime, 1000 * 60 * Config.autoSaveTime);
+	}
+	
+	public LevelManager getLevelManager() {
+		return levelManager;
 	}
 
 }

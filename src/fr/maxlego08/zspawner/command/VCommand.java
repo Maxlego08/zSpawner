@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
-import fr.maxlego08.zspawner.api.SpawnerManager;
+import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
 import fr.maxlego08.zspawner.zcore.utils.commands.Arguments;

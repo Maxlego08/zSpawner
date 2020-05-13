@@ -3,7 +3,7 @@ package fr.maxlego08.zspawner.depends;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import fr.maxlego08.zspawner.api.FactionListener;
+import fr.maxlego08.zspawner.api.utils.FactionListener;
 
 public class NoFaction extends FactionListener {
 

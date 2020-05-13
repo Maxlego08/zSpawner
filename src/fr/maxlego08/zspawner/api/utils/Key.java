@@ -1,4 +1,4 @@
-package fr.maxlego08.zspawner.api;
+package fr.maxlego08.zspawner.api.utils;
 
 public interface Key {
 

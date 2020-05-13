@@ -3,6 +3,8 @@ package fr.maxlego08.zspawner.api;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import fr.maxlego08.zspawner.api.utils.Key;
+
 public interface NMS extends Key{
 	
 	/**

@@ -15,7 +15,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 
-import fr.maxlego08.zspawner.api.FactionListener;
+import fr.maxlego08.zspawner.api.utils.FactionListener;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 
 public class WorldGuard extends FactionListener {

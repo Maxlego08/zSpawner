@@ -19,12 +19,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
-import fr.maxlego08.zspawner.api.FactionListener;
-import fr.maxlego08.zspawner.api.Key;
 import fr.maxlego08.zspawner.api.NMS;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
-import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.api.enums.InventoryType;
 import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerGiveEvent;
@@ -34,6 +31,10 @@ import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveAllEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerSendEvent;
+import fr.maxlego08.zspawner.api.manager.LevelManager;
+import fr.maxlego08.zspawner.api.manager.SpawnerManager;
+import fr.maxlego08.zspawner.api.utils.FactionListener;
+import fr.maxlego08.zspawner.api.utils.Key;
 import fr.maxlego08.zspawner.depends.NoFaction;
 import fr.maxlego08.zspawner.nms.NMS_1_10;
 import fr.maxlego08.zspawner.nms.NMS_1_11;
@@ -57,9 +58,9 @@ import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 	private final transient Board board;
-	private final transient ZSpawnerPlugin plugin;
 	private transient FactionListener factionListener;
-	private transient NMS nms;
+	private transient final NMS nms;
+	private transient final LevelManager levelManager;
 	private transient final double version = ItemDecoder.getNMSVersion();
 	private transient Map<UUID, PlayerSpawner> players = new HashMap<UUID, PlayerSpawner>();
 
@@ -68,7 +69,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 	protected ZSpawnerManager(Board board, ZSpawnerPlugin plugin) {
 		super();
 		this.board = board;
-		this.plugin = plugin;
+		this.levelManager = plugin.getLevelManager();
 
 		factionListener = new NoFaction();
 		if (factionListener instanceof NoFaction)
@@ -100,9 +101,11 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 			nms = new NMS_1_9();
 		} else if (version == 1.7) {
 			nms = new NMS_1_7();
-		}
+		} else
+			nms = null;
 
-		Logger.info("Load " + nms.getClass().getName(), LogType.SUCCESS);
+		if (nms != null)
+			Logger.info("Load " + nms.getClass().getName(), LogType.SUCCESS);
 	}
 
 	@Override
@@ -486,11 +489,11 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 	@Override
 	public void remove(Spawner spawner) {
-		
+
 		UUID uuid = spawner.getOwner();
 		spawner.delete(board);
 		PlayerSpawner playerSpawner = getPlayer(uuid);
 		playerSpawner.removeSpawner(board, spawner);
-		
+
 	}
 }

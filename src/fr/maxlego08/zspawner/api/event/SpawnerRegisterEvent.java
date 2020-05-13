@@ -3,7 +3,7 @@
  */
 package fr.maxlego08.zspawner.api.event;
 
-import fr.maxlego08.zspawner.api.FactionListener;
+import fr.maxlego08.zspawner.api.utils.FactionListener;
 
 /**
  * @author Maxlego08 Permet de register le faction listener

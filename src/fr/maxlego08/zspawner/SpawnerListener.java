@@ -18,11 +18,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
-import fr.maxlego08.zspawner.api.Key;
 import fr.maxlego08.zspawner.api.Spawner;
-import fr.maxlego08.zspawner.api.SpawnerManager;
 import fr.maxlego08.zspawner.api.event.SpawnerExplodeEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerExplodeNaturalEvent;
+import fr.maxlego08.zspawner.api.manager.SpawnerManager;
+import fr.maxlego08.zspawner.api.utils.Key;
 import fr.maxlego08.zspawner.listener.ListenerAdapter;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.ZPlugin;

@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
-import fr.maxlego08.zspawner.api.SpawnerManager;
+import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.exceptions.InventoryOpenException;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;

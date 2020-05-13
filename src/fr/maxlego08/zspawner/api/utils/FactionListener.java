@@ -1,4 +1,4 @@
-package fr.maxlego08.zspawner.api;
+package fr.maxlego08.zspawner.api.utils;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
