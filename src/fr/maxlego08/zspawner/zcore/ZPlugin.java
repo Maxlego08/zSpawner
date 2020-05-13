@@ -4,6 +4,8 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.black_ixx.playerpoints.PlayerPoints;
+import org.black_ixx.playerpoints.PlayerPointsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Listener;
@@ -55,6 +57,9 @@ public abstract class ZPlugin extends JavaPlugin {
 
 	private WorldGuardPlugin worldguard;
 	private WorldGuard guard;
+	
+	private PlayerPoints playerPoints;
+	private PlayerPointsAPI playerPointsAPI;
 
 	public ZPlugin() {
 		plugin = this;
@@ -75,6 +80,7 @@ public abstract class ZPlugin extends JavaPlugin {
 		if (getPlugin("Vault") != null)
 			economy = getProvider(Economy.class);
 		loadWorldguard();
+		hookPlayerPoints();
 
 		if (worldguard != null) 
 			guard = new WorldGuard();
@@ -291,4 +297,44 @@ public abstract class ZPlugin extends JavaPlugin {
 		return guard;
 	}
 
+	/**
+	 * @return boolean
+	 */
+	protected void hookPlayerPoints() {
+		try {
+			final Plugin plugin = (Plugin) this.getServer().getPluginManager().getPlugin("PlayerPoints");
+			if (plugin == null)
+				return;
+			playerPoints = PlayerPoints.class.cast(plugin);
+			if (playerPoints != null) {
+				playerPointsAPI = playerPoints.getAPI();
+				log.log("PlayerPoint plugin detection performed successfully", LogType.SUCCESS);
+			} else
+				log.log("Impossible de charger player point !", LogType.SUCCESS);
+		} catch (Exception e) {
+		}
+	}
+
+	/**
+	 * @return the playerPoints
+	 */
+	public PlayerPoints getPlayerPoints() {
+		return playerPoints;
+	}
+
+	/**
+	 * @return the playerPointsAPI
+	 */
+	public PlayerPointsAPI getPlayerPointsAPI() {
+
+		if (playerPointsAPI == null) {
+
+			hookPlayerPoints();
+
+		}
+
+		return playerPointsAPI;
+	}
+
+	
 }
