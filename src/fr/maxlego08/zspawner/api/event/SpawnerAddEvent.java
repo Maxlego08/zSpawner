@@ -13,15 +13,17 @@ public class SpawnerAddEvent extends SpawnerEvent {
 	private final PlayerSpawner playerSpawner;
 	private EntityType type;
 	private int amount;
+	private int level;
 
 	public SpawnerAddEvent(CommandSender sender, Player player, PlayerSpawner playerSpawner, EntityType type,
-			int amount) {
+			int amount, int level) {
 		super();
 		this.sender = sender;
 		this.player = player;
 		this.playerSpawner = playerSpawner;
 		this.type = type;
 		this.amount = amount;
+		this.level = level;
 	}
 
 	/**
@@ -73,6 +75,21 @@ public class SpawnerAddEvent extends SpawnerEvent {
 	 */
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	/**
+	 * @return the level
+	 */
+	public int getLevel() {
+		return level;
+	}
+
+	/**
+	 * @param level
+	 *            the level to set
+	 */
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 }

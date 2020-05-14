@@ -16,6 +16,7 @@ import fr.maxlego08.zspawner.inventory.inventories.InventorySpawner;
 import fr.maxlego08.zspawner.inventory.inventories.InventorySpawnerPaginate;
 import fr.maxlego08.zspawner.listener.AdapterListener;
 import fr.maxlego08.zspawner.save.Config;
+import fr.maxlego08.zspawner.save.Lang;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
@@ -71,6 +72,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 		/* Add Saver */
 		addSave(Config.getInstance());
+		addSave(Lang.getInstance());
 		addSave(new CooldownBuilder());
 		addSave(spawner);
 		addSave(levelManager);

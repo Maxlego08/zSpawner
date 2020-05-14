@@ -24,6 +24,8 @@ public class CommandSpawnerAdd extends VCommand {
 		this.addRequireArg("player");
 		this.addRequireArg("type");
 		this.addOptionalArg("number");
+		this.addOptionalArg("level");
+		this.setTabCompletor();
 	}
 
 	@Override
@@ -36,15 +38,11 @@ public class CommandSpawnerAdd extends VCommand {
 			return CommandType.SYNTAX_ERROR;
 
 		int amount = argAsInteger(2, 1);
+		int level = argAsInteger(3, 0);
 		amount = amount < 0 ? 1 : amount;
 
-		manager.addSpawner(sender, player, entityType, amount);
+		manager.addSpawner(sender, player, entityType, amount, level);
 
-		return CommandType.SUCCESS;
-	}
-
-	@Override
-	public CommandType tabPerform(ZSpawnerPlugin plugin, CommandSender sender, String[] args) {
 		return CommandType.SUCCESS;
 	}
 

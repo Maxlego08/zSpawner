@@ -25,6 +25,7 @@ public class CommandSpawnerGive extends VCommand {
 		this.addRequireArg("type");
 		this.addOptionalArg("number");
 		this.addOptionalArg("level");
+		this.setTabCompletor();
 	}
 
 	@Override
@@ -41,11 +42,6 @@ public class CommandSpawnerGive extends VCommand {
 		return CommandType.SUCCESS;
 	}
 
-
-	@Override
-	public CommandType tabPerform(ZSpawnerPlugin plugin, CommandSender sender, String[] args) {
-		return CommandType.SUCCESS;
-	}
 
 	@Override
 	public List<String> toTab(ZSpawnerPlugin plugin, CommandSender sender, String[] args) {

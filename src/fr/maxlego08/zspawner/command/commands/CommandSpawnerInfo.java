@@ -58,6 +58,7 @@ public class CommandSpawnerInfo extends VCommand {
 					spawner.getLocation() == null ? "non placé" : ((SpawnerObject) spawner).toLocation());
 			string = string.replace("%type%", spawner.getType().name());
 			string = string.replace("%create%", format.format(new Date(spawner.createAt())));
+			string = string.replace("%level%", String.valueOf(spawner.getLevelId()));
 			string = string.replace("%player%", Bukkit.getOfflinePlayer(spawner.getOwner()).getName());
 			string = string.replace("%placed%",
 					spawner.getLocation() == null ? "non placé" : format.format(new Date(spawner.placedAt())));

@@ -31,11 +31,6 @@ public class CommandLevelShow extends VCommand {
 	}
 
 	@Override
-	public CommandType tabPerform(ZSpawnerPlugin plugin, CommandSender sender, String[] args) {
-		return CommandType.SUCCESS;
-	}
-
-	@Override
 	public List<String> toTab(ZSpawnerPlugin plugin, CommandSender sender2, String[] args) {
 		return generateList(plugin.getSpawner().getLevelManager().toTabList(), args[2]);
 	}

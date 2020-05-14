@@ -3,6 +3,7 @@ package fr.maxlego08.zspawner.command.commands;
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.command.VCommand;
 import fr.maxlego08.zspawner.save.Config;
+import fr.maxlego08.zspawner.save.Lang;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
 import fr.maxlego08.zspawner.zcore.utils.commands.CommandType;
@@ -22,6 +23,7 @@ public class CommandSpawnerReload extends VCommand {
 
 		manager.save(main.getPersist());
 		Config.getInstance().load(main.getPersist());
+		Lang.getInstance().load(main.getPersist());
 		manager.getLevelManager().load(main.getPersist());
 
 		long end = Math.abs(System.currentTimeMillis() - ms);

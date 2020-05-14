@@ -43,8 +43,8 @@ public class SpawnerObject extends FakeSpawnerObject implements Spawner {
 	 * @param type
 	 * @param spawnerManager
 	 */
-	public SpawnerObject(UUID owner, EntityType type, SpawnerManager spawnerManager) {
-		this(UUID.randomUUID(), type, 0, owner, null, 0, spawnerManager);
+	public SpawnerObject(UUID owner, EntityType type, int level, SpawnerManager spawnerManager) {
+		this(UUID.randomUUID(), type, 0, owner, null, level, spawnerManager);
 	}
 
 	/**
@@ -115,6 +115,7 @@ public class SpawnerObject extends FakeSpawnerObject implements Spawner {
 
 			string = string.replace("%location%", location == null ? "non placé" : toLocation());
 			string = string.replace("%type%", type.name());
+			string = string.replace("%level%", String.valueOf(levelId));
 			string = string.replace("%create%", format.format(new Date(createAt)));
 			string = string.replace("%placed%", location == null ? "non placé" : format.format(new Date(placedAt)));
 

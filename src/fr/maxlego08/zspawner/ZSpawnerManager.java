@@ -253,11 +253,11 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 	}
 
 	@Override
-	public void addSpawner(CommandSender sender, Player target, EntityType type, int number) {
+	public void addSpawner(CommandSender sender, Player target, EntityType type, int number, int level) {
 
 		PlayerSpawner playerSpawner = getPlayer(target.getUniqueId());
 
-		SpawnerAddEvent event = new SpawnerAddEvent(sender, target, playerSpawner, type, number);
+		SpawnerAddEvent event = new SpawnerAddEvent(sender, target, playerSpawner, type, number, level);
 		event.callEvent();
 
 		if (event.isCancelled())
@@ -265,12 +265,13 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 		type = event.getType();
 		number = event.getAmount();
+		level = event.getLevel();
 
 		if (number < 0)
 			return;
 
 		for (int a = 0; a < number; a++) {
-			Spawner spawner = new SpawnerObject(target.getUniqueId(), type, this);
+			Spawner spawner = new SpawnerObject(target.getUniqueId(), type, level, this);
 			playerSpawner.addSpawner(spawner);
 		}
 
@@ -297,7 +298,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 			message(sender, Message.LEVEL_ERROR, level);
 			return;
 		}
-		
+
 		SpawnerGiveEvent event = new SpawnerGiveEvent(sender, target, type, number, level);
 		event.callEvent();
 
@@ -481,11 +482,22 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 		if (nms.has(itemInHand, KEY_TYPE)) {
 
 			EntityType entityType = nms.get(itemInHand, KEY_TYPE);
+
+			int level = 0;
+			if (nms.has(itemInHand, KEY_LEVEL))
+				level = nms.getInteger(itemInHand, KEY_LEVEL);
+
 			block.setType(getMaterial(52));
 			CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
 			creatureSpawner.setSpawnedType(entityType);
 			if (version != 1.8 && version != 1.7)
 				creatureSpawner.update();
+
+			if (level > 0) {
+
+				nms.updateSpawner(new SpawnerObject(null, entityType, 0, null, block.getLocation(), level, this));
+
+			}
 
 			message(player, Message.PLACE_SPAWNER.getMessage().replace("%type%", name(entityType.name())));
 

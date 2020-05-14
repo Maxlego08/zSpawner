@@ -100,6 +100,7 @@ public class Config implements Saveable {
 		infos.add("  §6* §eLocation§7: §6%location%");
 		infos.add("  §6* §eCreate at§7: §6%create%");
 		infos.add("  §6* §ePlaced at§7: §6%placed%");
+		infos.add("  §6* §eLevel§7: §6%level%");
 		infos.add("§7§m--------------------------------------");
 		
 		commandInfos.add("§7§m--------------------------------------");
@@ -107,7 +108,7 @@ public class Config implements Saveable {
 		commandInfos.add("§eType§7: §6%type%");
 		commandInfos.add("§eLocation§7: §6%location%");
 		commandInfos.add("§eCreate at§7: §6%create%");
-		commandInfos.add("§ePlaced at§7: §6%placed%");
+		commandInfos.add("§eLevel§7: §6%level%");
 		commandInfos.add("§7§m--------------------------------------");
 
 	}

@@ -377,18 +377,6 @@ public abstract class VCommand extends Arguments {
 			return CommandType.SYNTAX_ERROR;
 		}
 	}
-
-	/**
-	 * 
-	 * @param plugin
-	 * @param sender
-	 * @param args
-	 * @return
-	 */
-	public CommandType tabPerform(ZSpawnerPlugin plugin, CommandSender sender, String[] args){
-		return CommandType.DEFAULT;
-	}
-	
 	/**
 	 * method that allows you to execute the command
 	 */

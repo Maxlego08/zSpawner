@@ -74,7 +74,7 @@ public interface SpawnerManager extends Saveable{
 	 * @param type
 	 * @param number
 	 */
-	void addSpawner(CommandSender sender, Player target, EntityType type, int number);
+	void addSpawner(CommandSender sender, Player target, EntityType type, int number, int level);
 	
 	/**
 	 * 
