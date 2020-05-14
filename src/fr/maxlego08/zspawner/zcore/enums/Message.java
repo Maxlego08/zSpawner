@@ -40,7 +40,9 @@ public enum Message {
 	DESCRIPTION_SEND("Send spawner to player"),
 	DESCRIPTION_LEVEL("Show level commands"),
 	DESCRIPTION_LEVEL_CREATE("Create a new level"),
+	DESCRIPTION_LEVEL_EDIT("Edit value for a level"),
 	DESCRIPTION_LEVEL_SHOW("Show information about a level"),
+	DESCRIPTION_LEVEL_EDIT_MIN_DELAY("Change min delay for spawn (in tick)"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
@@ -80,7 +82,7 @@ public enum Message {
 	LEVEL_ERROR("§clevel §f%s §cdoesn't exists."),
 	LEVEL_CREATE_ERROR("§clevel §f%s §calready exists."),
 	LEVEL_CREATE_SUCCESS("§eYou just create level §6%s§e."),
-	
+	LEVEL_UPDATE("§eYou just update level §6%s§e."),	
 	;
 
 	private String message;

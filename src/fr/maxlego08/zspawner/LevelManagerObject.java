@@ -11,7 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.maxlego08.zspawner.api.Level;
+import fr.maxlego08.zspawner.api.enums.Value;
 import fr.maxlego08.zspawner.api.event.SpawnerLevelCreateEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerLevelUpdateEvent;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
@@ -146,6 +148,55 @@ public class LevelManagerObject extends ZUtils implements LevelManager {
 	@Override
 	public List<String> toTabList() {
 		return levels.values().stream().map(level -> String.valueOf(level.getId())).collect(Collectors.toList());
+	}
+
+	@Override
+	public void updateLevel(CommandSender sender, Value type, int id, int value) {
+
+		Level level = getLevel(id);
+		if (level == null) {
+
+			message(sender, Message.LEVEL_ERROR, level);
+			return;
+
+		}
+
+		SpawnerLevelUpdateEvent event = new SpawnerLevelUpdateEvent(level, type, value);
+		event.callEvent();
+
+		if (event.isCancelled())
+			return;
+
+		type = event.getType();
+		value = event.getValue();
+
+		switch (type) {
+		case COUNT:
+			level.setSpawnCount(value);
+			break;
+		case ENTITIES:
+			level.setMaxNearbyEntity(value);
+			break;
+		case MAX:
+			level.setMaxDelay(value);
+			break;
+		case MIN:
+			level.setMinDelay(value);
+			break;
+		case PLAYERS:
+			level.setRequiredPlayerRange(value);
+			break;
+		case RANGE:
+			level.setSpawnRange(value);
+			break;
+		default:
+			break;
+
+		}
+
+		level.flush();
+		message(sender, Message.LEVEL_UPDATE, level.getId());
+
 	}
 
 }
