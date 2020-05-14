@@ -15,7 +15,6 @@ import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
-import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
@@ -135,16 +134,12 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		creatureSpawner.setSpawnedType(type);
 		if (ItemDecoder.getNMSVersion() != 1.8 && ItemDecoder.getNMSVersion() != 1.7)
 			creatureSpawner.update();
-
-		if (levelId > 0){
-			
-			spawnerManager.getNMS().updateSpawner(this);
-			
-		}
 		
 		placedAt = System.currentTimeMillis();
-
 		this.location = location;
+		
+		if (levelId > 0)
+			spawnerManager.getNMS().updateSpawner(this);
 	}
 
 	public int comparePlace() {
