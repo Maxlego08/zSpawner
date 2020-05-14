@@ -106,5 +106,11 @@ public interface Spawner {
 	 * @param level
 	 */
 	void setLevel(int level);
+	
+	/**
+	 * 
+	 * @return
+	 */
+	Level getLevel();
 
 }

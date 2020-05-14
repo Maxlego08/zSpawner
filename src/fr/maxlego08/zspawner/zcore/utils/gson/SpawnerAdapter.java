@@ -16,6 +16,7 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import fr.maxlego08.zspawner.SpawnerObject;
+import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 
@@ -87,7 +88,9 @@ public class SpawnerAdapter extends TypeAdapter<Spawner> {
 		int level = levelNumber == null ? 0 : levelNumber.intValue();
 
 		EntityType type = EntityType.valueOf((String) keys.get(TYPE));
-		return new SpawnerObject(uuid, type, createAt, placedAt, owner, location, level);
+
+		ZSpawnerPlugin plugin = (ZSpawnerPlugin) ZPlugin.z();
+		return new SpawnerObject(uuid, type, createAt, placedAt, owner, location, level, plugin.getLevelManager());
 	}
 
 }

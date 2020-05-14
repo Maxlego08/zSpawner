@@ -12,8 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
+import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
+import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
@@ -21,6 +23,7 @@ import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
 public class SpawnerObject extends ZUtils implements Spawner {
 
+	private final LevelManager levelManager;
 	private final UUID uuid;
 	private final EntityType type;
 	private final long createAt;
@@ -29,15 +32,17 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	private UUID owner;
 	private Location location;
 
-	public SpawnerObject(UUID owner, EntityType type) {
+	public SpawnerObject(UUID owner, EntityType type, LevelManager levelManager) {
 		super();
 		this.uuid = UUID.randomUUID();
 		this.type = type;
 		this.owner = owner;
 		this.createAt = System.currentTimeMillis();
+		this.levelManager = levelManager;
 	}
 
-	public SpawnerObject(UUID uuid, EntityType type, long createAt, long placedAt, UUID owner, Location location, int levelId) {
+	public SpawnerObject(UUID uuid, EntityType type, long createAt, long placedAt, UUID owner, Location location,
+			int levelId, LevelManager levelManager) {
 		super();
 		this.uuid = uuid;
 		this.type = type;
@@ -46,6 +51,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		this.owner = owner;
 		this.location = location;
 		this.levelId = levelId;
+		this.levelManager = levelManager;
 	}
 
 	@Override
@@ -165,6 +171,11 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	@Override
 	public void setLevel(int level) {
 		this.levelId = level;
+	}
+
+	@Override
+	public Level getLevel() {
+		return levelManager.getLevel(levelId);
 	}
 
 }
