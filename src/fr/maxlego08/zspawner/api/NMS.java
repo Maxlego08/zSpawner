@@ -63,7 +63,7 @@ public interface NMS extends Key{
 	 * @param spawner
 	 * @return
 	 */
-	ItemStack fromSpawner(Spawner spawner);
+	ItemStack fromSpawner(FakeSpawner spawner);
 	
 	/**
 	 * 

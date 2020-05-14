@@ -1,5 +1,32 @@
 package fr.maxlego08.zspawner.api;
 
-public interface FakeSpawner extends Spawner{
+import org.bukkit.entity.EntityType;
 
+public interface FakeSpawner extends Cloneable{
+
+	/**
+	 * 
+	 * @return
+	 */
+	long createAt();
+
+
+	/**
+	 * 
+	 * @return type
+	 */
+	EntityType getType();
+
+	/**
+	 * 
+	 * @return level as id
+	 */
+	int getLevelId();
+	
+	/**
+	 * 
+	 * @return
+	 */
+	SimpleLevel getLevel();
+	
 }

@@ -1,24 +1,61 @@
 package fr.maxlego08.zspawner;
 
-import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
-import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.FakeSpawner;
+import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
+import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
-public class FakeSpawnerObject extends SpawnerObject implements FakeSpawner {
+public class FakeSpawnerObject extends ZUtils implements FakeSpawner {
 
-	public FakeSpawnerObject(EntityType type, int levelId, SpawnerManager spawnerManager) {
-		super(null, type, System.currentTimeMillis(), 0, null, null, levelId, spawnerManager);
+	protected final SpawnerManager spawnerManager;
+	protected final EntityType type;
+	protected final long createAt;
+	protected int levelId;
+
+	/**
+	 * 
+	 * @param spawnerManager
+	 * @param type
+	 * @param levelId
+	 */
+	public FakeSpawnerObject(SpawnerManager spawnerManager, EntityType type, int levelId) {
+		this(spawnerManager, type, System.currentTimeMillis(), levelId);
+	}
+
+	/**
+	 * @param spawnerManager
+	 * @param type
+	 * @param createAt
+	 * @param levelId
+	 */
+	public FakeSpawnerObject(SpawnerManager spawnerManager, EntityType type, long createAt, int levelId) {
+		super();
+		this.spawnerManager = spawnerManager;
+		this.type = type;
+		this.createAt = createAt;
+		this.levelId = levelId;
 	}
 
 	@Override
-	public void place(Location location) {
+	public long createAt() {
+		return createAt;
 	}
-	
+
 	@Override
-	public void delete(Board board) {
+	public EntityType getType() {
+		return type;
 	}
-	
+
+	@Override
+	public int getLevelId() {
+		return levelId;
+	}
+
+	@Override
+	public SimpleLevel getLevel() {
+		return spawnerManager.getLevelManager().getLevel(levelId);
+	}
+
 }

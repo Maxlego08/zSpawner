@@ -10,6 +10,7 @@ import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import fr.maxlego08.zspawner.api.FakeSpawner;
 import fr.maxlego08.zspawner.api.NMS;
 import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.Spawner;
@@ -79,7 +80,7 @@ public class NMS_1_11 extends ZUtils implements NMS {
 	}
 	
 	@Override
-	public ItemStack fromSpawner(Spawner spawner) {
+	public ItemStack fromSpawner(FakeSpawner spawner) {
 
 		EntityType finalType = spawner.getType();
 

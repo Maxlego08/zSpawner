@@ -3,11 +3,10 @@ package fr.maxlego08.zspawner.api;
 import java.util.UUID;
 
 import org.bukkit.Location;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public interface Spawner {
+public interface Spawner extends FakeSpawner{
 
 	/**
 	 * 
@@ -29,21 +28,9 @@ public interface Spawner {
 	
 	/**
 	 * 
-	 * @return
-	 */
-	long createAt();
-	
-	/**
-	 * 
 	 * @return location
 	 */
 	Location getLocation();
-
-	/**
-	 * 
-	 * @return type
-	 */
-	EntityType getType();
 
 	/**
 	 * 
@@ -97,20 +84,8 @@ public interface Spawner {
 	
 	/**
 	 * 
-	 * @return level as id
-	 */
-	int getLevelId();
-	
-	/**
-	 * 
 	 * @param level
 	 */
 	void setLevel(int level);
-	
-	/**
-	 * 
-	 * @return
-	 */
-	SimpleLevel getLevel();
 
 }

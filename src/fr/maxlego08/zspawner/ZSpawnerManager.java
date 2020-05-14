@@ -226,7 +226,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 		PlayerSpawner playerSpawner = getPlayer(uuid);
 		PlayerSpawner targetPlayerSpawner = getPlayer(target.getUniqueId());
-		Spawner newSpawner = new SpawnerObject(target.getUniqueId(), spawner.getType(), this);
+		Spawner newSpawner = new SpawnerObject(target.getUniqueId(), spawner, this);
 
 		SpawnerSendEvent event = new SpawnerSendEvent(player, target, playerSpawner, targetPlayerSpawner, spawner,
 				newSpawner);
@@ -310,7 +310,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 		if (number < 0)
 			return;
 
-		FakeSpawner fakeSpawner = new FakeSpawnerObject(type, level, this);
+		FakeSpawner fakeSpawner = new FakeSpawnerObject(this, type, level);
 		ItemStack itemStack = nms.fromSpawner(fakeSpawner);
 
 		give(target, itemStack);

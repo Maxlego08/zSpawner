@@ -18,40 +18,73 @@ import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
-import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
-public class SpawnerObject extends ZUtils implements Spawner {
+public class SpawnerObject extends FakeSpawnerObject implements Spawner {
 
-	private final SpawnerManager spawnerManager;
 	private final UUID uuid;
-	private final EntityType type;
-	private final long createAt;
 	private long placedAt;
-	private int levelId;
 	private UUID owner;
 	private Location location;
 
-	public SpawnerObject(UUID owner, EntityType type, SpawnerManager spawnerManager) {
-		super();
-		this.uuid = UUID.randomUUID();
-		this.type = type;
-		this.owner = owner;
-		this.createAt = System.currentTimeMillis();
-		this.spawnerManager = spawnerManager;
+	/**
+	 * 
+	 * @param owner
+	 * @param spanwer
+	 * @param spawnerManager
+	 */
+	public SpawnerObject(UUID owner, Spawner spanwer, SpawnerManager spawnerManager) {
+		this(UUID.randomUUID(), spanwer.getType(), 0, owner, null, spanwer.getLevelId(), spawnerManager);
 	}
 
-	public SpawnerObject(UUID uuid, EntityType type, long createAt, long placedAt, UUID owner, Location location,
-			int levelId, SpawnerManager spawnerManager) {
-		super();
+	/**
+	 * 
+	 * @param owner
+	 * @param type
+	 * @param spawnerManager
+	 */
+	public SpawnerObject(UUID owner, EntityType type, SpawnerManager spawnerManager) {
+		this(UUID.randomUUID(), type, 0, owner, null, 0, spawnerManager);
+	}
+
+	/**
+	 * 
+	 * @param uuid
+	 * @param type
+	 * @param createAt
+	 * @param placedAt
+	 * @param owner
+	 * @param location
+	 * @param levelId
+	 * @param spawnerManager
+	 */
+	public SpawnerObject(UUID uuid, EntityType type, long placedAt, UUID owner, Location location, int levelId,
+			SpawnerManager spawnerManager) {
+		super(spawnerManager, type, levelId);
 		this.uuid = uuid;
-		this.type = type;
-		this.createAt = createAt;
 		this.placedAt = placedAt;
 		this.owner = owner;
 		this.location = location;
-		this.levelId = levelId;
-		this.spawnerManager = spawnerManager;
+	}
+
+	/**
+	 * 
+	 * @param uuid
+	 * @param type
+	 * @param createAt
+	 * @param placedAt
+	 * @param owner
+	 * @param location
+	 * @param levelId
+	 * @param spawnerManager
+	 */
+	public SpawnerObject(UUID uuid, EntityType type, long createAt, long placedAt, UUID owner, Location location,
+			int levelId, SpawnerManager spawnerManager) {
+		super(spawnerManager, type, createAt, levelId);
+		this.uuid = uuid;
+		this.placedAt = placedAt;
+		this.owner = owner;
+		this.location = location;
 	}
 
 	@Override
@@ -67,11 +100,6 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	@Override
 	public Location getLocation() {
 		return location;
-	}
-
-	@Override
-	public EntityType getType() {
-		return type;
 	}
 
 	@Override
@@ -134,10 +162,10 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		creatureSpawner.setSpawnedType(type);
 		if (ItemDecoder.getNMSVersion() != 1.8 && ItemDecoder.getNMSVersion() != 1.7)
 			creatureSpawner.update();
-		
+
 		placedAt = System.currentTimeMillis();
 		this.location = location;
-		
+
 		if (levelId > 0)
 			spawnerManager.getNMS().updateSpawner(this);
 	}
@@ -156,21 +184,6 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	}
 
 	@Override
-	public long placedAt() {
-		return placedAt;
-	}
-
-	@Override
-	public long createAt() {
-		return createAt;
-	}
-
-	@Override
-	public int getLevelId() {
-		return levelId;
-	}
-
-	@Override
 	public void setLevel(int level) {
 		this.levelId = level;
 	}
@@ -178,6 +191,11 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	@Override
 	public SimpleLevel getLevel() {
 		return spawnerManager.getLevelManager().getLevel(levelId);
+	}
+
+	@Override
+	public long placedAt() {
+		return placedAt;
 	}
 
 }
