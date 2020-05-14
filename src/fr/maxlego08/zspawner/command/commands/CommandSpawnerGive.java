@@ -33,7 +33,7 @@ public class CommandSpawnerGive extends VCommand {
 		Player player = argAsPlayer(0);
 		EntityType entityType = argAsEntityType(1);
 		int amount = argAsInteger(2, 1);
-		int level = argAsInteger(3, 1);
+		int level = argAsInteger(3, 0);
 		amount = amount < 0 ? 1 : amount;
 		
 		manager.giveSpawner(sender, player, entityType, amount, level);

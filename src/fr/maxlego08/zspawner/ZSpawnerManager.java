@@ -293,7 +293,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 	public void giveSpawner(CommandSender sender, Player target, EntityType type, int number, int level) {
 
 		SimpleLevel levelObject = levelManager.getLevel(level);
-		if (levelObject == null) {
+		if (levelObject == null && level != 0) {
 			message(sender, Message.LEVEL_ERROR, level);
 			return;
 		}
