@@ -62,6 +62,22 @@ public class NMS_1_7 extends ZUtils implements NMS {
 
 		return CraftItemStack.asBukkitCopy(itemStackNMS);
 	}
+	
+	@Override
+	public ItemStack set(ItemStack itemStack, String key, int value) {
+		net.minecraft.server.v1_7_R4.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = itemStackNMS.getTag();
+		compound.setInt(key, value);
+		itemStackNMS.setTag(compound);
+		return CraftItemStack.asBukkitCopy(itemStackNMS);
+	}
+
+	@Override
+	public int getInteger(ItemStack itemStack, String key) {
+		net.minecraft.server.v1_7_R4.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = itemStackNMS.getTag();
+		return compound.getInt(key);
+	}
 
 	@Override
 	public ItemStack fromSpawner(Spawner spawner) {

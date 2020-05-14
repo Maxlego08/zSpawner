@@ -81,6 +81,16 @@ public class Config implements Saveable {
 			"§f§l» §7This spawner will not be in the §7/spawners§7.",
 			"§7§m-------------------------------------"
 			);
+	
+	public static List<String> itemLoreSpawnerLevel = Arrays.asList(
+			"§7§m-------------------------------------",
+			"§f§l» §7You have a §b%type% §7spawner",
+			"§f§l» §7Spawner level: §b%level%",
+			"",
+			"§f§l» §7Just put the spawner on the ground §7to use it",
+			"§f§l» §7This spawner will not be in the §7/spawners§7.",
+			"§7§m-------------------------------------"
+			);
 
 	static {
 

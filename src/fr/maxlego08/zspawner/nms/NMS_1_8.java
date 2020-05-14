@@ -31,7 +31,7 @@ public class NMS_1_8 extends ZUtils implements NMS {
 
 		return CraftItemStack.asBukkitCopy(itemStackNMS);
 	}
-	
+
 	@Override
 	public ItemStack set(ItemStack itemStack, String key, boolean value) {
 		net.minecraft.server.v1_8_R3.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
@@ -39,6 +39,22 @@ public class NMS_1_8 extends ZUtils implements NMS {
 		compound.setBoolean(key, value);
 		itemStackNMS.setTag(compound);
 		return CraftItemStack.asBukkitCopy(itemStackNMS);
+	}
+
+	@Override
+	public ItemStack set(ItemStack itemStack, String key, int value) {
+		net.minecraft.server.v1_8_R3.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = itemStackNMS.getTag();
+		compound.setInt(key, value);
+		itemStackNMS.setTag(compound);
+		return CraftItemStack.asBukkitCopy(itemStackNMS);
+	}
+
+	@Override
+	public int getInteger(ItemStack itemStack, String key) {
+		net.minecraft.server.v1_8_R3.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		NBTTagCompound compound = itemStackNMS.getTag();
+		return compound.getInt(key);
 	}
 
 	@Override
@@ -73,6 +89,7 @@ public class NMS_1_8 extends ZUtils implements NMS {
 
 		ItemStack itemStack = this.set(builder.build(), KEY_TYPE, finalType);
 		itemStack = this.set(itemStack, KEY_ADD, true);
+		itemStack = this.set(itemStack, KEY_LEVEL, spawner.getLevelId());
 		return itemStack;
 	}
 
@@ -83,24 +100,23 @@ public class NMS_1_8 extends ZUtils implements NMS {
 
 	@Override
 	public void updateSpawner(Spawner spawner) {
-		
+
 		Location location = spawner.getLocation();
 		SimpleLevel level = spawner.getLevel();
-		
+
 		if (!location.getBlock().getType().equals(getMaterial(52)))
 			return;
-		
+
 		if (level == null)
 			return;
-		
+
 		CreatureSpawner creatureSpawner = (CreatureSpawner) location.getBlock().getState();
-		
-		
+
 		CraftCreatureSpawner craftCreatureSpawner = (CraftCreatureSpawner) creatureSpawner;
 		MobSpawnerAbstract mobSpawnerAbstract = craftCreatureSpawner.getTileEntity().getSpawner();
 		NBTTagCompound nbt = new NBTTagCompound();
 		mobSpawnerAbstract.b(nbt);
-		
+
 		if (level.getMinDelay() != 0)
 			nbt.setShort("MinSpawnDelay", (short) level.getMinDelay());
 		if (level.getMaxDelay() != 0)
@@ -113,7 +129,7 @@ public class NMS_1_8 extends ZUtils implements NMS {
 			nbt.setShort("MaxNearbyEntities", (short) level.getMaxNearbyEntities());
 		if (level.getSpawnCount() != 0)
 			nbt.setShort("SpawnCount", (short) level.getSpawnCount());
-		
+
 		mobSpawnerAbstract.a(nbt);
 	}
 

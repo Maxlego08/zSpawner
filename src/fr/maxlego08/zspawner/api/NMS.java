@@ -29,9 +29,26 @@ public interface NMS extends Key{
 	 * 
 	 * @param itemStack
 	 * @param key
+	 * @param value
+	 * @return
+	 */
+	ItemStack set(ItemStack itemStack, String key, int value);
+	
+	/**
+	 * 
+	 * @param itemStack
+	 * @param key
 	 * @return
 	 */
 	EntityType get(ItemStack itemStack, String key);
+	
+	/**
+	 * 
+	 * @param itemStack
+	 * @param key
+	 * @return
+	 */
+	int getInteger(ItemStack itemStack, String key);
 	
 	/**
 	 * 
