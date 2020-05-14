@@ -135,6 +135,12 @@ public interface SpawnerManager extends Saveable{
 	
 	/**
 	 * 
+	 * @return
+	 */
+	LevelManager getLevelManager();
+	
+	/**
+	 * 
 	 * @param event
 	 * @param player
 	 * @param itemInHand

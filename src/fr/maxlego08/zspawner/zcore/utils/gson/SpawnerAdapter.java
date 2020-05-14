@@ -90,7 +90,7 @@ public class SpawnerAdapter extends TypeAdapter<Spawner> {
 		EntityType type = EntityType.valueOf((String) keys.get(TYPE));
 
 		ZSpawnerPlugin plugin = (ZSpawnerPlugin) ZPlugin.z();
-		return new SpawnerObject(uuid, type, createAt, placedAt, owner, location, level, plugin.getLevelManager());
+		return new SpawnerObject(uuid, type, createAt, placedAt, owner, location, level, plugin.getSpawner());
 	}
 
 }

@@ -55,4 +55,10 @@ public interface NMS extends Key{
 	 */
 	Spawner toSpawner(ItemStack itemStack);
 
+	/**
+	 * 
+	 * @param spawnerObject
+	 */
+	void updateSpawner(Spawner spawner);
+
 }

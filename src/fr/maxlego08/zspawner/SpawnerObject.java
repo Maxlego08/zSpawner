@@ -16,6 +16,7 @@ import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
+import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
@@ -23,7 +24,7 @@ import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
 public class SpawnerObject extends ZUtils implements Spawner {
 
-	private final LevelManager levelManager;
+	private final SpawnerManager spawnerManager;
 	private final UUID uuid;
 	private final EntityType type;
 	private final long createAt;
@@ -32,17 +33,17 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	private UUID owner;
 	private Location location;
 
-	public SpawnerObject(UUID owner, EntityType type, LevelManager levelManager) {
+	public SpawnerObject(UUID owner, EntityType type, SpawnerManager spawnerManager) {
 		super();
 		this.uuid = UUID.randomUUID();
 		this.type = type;
 		this.owner = owner;
 		this.createAt = System.currentTimeMillis();
-		this.levelManager = levelManager;
+		this.spawnerManager = spawnerManager;
 	}
 
 	public SpawnerObject(UUID uuid, EntityType type, long createAt, long placedAt, UUID owner, Location location,
-			int levelId, LevelManager levelManager) {
+			int levelId, SpawnerManager spawnerManager) {
 		super();
 		this.uuid = uuid;
 		this.type = type;
@@ -51,7 +52,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		this.owner = owner;
 		this.location = location;
 		this.levelId = levelId;
-		this.levelManager = levelManager;
+		this.spawnerManager = spawnerManager;
 	}
 
 	@Override
@@ -135,6 +136,12 @@ public class SpawnerObject extends ZUtils implements Spawner {
 		if (ItemDecoder.getNMSVersion() != 1.8 && ItemDecoder.getNMSVersion() != 1.7)
 			creatureSpawner.update();
 
+		if (levelId > 0){
+			
+			spawnerManager.getNMS().updateSpawner(this);
+			
+		}
+		
 		placedAt = System.currentTimeMillis();
 
 		this.location = location;
@@ -175,7 +182,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 
 	@Override
 	public Level getLevel() {
-		return levelManager.getLevel(levelId);
+		return spawnerManager.getLevelManager().getLevel(levelId);
 	}
 
 }

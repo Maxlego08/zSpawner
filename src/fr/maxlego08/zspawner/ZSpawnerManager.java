@@ -221,7 +221,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 		PlayerSpawner playerSpawner = getPlayer(uuid);
 		PlayerSpawner targetPlayerSpawner = getPlayer(target.getUniqueId());
-		Spawner newSpawner = new SpawnerObject(target.getUniqueId(), spawner.getType(), levelManager);
+		Spawner newSpawner = new SpawnerObject(target.getUniqueId(), spawner.getType(), this);
 
 		SpawnerSendEvent event = new SpawnerSendEvent(player, target, playerSpawner, targetPlayerSpawner, spawner,
 				newSpawner);
@@ -265,7 +265,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 			return;
 
 		for (int a = 0; a < number; a++) {
-			Spawner spawner = new SpawnerObject(target.getUniqueId(), type, levelManager);
+			Spawner spawner = new SpawnerObject(target.getUniqueId(), type, this);
 			playerSpawner.addSpawner(spawner);
 		}
 
@@ -495,5 +495,10 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 		PlayerSpawner playerSpawner = getPlayer(uuid);
 		playerSpawner.removeSpawner(board, spawner);
 
+	}
+
+	@Override
+	public LevelManager getLevelManager() {
+		return levelManager;
 	}
 }
