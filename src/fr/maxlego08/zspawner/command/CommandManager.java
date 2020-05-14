@@ -188,17 +188,19 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 	 */
 	private List<String> proccessTab(CommandSender sender, VCommand command, String[] args) {
 
-		CommandType type = command.tabPerform(plugin, sender, args);
+		CommandType type = command.getTabCompleter();
 		if (type.equals(CommandType.DEFAULT)) {
 
-			String startWith = args[0];
+			String startWith = args[args.length - 1];
 
 			List<String> tabCompleter = new ArrayList<>();
 			for (VCommand vCommand : commands) {
 				if ((vCommand.getParent() != null && vCommand.getParent() == command)) {
 					String cmd = vCommand.getSubCommands().get(0);
-					if (startWith.length() == 0 || cmd.startsWith(startWith))
-						tabCompleter.add(cmd);
+					if (vCommand.getPermission() == null
+							|| sender.hasPermission(vCommand.getPermission().getPermission()))
+						if (startWith.length() == 0 || cmd.startsWith(startWith))
+							tabCompleter.add(cmd);
 				}
 			}
 			return tabCompleter.size() == 0 ? null : tabCompleter;
@@ -265,13 +267,15 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String str, String[] args) {
 
 		for (VCommand command : commands) {
+
 			if (command.getSubCommands().contains(cmd.getName().toLowerCase())) {
-				if ((args.length == 1 || command.isIgnoreParent()) && command.getParent() == null) {
+				if (args.length == 1 && command.getParent() == null) {
 					return proccessTab(sender, command, args);
 				}
 			} else {
-				if (args.length >= 1 && command.getParent() != null
-						&& canExecute(args, cmd.getName().toLowerCase(), command)) {
+				String[] newArgs = Arrays.copyOf(args, args.length - 1);
+				if (newArgs.length >= 1 && command.getParent() != null
+						&& canExecute(newArgs, cmd.getName().toLowerCase(), command)) {
 					return proccessTab(sender, command, args);
 				}
 			}
@@ -279,5 +283,4 @@ public class CommandManager extends ZUtils implements CommandExecutor, TabComple
 
 		return null;
 	}
-
 }

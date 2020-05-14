@@ -12,14 +12,14 @@ import fr.maxlego08.zspawner.zcore.utils.economy.Economy;
 public class LevelObject extends ZUtils implements Level {
 
 	private final int level;
-	private final Economy economy;
-	private final double price;
-	private final int minDelay;
-	private final int maxDelay;
-	private final int spawnCount;
-	private final int maxNearbyEntity;
-	private final int spawnRange;
-	private final int requiredPlayerRange;
+	private Economy economy;
+	private double price;
+	private int minDelay;
+	private int maxDelay;
+	private int spawnCount;
+	private int maxNearbyEntity;
+	private int spawnRange;
+	private int requiredPlayerRange;
 
 	/**
 	 * 
@@ -111,6 +111,94 @@ public class LevelObject extends ZUtils implements Level {
 	@Override
 	public int getMaxNearbyEntities() {
 		return maxNearbyEntity;
+	}
+
+	/**
+	 * @return the level
+	 */
+	public int getLevel() {
+		return level;
+	}
+
+	/**
+	 * @return the maxNearbyEntity
+	 */
+	public int getMaxNearbyEntity() {
+		return maxNearbyEntity;
+	}
+
+	/**
+	 * @param economy
+	 *            the economy to set
+	 */
+	public void setEconomy(Economy economy) {
+		this.economy = economy;
+	}
+
+	/**
+	 * @param price
+	 *            the price to set
+	 */
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	/**
+	 * @param minDelay
+	 *            the minDelay to set
+	 */
+	public void setMinDelay(int minDelay) {
+		this.minDelay = minDelay;
+	}
+
+	/**
+	 * @param maxDelay
+	 *            the maxDelay to set
+	 */
+	public void setMaxDelay(int maxDelay) {
+		this.maxDelay = maxDelay;
+	}
+
+	/**
+	 * @param spawnCount
+	 *            the spawnCount to set
+	 */
+	public void setSpawnCount(int spawnCount) {
+		this.spawnCount = spawnCount;
+	}
+
+	/**
+	 * @param maxNearbyEntity
+	 *            the maxNearbyEntity to set
+	 */
+	public void setMaxNearbyEntity(int maxNearbyEntity) {
+		this.maxNearbyEntity = maxNearbyEntity;
+	}
+
+	/**
+	 * @param spawnRange
+	 *            the spawnRange to set
+	 */
+	public void setSpawnRange(int spawnRange) {
+		this.spawnRange = spawnRange;
+	}
+
+	/**
+	 * @param requiredPlayerRange
+	 *            the requiredPlayerRange to set
+	 */
+	public void setRequiredPlayerRange(int requiredPlayerRange) {
+		this.requiredPlayerRange = requiredPlayerRange;
+	}
+
+	@Override
+	protected Level clone() {
+		try {
+			return (Level) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

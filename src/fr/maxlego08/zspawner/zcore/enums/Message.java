@@ -22,7 +22,7 @@ public enum Message {
 	TIME_MINUTE("%02d minute(s) %02d seconde(s)", true),
 	TIME_SECOND("%02d seconde(s)", true),
 	
-	COMMAND_SYNTAXE_ERROR("§cVous devez exécuter la commande comme ceci§7: §a%s", true),
+	COMMAND_SYNTAXE_ERROR("§cVous devez exécuter la commande comme ceci§7: §b%s", true),
 	COMMAND_NO_PERMISSION("§cVous n'avez pas la permission d'exécuter cette commande.", true),
 	COMMAND_NO_CONSOLE("§cSeul un joueur peut exécuter cette commande.", true),
 	COMMAND_NO_ARG("§cImpossible de trouver la commande avec ses arguments.", true),
@@ -38,6 +38,8 @@ public enum Message {
 	DESCRIPTION_REMOVE_ALL("Remove all spawners to player"),
 	DESCRIPTION_INFO("See the spawner information that you pointed"),
 	DESCRIPTION_SEND("Send spawner to player"),
+	DESCRIPTION_LEVEL("Show level commands"),
+	DESCRIPTION_LEVEL_CREATE("Create a new level"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
@@ -73,6 +75,9 @@ public enum Message {
 	REMOVE_SPAWNER("§eYou have removed a spawner !"), 
 	INFO_ERROR("§cYou must watch a block!"), 
 	INFO_ERROR_BOARD("§cThis spawner is natural!"), 
+
+	LEVEL_CREATE_ERROR("§clevel §f%s §calready exists."),
+	LEVEL_CREATE_SUCCESS("§eYou just create level §6%s§e."),
 	
 	;
 
