@@ -1,12 +1,12 @@
 package fr.maxlego08.zspawner.api.event;
 
-import fr.maxlego08.zspawner.api.Level;
+import fr.maxlego08.zspawner.api.SimpleLevel;
 
 public class SpawnerLevelCreateEvent extends SpawnerEvent {
 
-	private final Level level;
+	private final SimpleLevel level;
 
-	public SpawnerLevelCreateEvent(Level level) {
+	public SpawnerLevelCreateEvent(SimpleLevel level) {
 		super();
 		this.level = level;
 	}
@@ -14,7 +14,7 @@ public class SpawnerLevelCreateEvent extends SpawnerEvent {
 	/**
 	 * @return the level
 	 */
-	public Level getLevel() {
+	public SimpleLevel getLevel() {
 		return level;
 	}
 

@@ -11,8 +11,8 @@ import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.api.NMS;
+import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
@@ -88,7 +88,7 @@ public class NMS_1_7 extends ZUtils implements NMS {
 	public void updateSpawner(Spawner spawner) {
 
 		Location location = spawner.getLocation();
-		Level level = spawner.getLevel();
+		SimpleLevel level = spawner.getLevel();
 
 		if (!location.getBlock().getType().equals(getMaterial(52)))
 			return;

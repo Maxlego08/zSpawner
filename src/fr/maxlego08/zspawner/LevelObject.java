@@ -1,6 +1,7 @@
 package fr.maxlego08.zspawner;
 
 import fr.maxlego08.zspawner.api.Level;
+import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.economy.Economy;
 
@@ -20,6 +21,7 @@ public class LevelObject extends ZUtils implements Level {
 	private int maxNearbyEntity;
 	private int spawnRange;
 	private int requiredPlayerRange;
+	private final LevelManager levelManager;
 
 	/**
 	 * 
@@ -34,7 +36,7 @@ public class LevelObject extends ZUtils implements Level {
 	 * @param requiredPlayerRange
 	 */
 	public LevelObject(int level, Economy economy, double price, int minDelay, int maxDelay, int spawnCount,
-			int maxNearbyEntity, int spawnRange, int requiredPlayerRange) {
+			int maxNearbyEntity, int spawnRange, int requiredPlayerRange, LevelManager levelManager) {
 		super();
 		this.level = level;
 		this.economy = economy;
@@ -45,6 +47,7 @@ public class LevelObject extends ZUtils implements Level {
 		this.maxNearbyEntity = maxNearbyEntity;
 		this.spawnRange = spawnRange;
 		this.requiredPlayerRange = requiredPlayerRange;
+		this.levelManager = levelManager;
 	}
 
 	/**
@@ -199,6 +202,11 @@ public class LevelObject extends ZUtils implements Level {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	@Override
+	public void flush() {
+		levelManager.save(null);
 	}
 
 }

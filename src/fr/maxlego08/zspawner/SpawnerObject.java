@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
-import fr.maxlego08.zspawner.api.Level;
+import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
@@ -176,7 +176,7 @@ public class SpawnerObject extends ZUtils implements Spawner {
 	}
 
 	@Override
-	public Level getLevel() {
+	public SimpleLevel getLevel() {
 		return spawnerManager.getLevelManager().getLevel(levelId);
 	}
 

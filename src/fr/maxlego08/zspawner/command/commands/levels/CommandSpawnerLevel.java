@@ -13,6 +13,7 @@ public class CommandSpawnerLevel extends VCommand {
 		this.setDescription(Message.DESCRIPTION_LEVEL);
 		this.addSubCommand("level");
 		this.addSubCommand(new CommandLevelCreate());
+		this.addSubCommand(new CommandLevelShow());
 	}
 
 	@Override

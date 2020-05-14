@@ -16,6 +16,7 @@ import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.utils.economy.Economy;
 
+@Deprecated
 public class LevelAdapter extends TypeAdapter<Level> {
 
 	private static Type seriType = new TypeToken<Map<String, Object>>() {
@@ -87,7 +88,7 @@ public class LevelAdapter extends TypeAdapter<Level> {
 
 		return new LevelObject(levelNumber.intValue(), economy, priceNumber.doubleValue(), minNumber.intValue(),
 				maxNumber.intValue(), spawnNumber.intValue(), entitiesNumber.intValue(), rangeNumber.intValue(),
-				requiredNumber.intValue());
+				requiredNumber.intValue(), null);
 
 	}
 

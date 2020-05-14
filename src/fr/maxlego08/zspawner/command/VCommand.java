@@ -11,6 +11,7 @@ import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
+import fr.maxlego08.zspawner.zcore.enums.Tab;
 import fr.maxlego08.zspawner.zcore.utils.commands.Arguments;
 import fr.maxlego08.zspawner.zcore.utils.commands.CommandType;
 
@@ -417,4 +418,55 @@ public abstract class VCommand extends Arguments {
 		return null;
 	}
 
+	/**
+	 * Generate list for tab completer
+	 * 
+	 * @param startWith
+	 * @param strings
+	 * @return
+	 */
+	protected List<String> generateList(String startWith, String... strings) {
+		return generateList(Arrays.asList(strings), startWith);
+	}
+
+	/**
+	 * Generate list for tab completer
+	 * 
+	 * @param startWith
+	 * @param strings
+	 * @return
+	 */
+	protected List<String> generateList(Tab tab, String startWith, String... strings) {
+		return generateList(Arrays.asList(strings), startWith, tab);
+	}
+
+	/**
+	 * Generate list for tab completer
+	 * 
+	 * @param defaultList
+	 * @param startWith
+	 * @return
+	 */
+	protected List<String> generateList(List<String> defaultList, String startWith) {
+		return generateList(defaultList, startWith, Tab.START);
+	}
+
+	/**
+	 * Generate list for tab completer
+	 * 
+	 * @param defaultList
+	 * @param startWith
+	 * @param tab
+	 * @return
+	 */
+	protected List<String> generateList(List<String> defaultList, String startWith, Tab tab) {
+		List<String> newList = new ArrayList<>();
+		for (String str : defaultList)
+			if (startWith.length() == 0
+					|| (tab.equals(Tab.START) ? str.toLowerCase().startsWith(startWith.toLowerCase())
+							: str.toLowerCase().contains(startWith.toLowerCase())))
+				newList.add(str);
+		return newList.size() == 0 ? null : newList;
+	}
+	
 }

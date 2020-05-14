@@ -4,10 +4,18 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.maxlego08.zspawner.LevelObject;
 import fr.maxlego08.zspawner.api.Level;
+import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.economy.Economy;
 
 public class LevelLoader extends ZUtils implements Loader<Level> {
+
+	private final LevelManager manager;
+
+	public LevelLoader(LevelManager manager) {
+		super();
+		this.manager = manager;
+	}
 
 	@Override
 	public Level load(YamlConfiguration configuration, String path) {
@@ -23,7 +31,7 @@ public class LevelLoader extends ZUtils implements Loader<Level> {
 		int requiredPlayerRange = configuration.getInt(path + "requiredPlayerRange");
 
 		return new LevelObject(level, economy, price, minDelay, maxDelay, spawnCount, maxNearbyEntity, spawnRange,
-				requiredPlayerRange);
+				requiredPlayerRange, manager);
 	}
 
 	@Override

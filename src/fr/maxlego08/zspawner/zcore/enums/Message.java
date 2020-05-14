@@ -40,6 +40,7 @@ public enum Message {
 	DESCRIPTION_SEND("Send spawner to player"),
 	DESCRIPTION_LEVEL("Show level commands"),
 	DESCRIPTION_LEVEL_CREATE("Create a new level"),
+	DESCRIPTION_LEVEL_SHOW("Show information about a level"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
@@ -76,6 +77,7 @@ public enum Message {
 	INFO_ERROR("§cYou must watch a block!"), 
 	INFO_ERROR_BOARD("§cThis spawner is natural!"), 
 
+	LEVEL_ERROR("§clevel §f%s §cdoesn't exists."),
 	LEVEL_CREATE_ERROR("§clevel §f%s §calready exists."),
 	LEVEL_CREATE_SUCCESS("§eYou just create level §6%s§e."),
 	

@@ -111,6 +111,6 @@ public interface Spawner {
 	 * 
 	 * @return
 	 */
-	Level getLevel();
+	SimpleLevel getLevel();
 
 }
