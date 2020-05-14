@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -19,8 +18,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.Board;
+import fr.maxlego08.zspawner.api.FakeSpawner;
 import fr.maxlego08.zspawner.api.NMS;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
+import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.api.enums.InventoryType;
 import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
@@ -52,7 +53,6 @@ import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
-import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 
 public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
@@ -200,6 +200,11 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 			PlayerSpawner playerSpawner = getPlayer(uuid);
 
+			if (playerSpawner.isPlacing()) {
+				message(player, Message.PLACING_SPAWNER);
+				return;
+			}
+
 			SpawnerOpenInventoryEvent event = new SpawnerOpenInventoryEvent(Inventory.INVENTORY_SPAWNER_SEND,
 					playerSpawner, player);
 			event.callEvent();
@@ -285,9 +290,15 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 	}
 
 	@Override
-	public void giveSpawner(CommandSender sender, Player target, EntityType type, int number) {
+	public void giveSpawner(CommandSender sender, Player target, EntityType type, int number, int level) {
 
-		SpawnerGiveEvent event = new SpawnerGiveEvent(sender, target, type, number);
+		SimpleLevel levelObject = levelManager.getLevel(level);
+		if (levelObject == null) {
+			message(sender, Message.LEVEL_ERROR, level);
+			return;
+		}
+		
+		SpawnerGiveEvent event = new SpawnerGiveEvent(sender, target, type, number, level);
 		event.callEvent();
 
 		if (event.isCancelled())
@@ -299,13 +310,8 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 		if (number < 0)
 			return;
 
-		ItemBuilder builder = new ItemBuilder(getMaterial(52), number,
-				Config.itemName.replace("%type%", name(finalType.name())));
-		List<String> lore = Config.itemLore.stream().map(str -> str.replace("%type%", name(finalType.name())))
-				.collect(Collectors.toList());
-		builder.setLore(lore);
-
-		ItemStack itemStack = nms.set(builder.build(), KEY_TYPE, finalType);
+		FakeSpawner fakeSpawner = new FakeSpawnerObject(type, level, this);
+		ItemStack itemStack = nms.fromSpawner(fakeSpawner);
 
 		give(target, itemStack);
 

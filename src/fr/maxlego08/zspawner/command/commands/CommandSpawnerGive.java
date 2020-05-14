@@ -24,6 +24,7 @@ public class CommandSpawnerGive extends VCommand {
 		this.addRequireArg("player");
 		this.addRequireArg("type");
 		this.addOptionalArg("number");
+		this.addOptionalArg("level");
 	}
 
 	@Override
@@ -32,9 +33,10 @@ public class CommandSpawnerGive extends VCommand {
 		Player player = argAsPlayer(0);
 		EntityType entityType = argAsEntityType(1);
 		int amount = argAsInteger(2, 1);
+		int level = argAsInteger(3, 1);
 		amount = amount < 0 ? 1 : amount;
 		
-		manager.giveSpawner(sender, player, entityType, amount);
+		manager.giveSpawner(sender, player, entityType, amount, level);
 
 		return CommandType.SUCCESS;
 	}
