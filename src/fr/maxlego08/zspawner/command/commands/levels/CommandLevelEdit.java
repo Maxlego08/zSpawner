@@ -2,7 +2,12 @@ package fr.maxlego08.zspawner.command.commands.levels;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.command.VCommand;
+import fr.maxlego08.zspawner.command.commands.levels.edits.CommandLevelEditMaxDelay;
+import fr.maxlego08.zspawner.command.commands.levels.edits.CommandLevelEditMaxNearbyEntities;
 import fr.maxlego08.zspawner.command.commands.levels.edits.CommandLevelEditMinDelay;
+import fr.maxlego08.zspawner.command.commands.levels.edits.CommandLevelEditRequiredPlayerRange;
+import fr.maxlego08.zspawner.command.commands.levels.edits.CommandLevelEditSpawnCount;
+import fr.maxlego08.zspawner.command.commands.levels.edits.CommandLevelEditSpawnRange;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
 import fr.maxlego08.zspawner.zcore.utils.commands.CommandType;
@@ -15,6 +20,11 @@ public class CommandLevelEdit extends VCommand {
 		this.addSubCommand("edit");
 		this.addSubCommand("update");
 		this.addSubCommand(new CommandLevelEditMinDelay());
+		this.addSubCommand(new CommandLevelEditMaxDelay());
+		this.addSubCommand(new CommandLevelEditMaxNearbyEntities());
+		this.addSubCommand(new CommandLevelEditRequiredPlayerRange());
+		this.addSubCommand(new CommandLevelEditSpawnCount());
+		this.addSubCommand(new CommandLevelEditSpawnRange());
 	}
 
 	@Override

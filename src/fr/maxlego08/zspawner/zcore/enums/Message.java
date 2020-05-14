@@ -43,6 +43,11 @@ public enum Message {
 	DESCRIPTION_LEVEL_EDIT("Edit value for a level"),
 	DESCRIPTION_LEVEL_SHOW("Show information about a level"),
 	DESCRIPTION_LEVEL_EDIT_MIN_DELAY("Change min delay for spawn (in tick)"),
+	DESCRIPTION_LEVEL_EDIT_MAX_DELAY("Change max delay for spawn (in tick)"),
+	DESCRIPTION_LEVEL_EDIT_SPAWN_COUNT("Change spawn count"),
+	DESCRIPTION_LEVEL_EDIT_SPAWN_RANGE("Change spawn range"),
+	DESCRIPTION_LEVEL_EDIT_MAX_ENTITIES("Change entity limit for spawn"),
+	DESCRIPTION_LEVEL_EDIT_PLAYER("Change required player range"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
