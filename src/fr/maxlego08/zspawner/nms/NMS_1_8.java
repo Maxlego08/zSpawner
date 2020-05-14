@@ -81,15 +81,26 @@ public class NMS_1_8 extends ZUtils implements NMS {
 
 		EntityType finalType = spawner.getType();
 
-		ItemBuilder builder = new ItemBuilder(getMaterial(52), 1,
-				Config.itemName.replace("%type%", name(finalType.name())));
-		List<String> lore = Config.itemLoreSpawner.stream().map(str -> str.replace("%type%", name(finalType.name())))
-				.collect(Collectors.toList());
+		String name = Config.itemName.replace("%type%", name(finalType.name()));
+		name = name.replace("%level%", String.valueOf(spawner.getLevelId()));
+
+		ItemBuilder builder = new ItemBuilder(getMaterial(52), 1, name);
+
+		List<String> tmpList = spawner.getLevelId() == 0 ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
+		List<String> lore = tmpList.stream().map(str -> {
+			
+			str = str.replace("%type%", name(finalType.name()));
+			str = str.replace("%level%", String.valueOf(spawner.getLevelId()));
+			return str;
+			
+		}).collect(Collectors.toList());
+		
 		builder.setLore(lore);
 
 		ItemStack itemStack = this.set(builder.build(), KEY_TYPE, finalType);
 		itemStack = this.set(itemStack, KEY_ADD, true);
 		itemStack = this.set(itemStack, KEY_LEVEL, spawner.getLevelId());
+		
 		return itemStack;
 	}
 
