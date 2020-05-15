@@ -48,6 +48,7 @@ public enum Message {
 	DESCRIPTION_LEVEL_EDIT_SPAWN_RANGE("Change spawn range"),
 	DESCRIPTION_LEVEL_EDIT_MAX_ENTITIES("Change entity limit for spawn"),
 	DESCRIPTION_LEVEL_EDIT_PLAYER("Change required player range"),
+	DESCRIPTION_PICKAXE("Give pickaxe to player"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
@@ -88,6 +89,10 @@ public enum Message {
 	LEVEL_CREATE_ERROR("§clevel §f%s §calready exists."),
 	LEVEL_CREATE_SUCCESS("§eYou just create level §6%s§e."),
 	LEVEL_UPDATE("§eYou just update level §6%s§e."),	
+	
+	GIVE_PICKAXE_SENDER("§eYou have just given x§f1 §ePickaxe to §f%player%§e."),
+	GIVE_PICKAXE_RECEIVER("§eYou have just received x§f1 §ePickaxe."),
+	
 	;
 
 	private String message;

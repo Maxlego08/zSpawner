@@ -46,7 +46,7 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 	}
 
 	public ItemBuilder(Material material, int amount) {
-		this(material, 0, amount);
+		this(material, amount, 0);
 	}
 
 	public ItemBuilder(Material material, int amount, int data) {

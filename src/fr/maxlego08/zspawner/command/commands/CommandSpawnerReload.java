@@ -25,6 +25,7 @@ public class CommandSpawnerReload extends VCommand {
 		Config.getInstance().load(main.getPersist());
 		Lang.getInstance().load(main.getPersist());
 		manager.getLevelManager().load(main.getPersist());
+		main.getPickaxeManager().load(null);
 
 		long end = Math.abs(System.currentTimeMillis() - ms);
 

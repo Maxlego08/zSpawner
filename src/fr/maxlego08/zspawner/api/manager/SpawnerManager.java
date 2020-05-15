@@ -161,4 +161,6 @@ public interface SpawnerManager extends Saveable{
 	 */
 	void remove(Spawner spawner);
 	
+	void givePickaxe(CommandSender sender, Player player, int durabilty, int maxDurabilty);
+	
 }

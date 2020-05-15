@@ -33,6 +33,7 @@ import fr.maxlego08.zspawner.api.event.SpawnerRemoveAllEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerSendEvent;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
+import fr.maxlego08.zspawner.api.manager.PickaxeManager;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.api.utils.FactionListener;
 import fr.maxlego08.zspawner.api.utils.Key;
@@ -64,6 +65,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 	private transient FactionListener factionListener;
 	private transient final NMS nms;
 	private transient final LevelManager levelManager;
+	private transient final PickaxeManager pickaxeManager;
 	private transient final double version = ItemDecoder.getNMSVersion();
 	private transient Map<UUID, PlayerSpawner> players = new HashMap<UUID, PlayerSpawner>();
 
@@ -73,6 +75,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 		super();
 		this.board = board;
 		this.levelManager = plugin.getLevelManager();
+		this.pickaxeManager = plugin.getPickaxeManager();
 
 		factionListener = new NoFaction();
 		if (factionListener instanceof NoFaction)
@@ -521,5 +524,16 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 	@Override
 	public LevelManager getLevelManager() {
 		return levelManager;
+	}
+
+	@Override
+	public void givePickaxe(CommandSender sender, Player player, int durabilty, int maxDurabilty) {
+
+		ItemStack itemStack = pickaxeManager.getPickaxe(durabilty, maxDurabilty);
+		give(player, itemStack);
+
+		message(player, Message.GIVE_PICKAXE_RECEIVER);
+		message(sender, Message.GIVE_PICKAXE_SENDER.getMessage().replace("%player%", player.getName()));
+
 	}
 }
