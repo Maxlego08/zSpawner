@@ -6,10 +6,10 @@ import java.util.Date;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 
-import fr.maxlego08.zspawner.SpawnerObject;
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.api.Spawner;
 import fr.maxlego08.zspawner.command.VCommand;
+import fr.maxlego08.zspawner.objects.SpawnerObject;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;

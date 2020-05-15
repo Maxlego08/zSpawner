@@ -11,8 +11,8 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-import fr.maxlego08.zspawner.LevelObject;
 import fr.maxlego08.zspawner.api.Level;
+import fr.maxlego08.zspawner.objects.LevelObject;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.utils.economy.Economy;
 

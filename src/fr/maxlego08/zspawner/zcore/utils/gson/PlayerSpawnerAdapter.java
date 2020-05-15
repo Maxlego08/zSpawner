@@ -14,9 +14,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-import fr.maxlego08.zspawner.PlayerObject;
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 import fr.maxlego08.zspawner.api.Spawner;
+import fr.maxlego08.zspawner.objects.PlayerObject;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 
 public class PlayerSpawnerAdapter extends TypeAdapter<PlayerSpawner> {

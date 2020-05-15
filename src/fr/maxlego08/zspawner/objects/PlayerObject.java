@@ -1,4 +1,4 @@
-package fr.maxlego08.zspawner;
+package fr.maxlego08.zspawner.objects;
 
 import java.util.ArrayList;
 import java.util.Collections;

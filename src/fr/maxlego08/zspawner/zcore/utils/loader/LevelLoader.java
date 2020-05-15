@@ -2,9 +2,9 @@ package fr.maxlego08.zspawner.zcore.utils.loader;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import fr.maxlego08.zspawner.LevelObject;
 import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
+import fr.maxlego08.zspawner.objects.LevelObject;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.economy.Economy;
 

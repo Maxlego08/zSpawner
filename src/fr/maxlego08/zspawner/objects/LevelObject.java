@@ -1,4 +1,4 @@
-package fr.maxlego08.zspawner;
+package fr.maxlego08.zspawner.objects;
 
 import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.api.manager.LevelManager;

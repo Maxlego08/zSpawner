@@ -1,4 +1,4 @@
-package fr.maxlego08.zspawner;
+package fr.maxlego08.zspawner.objects;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

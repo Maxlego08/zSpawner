@@ -15,6 +15,7 @@ import fr.maxlego08.zspawner.api.enums.Value;
 import fr.maxlego08.zspawner.api.event.SpawnerLevelCreateEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerLevelUpdateEvent;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
+import fr.maxlego08.zspawner.objects.LevelObject;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
