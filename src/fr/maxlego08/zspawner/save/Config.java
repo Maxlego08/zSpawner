@@ -27,6 +27,10 @@ public class Config implements Saveable {
 	public static boolean dropNaturalSpawnerOnExplose = false;
 	public static boolean dropSpawnerOnExplose = false;
 	public static boolean sendMessageWhenSpawnerExplose = true;
+	
+	public static boolean useSilkPickaxe = true;
+	public static boolean useSilkPickaxeOnPlayerSpawner = false;
+	public static int defaultMaxUsePickaxe = 1;
 
 	public static boolean autoSave = true;
 	public static int autoSaveTime = 60;

@@ -130,7 +130,7 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
 		configuration.set(path + "durability", item.getDurability());
 		ItemMeta meta = item.getItemMeta();
 		if (meta.hasDisplayName())
-			configuration.set(path + "name", meta.getDisplayName().replace("&", "§"));
+			configuration.set(path + "name", meta.getDisplayName().replace("§", "&"));
 		if (meta.hasLore())
 			configuration.set(path + "lore", colorReverse(meta.getLore()));
 		if (meta.getItemFlags().size() != 0)

@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
+import fr.maxlego08.zspawner.api.manager.PickaxeManager;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.command.commands.CommandSpawner;
@@ -23,7 +24,6 @@ import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.Metrics;
 import fr.maxlego08.zspawner.zcore.utils.UpdateChecker;
-import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
 
 /**
  * System to create your plugins very simply Projet:
@@ -37,6 +37,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 	private SpawnerManager spawner;
 	private LevelManager levelManager;
 	private Board board;
+	private PickaxeManager pickaxeManager;
 	private SpawnerListener listener;
 	private boolean isEnable = false;
 
@@ -55,7 +56,9 @@ public class ZSpawnerPlugin extends ZPlugin {
 
 		board = new BoardObject();
 		levelManager = new LevelManagerObject();
+		pickaxeManager = new PickaxeManagerObject();
 		spawner = new ZSpawnerManager(board, this);
+		((PickaxeManagerObject) pickaxeManager).setManager(spawner);
 
 		/* Commands */
 		registerCommand("zspawners", new CommandSpawner(), "spawners", "spawner");
@@ -73,9 +76,9 @@ public class ZSpawnerPlugin extends ZPlugin {
 		/* Add Saver */
 		addSave(Config.getInstance());
 		addSave(Lang.getInstance());
-		addSave(new CooldownBuilder());
 		addSave(spawner);
 		addSave(levelManager);
+		addSave(pickaxeManager);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
@@ -135,9 +138,13 @@ public class ZSpawnerPlugin extends ZPlugin {
 			}
 		}, 1000 * 60 * Config.autoSaveTime, 1000 * 60 * Config.autoSaveTime);
 	}
-	
+
 	public LevelManager getLevelManager() {
 		return levelManager;
+	}
+
+	public PickaxeManager getPickaxeManager() {
+		return pickaxeManager;
 	}
 
 }
