@@ -107,8 +107,10 @@ public class SpawnerObject extends FakeSpawnerObject implements Spawner {
 	public ItemStack getItemStack() {
 
 		ItemBuilder builder = new ItemBuilder(getMaterial(383), 1, type.getTypeId());
-		if (Config.glowPlaceSpawner && location != null)
+		
+		if (Config.glowPlaceSpawner && location != null && ItemDecoder.getNMSVersion() != 1.7)
 			builder.glow();
+		
 		Config.infos.forEach(string -> {
 
 			SimpleDateFormat format = new SimpleDateFormat(Config.timeFormat);

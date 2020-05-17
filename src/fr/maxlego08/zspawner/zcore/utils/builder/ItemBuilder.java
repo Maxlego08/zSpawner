@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
 public class ItemBuilder extends ZUtils implements Cloneable {
@@ -104,7 +105,7 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 		lore.add(String.format(format, args));
 		return this;
 	}
-	
+
 	public ItemBuilder addLine(String format) {
 		if (lore == null)
 			lore = new ArrayList<>();
@@ -129,7 +130,8 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 
 	public ItemBuilder glow() {
 		addEnchant(material != Material.BOW ? Enchantment.ARROW_INFINITE : Enchantment.LUCK, 10);
-		setFlag(ItemFlag.HIDE_ENCHANTS);
+		if (ItemDecoder.getNMSVersion() != 1.7)
+			setFlag(ItemFlag.HIDE_ENCHANTS);
 		return this;
 	}
 
