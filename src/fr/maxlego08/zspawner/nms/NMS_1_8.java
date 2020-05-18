@@ -170,14 +170,14 @@ public class NMS_1_8 extends ZUtils implements NMS {
 
 		SimpleLevel level = levelManager.getLevelFromValue(new LevelObject(0, null, 0, minDelay, maxDelay, spawnCount,
 				maxNearbyEntities, spawnRange, requiredPlayerRange, levelManager));
-
+		
 		String name = Config.itemName.replace("%type%", name(finalType.name()));
 		if (level != null)
 			name = name.replace("%level%", String.valueOf(level.getId()));
 
 		ItemBuilder builder = new ItemBuilder(getMaterial(52), 1, name);
 
-		List<String> tmpList = level != null ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
+		List<String> tmpList = level == null ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
 		List<String> lore = tmpList.stream().map(str -> {
 
 			str = str.replace("%type%", name(finalType.name()));

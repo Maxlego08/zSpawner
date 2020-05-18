@@ -179,7 +179,7 @@ public class NMS_1_9 extends ZUtils implements NMS {
 
 		ItemBuilder builder = new ItemBuilder(getMaterial(52), 1, name);
 
-		List<String> tmpList = level != null ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
+		List<String> tmpList = level == null ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
 		List<String> lore = tmpList.stream().map(str -> {
 
 			str = str.replace("%type%", name(finalType.name()));
