@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.craftbukkit.v1_7_R4.block.CraftCreatureSpawner;
 import org.bukkit.craftbukkit.v1_7_R4.inventory.CraftItemStack;
@@ -15,6 +16,8 @@ import fr.maxlego08.zspawner.api.FakeSpawner;
 import fr.maxlego08.zspawner.api.NMS;
 import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.Spawner;
+import fr.maxlego08.zspawner.api.manager.LevelManager;
+import fr.maxlego08.zspawner.objects.LevelObject;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
@@ -63,7 +66,7 @@ public class NMS_1_7 extends ZUtils implements NMS {
 
 		return CraftItemStack.asBukkitCopy(itemStackNMS);
 	}
-	
+
 	@Override
 	public ItemStack set(ItemStack itemStack, String key, int value) {
 		net.minecraft.server.v1_7_R4.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
@@ -92,19 +95,19 @@ public class NMS_1_7 extends ZUtils implements NMS {
 
 		List<String> tmpList = spawner.getLevelId() == 0 ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
 		List<String> lore = tmpList.stream().map(str -> {
-			
+
 			str = str.replace("%type%", name(finalType.name()));
 			str = str.replace("%level%", String.valueOf(spawner.getLevelId()));
 			return str;
-			
+
 		}).collect(Collectors.toList());
-		
+
 		builder.setLore(lore);
 
 		ItemStack itemStack = this.set(builder.build(), KEY_TYPE, finalType);
 		itemStack = this.set(itemStack, KEY_ADD, true);
 		itemStack = this.set(itemStack, KEY_LEVEL, spawner.getLevelId());
-		
+
 		return itemStack;
 	}
 
@@ -165,6 +168,69 @@ public class NMS_1_7 extends ZUtils implements NMS {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public ItemStack getLevelFromSpawnBlock(LevelManager levelManager, Block block) {
+
+		CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
+		CraftCreatureSpawner craftCreatureSpawner = (CraftCreatureSpawner) creatureSpawner;
+
+		Field field;
+		try {
+
+			field = craftCreatureSpawner.getClass().getDeclaredField("spawner");
+			field.setAccessible(true);
+
+			TileEntityMobSpawner entityMobSpawner = (TileEntityMobSpawner) field.get(craftCreatureSpawner);
+			MobSpawnerAbstract mobSpawnerAbstract = entityMobSpawner.getSpawner();
+			
+			NBTTagCompound nbt = new NBTTagCompound();
+			mobSpawnerAbstract.b(nbt);
+
+			int minDelay = nbt.getShort("MinSpawnDelay");
+			int maxDelay = nbt.getShort("MaxSpawnDelay");
+			int requiredPlayerRange = nbt.getShort("RequiredPlayerRange");
+			int spawnRange = nbt.getShort("SpawnRange");
+			int spawnCount = nbt.getShort("SpawnCount");
+			int maxNearbyEntities = nbt.getShort("MaxNearbyEntities");
+			EntityType finalType = creatureSpawner.getSpawnedType();
+
+			SimpleLevel level = levelManager.getLevelFromValue(new LevelObject(0, null, 0, minDelay, maxDelay,
+					spawnCount, maxNearbyEntities, spawnRange, requiredPlayerRange, levelManager));
+
+			String name = Config.itemName.replace("%type%", name(finalType.name()));
+			if (level != null)
+				name = name.replace("%level%", String.valueOf(level.getId()));
+
+			ItemBuilder builder = new ItemBuilder(getMaterial(52), 1, name);
+
+			List<String> tmpList = level != null ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
+			List<String> lore = tmpList.stream().map(str -> {
+
+				str = str.replace("%type%", name(finalType.name()));
+				str = str.replace("%level%", String.valueOf(level != null ? level.getId() : 0));
+				return str;
+
+			}).collect(Collectors.toList());
+
+			builder.setLore(lore);
+
+			ItemStack itemStack = this.set(builder.build(), KEY_TYPE, finalType);
+			itemStack = this.set(itemStack, KEY_ADD, true);
+			if (level != null)
+				itemStack = this.set(itemStack, KEY_LEVEL, level.getId());
+
+			return itemStack;
+		} catch (NoSuchFieldException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }
