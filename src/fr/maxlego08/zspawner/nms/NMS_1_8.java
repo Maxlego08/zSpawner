@@ -12,7 +12,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import fr.maxlego08.zspawner.api.FakeSpawner;
-import fr.maxlego08.zspawner.api.Level;
 import fr.maxlego08.zspawner.api.NMS;
 import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.Spawner;

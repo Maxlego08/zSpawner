@@ -352,6 +352,7 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 		FakeSpawner fakeSpawner = new FakeSpawnerObject(this, type, level);
 		ItemStack itemStack = nms.fromSpawner(fakeSpawner);
+		itemStack.setAmount(number);
 
 		give(target, itemStack);
 
@@ -593,16 +594,18 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 			int newDura = event.getNewDura();
 			spawner = event.getItemStack();
 
-			if (newDura < 0)
-				
+			if (newDura <= 0)
+
 				removeItemInHand(player);
-			
+
 			else {
 
-				itemStack = nms.set(itemStack, KEY_DURA, newDura);
+				itemStack = pickaxeManager.getPickaxe(newDura, maxDura);
 				player.setItemInHand(itemStack);
 
 			}
+
+			block.getWorld().dropItem(block.getLocation(), spawner);
 
 		}
 
