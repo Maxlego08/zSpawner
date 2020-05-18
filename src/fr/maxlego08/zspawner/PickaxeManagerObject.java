@@ -123,4 +123,9 @@ public class PickaxeManagerObject extends ZUtils implements PickaxeManager {
 		return itemStack;
 	}
 
+	@Override
+	public boolean isPickaxe(ItemStack itemStack) {
+		return manager.getNMS().has(pickaxe, KEY_DURA);
+	}
+
 }

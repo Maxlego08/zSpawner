@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.maxlego08.zspawner.api.Level;
+import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.enums.Value;
 import fr.maxlego08.zspawner.api.event.SpawnerLevelCreateEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerLevelUpdateEvent;
@@ -198,6 +199,11 @@ public class LevelManagerObject extends ZUtils implements LevelManager {
 		level.flush();
 		message(sender, Message.LEVEL_UPDATE, level.getId());
 
+	}
+
+	@Override
+	public SimpleLevel getLevelFromValue(SimpleLevel levelObject) {
+		return levels.values().stream().filter(level -> level.equals(levelObject)).findAny().orElse(null);
 	}
 
 }

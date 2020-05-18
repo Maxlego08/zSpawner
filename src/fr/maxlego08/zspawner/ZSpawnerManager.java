@@ -33,6 +33,7 @@ import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveAllEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerSendEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerSilkEvent;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.api.manager.PickaxeManager;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
@@ -566,6 +567,44 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 		message(player, Message.GIVE_PICKAXE_RECEIVER);
 		message(sender, Message.GIVE_PICKAXE_SENDER.getMessage().replace("%player%", player.getName()));
+
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void breakSilkSpawner(Player player, Block block) {
+
+		ItemStack itemStack = player.getItemInHand();
+		if (itemStack == null)
+			return;
+
+		if (pickaxeManager.isPickaxe(itemStack)) {
+
+			int dura = nms.getInteger(itemStack, KEY_DURA);
+			int maxDura = nms.getInteger(itemStack, KEY_MAX_DURA);
+			ItemStack spawner = nms.getLevelFromSpawnBlock(levelManager, block);
+
+			SpawnerSilkEvent event = new SpawnerSilkEvent(dura, maxDura, player, block, spawner, dura - 1);
+			event.callEvent();
+
+			if (event.isCancelled())
+				return;
+
+			int newDura = event.getNewDura();
+			spawner = event.getItemStack();
+
+			if (newDura < 0)
+				
+				removeItemInHand(player);
+			
+			else {
+
+				itemStack = nms.set(itemStack, KEY_DURA, newDura);
+				player.setItemInHand(itemStack);
+
+			}
+
+		}
 
 	}
 }

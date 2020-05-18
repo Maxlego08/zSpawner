@@ -161,6 +161,20 @@ public interface SpawnerManager extends Saveable{
 	 */
 	void remove(Spawner spawner);
 	
+	/**
+	 * 
+	 * @param sender
+	 * @param player
+	 * @param durabilty
+	 * @param maxDurabilty
+	 */
 	void givePickaxe(CommandSender sender, Player player, int durabilty, int maxDurabilty);
+
+	/**
+	 * 
+	 * @param player
+	 * @param block
+	 */
+	void breakSilkSpawner(Player player, Block block);
 	
 }

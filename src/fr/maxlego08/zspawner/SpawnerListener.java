@@ -179,7 +179,8 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 				} else
 					message(player, Message.SPAWNER_BREAK_OWNER_ERROR);
 
-			}
+			} else 
+				manager.breakSilkSpawner(player, block);
 
 		} else {
 			manager.placeSpawner(event, block, player);

@@ -209,4 +209,51 @@ public class LevelObject extends ZUtils implements Level {
 		levelManager.save(null);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + maxDelay;
+		result = prime * result + maxNearbyEntity;
+		result = prime * result + minDelay;
+		result = prime * result + requiredPlayerRange;
+		result = prime * result + spawnCount;
+		result = prime * result + spawnRange;
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LevelObject other = (LevelObject) obj;
+		if (maxDelay != other.maxDelay)
+			return false;
+		if (maxNearbyEntity != other.maxNearbyEntity)
+			return false;
+		if (minDelay != other.minDelay)
+			return false;
+		if (requiredPlayerRange != other.requiredPlayerRange)
+			return false;
+		if (spawnCount != other.spawnCount)
+			return false;
+		if (spawnRange != other.spawnRange)
+			return false;
+		return true;
+	}
+
 }

@@ -45,5 +45,12 @@ public interface LevelManager extends Saveable {
 	 * @param value
 	 */
 	void updateLevel(CommandSender sender, Value min, int level, int value);
+
+	/**
+	 * Get level spawn simple level
+	 * @param levelObject
+	 * @return
+	 */
+	SimpleLevel getLevelFromValue(SimpleLevel levelObject);
 	
 }

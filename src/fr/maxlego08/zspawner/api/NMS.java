@@ -1,8 +1,10 @@
 package fr.maxlego08.zspawner.api;
 
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.api.utils.Key;
 
 public interface NMS extends Key{
@@ -77,5 +79,13 @@ public interface NMS extends Key{
 	 * @param spawnerObject
 	 */
 	void updateSpawner(Spawner spawner);
+	
+	/**
+	 * 
+	 * @param levelManager
+	 * @param block
+	 * @return
+	 */
+	ItemStack getLevelFromSpawnBlock(LevelManager levelManager, Block block);
 
 }

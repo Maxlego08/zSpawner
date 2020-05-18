@@ -13,5 +13,12 @@ public interface PickaxeManager extends Saveable, Key{
 	 * @return
 	 */
 	ItemStack getPickaxe(int durabilty, int maxDurabilty);
+
+	/**
+	 * 
+	 * @param itemStack
+	 * @return
+	 */
+	boolean isPickaxe(ItemStack itemStack);
 	
 }
