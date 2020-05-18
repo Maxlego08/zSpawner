@@ -52,7 +52,12 @@ public class NMS_1_7 extends ZUtils implements NMS {
 	public boolean has(ItemStack itemStack, String key) {
 
 		net.minecraft.server.v1_7_R4.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		
+		if (itemStackNMS == null)
+			return false;
 		NBTTagCompound compound = itemStackNMS.getTag();
+		if (compound == null)
+			return false;
 
 		return compound.hasKey(key);
 	}
