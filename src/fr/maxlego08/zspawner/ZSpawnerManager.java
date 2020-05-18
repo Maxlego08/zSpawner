@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.FakeSpawner;
@@ -37,7 +38,11 @@ import fr.maxlego08.zspawner.api.manager.PickaxeManager;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.api.utils.FactionListener;
 import fr.maxlego08.zspawner.api.utils.Key;
+import fr.maxlego08.zspawner.depends.LegacyFaction;
+import fr.maxlego08.zspawner.depends.MassiveFaction;
 import fr.maxlego08.zspawner.depends.NoFaction;
+import fr.maxlego08.zspawner.depends.SuperiorSkyblock2;
+import fr.maxlego08.zspawner.depends.UUIDFaction;
 import fr.maxlego08.zspawner.nms.NMS_1_10;
 import fr.maxlego08.zspawner.nms.NMS_1_11;
 import fr.maxlego08.zspawner.nms.NMS_1_12;
@@ -77,10 +82,37 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 		this.levelManager = plugin.getLevelManager();
 		this.pickaxeManager = plugin.getPickaxeManager();
 
-		factionListener = new NoFaction();
-		if (factionListener instanceof NoFaction)
-			Logger.info("No faction plugin was detected.", LogType.SUCCESS);
+		for (Plugin pl : Bukkit.getPluginManager().getPlugins()) {
 
+			if (factionListener != null)
+				continue;
+
+			if (pl.getName().equalsIgnoreCase("LegacyFactions")) {
+				factionListener = new LegacyFaction();
+				Logger.info("LegacyFaction plugin detected successfully.", LogType.SUCCESS);
+			} else if (pl.getName().equalsIgnoreCase("SuperiorSkyblock2")) {
+				factionListener = new SuperiorSkyblock2();
+				Logger.info("SuperiorSkyblock2 plugin detected successfully.", LogType.SUCCESS);
+			} else if (pl.getName().equalsIgnoreCase("Factions")) {
+				String author = pl.getDescription().getAuthors().toString();
+				if (author.contains("Driftay")) {
+					factionListener = new UUIDFaction();
+					Logger.info("SaberFaction plugin detected successfully.", LogType.SUCCESS);
+				} else if (author.contains("drtshock")) {
+					factionListener = new UUIDFaction();
+					Logger.info("FactionUUID plugin detected successfully.", LogType.SUCCESS);
+				} else if (author.contains("Cayorion") && Bukkit.getPluginManager().isPluginEnabled("MassiveCore")) {
+					factionListener = new MassiveFaction();
+					Logger.info("Massivecraft Faction plugin detected successfully.", LogType.SUCCESS);
+				}
+			}
+		}
+
+		if (factionListener == null) {
+			factionListener = new NoFaction();
+			if (factionListener instanceof NoFaction)
+				Logger.info("No faction plugin was detected.", LogType.SUCCESS);
+		}
 		SpawnerRegisterEvent event = new SpawnerRegisterEvent(factionListener);
 		Bukkit.getPluginManager().callEvent(event);
 		factionListener = event.getFactionListener();

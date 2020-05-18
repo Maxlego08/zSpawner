@@ -46,16 +46,15 @@ public class WorldGuard extends FactionListener {
 			try {
 				Method method = guardPlugin.getClass().getMethod("canBuild", Player.class, Location.class);
 				boolean b = (boolean) method.invoke(guardPlugin, player, location);
-
 				return b;
 
 			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException e) {
 				e.printStackTrace();
+				return false;
 			}
 
 		}
-		return false;
 
 	}
 
