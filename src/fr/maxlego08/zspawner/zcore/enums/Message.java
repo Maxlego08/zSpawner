@@ -22,10 +22,10 @@ public enum Message {
 	TIME_MINUTE("%02d minute(s) %02d seconde(s)", true),
 	TIME_SECOND("%02d seconde(s)", true),
 	
-	COMMAND_SYNTAXE_ERROR("§cVous devez exécuter la commande comme ceci§7: §b%s", true),
-	COMMAND_NO_PERMISSION("§cVous n'avez pas la permission d'exécuter cette commande.", true),
-	COMMAND_NO_CONSOLE("§cSeul un joueur peut exécuter cette commande.", true),
-	COMMAND_NO_ARG("§cImpossible de trouver la commande avec ses arguments.", true),
+	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this §7: §a%command%", true),
+	COMMAND_NO_PERMISSION("§cYou don't have permission !", true),
+	COMMAND_NO_CONSOLE("§cOnly player can execute this command", true),
+	COMMAND_NO_ARG("§cThis argument does not exist!", true),
 	COMMAND_SYNTAXE_HELP("§f%s §7» §b%s", true),
 	
 	
