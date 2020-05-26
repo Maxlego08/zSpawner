@@ -15,6 +15,7 @@ import fr.maxlego08.zspawner.exceptions.ItemEnchantException;
 import fr.maxlego08.zspawner.exceptions.ItemFlagException;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
+import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 
 public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
@@ -90,7 +91,7 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
 		List<String> flags = configuration.getStringList(path + "flags");
 
 		// Permet de charger les différents flags
-		if (flags.size() != 0) {
+		if (flags.size() != 0 && ItemDecoder.getNMSVersion() != 1.7) {
 
 			for (String flagString : flags) {
 
