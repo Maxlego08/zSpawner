@@ -34,7 +34,7 @@ public class NMS_1_7 extends ZUtils implements NMS {
 		NBTTagCompound compound = itemStackNMS.getTag();
 		compound.setString(key, type.name());
 		itemStackNMS.setTag(compound);
-
+		
 		return CraftItemStack.asBukkitCopy(itemStackNMS);
 	}
 
