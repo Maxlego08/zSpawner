@@ -93,6 +93,7 @@ public enum Message {
 	GIVE_PICKAXE_SENDER("§eYou have just given x§f1 §ePickaxe to §f%player%§e."),
 	GIVE_PICKAXE_RECEIVER("§eYou have just received x§f1 §ePickaxe."), 
 	SPAWNER_UPGRADE_ERROR("§cYou can upgrade your spawners."),
+	SPAWNER_UPGRADE_ERROR_MONEY("§cYou don't have enought money."),
 	SPAWNER_UPGRADE_SUCCESS("§eYou have just improved your spawner to level §f%level%§e."),
 	
 	;

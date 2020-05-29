@@ -13,6 +13,9 @@ public class SpawnerPreUpgradeEvent extends SpawnerEvent {
 	private SimpleLevel newLevel;
 	private final Player player;
 	private final PlayerSpawner playerSpawner;
+	private double price;
+
+	
 
 	/**
 	 * @param spawner
@@ -20,15 +23,17 @@ public class SpawnerPreUpgradeEvent extends SpawnerEvent {
 	 * @param newLevel
 	 * @param player
 	 * @param playerSpawner
+	 * @param price
 	 */
 	public SpawnerPreUpgradeEvent(Spawner spawner, SimpleLevel currentLevel, SimpleLevel newLevel, Player player,
-			PlayerSpawner playerSpawner) {
+			PlayerSpawner playerSpawner, double price) {
 		super();
 		this.spawner = spawner;
 		this.currentLevel = currentLevel;
 		this.newLevel = newLevel;
 		this.player = player;
 		this.playerSpawner = playerSpawner;
+		this.price = price;
 	}
 
 	/**
@@ -74,4 +79,20 @@ public class SpawnerPreUpgradeEvent extends SpawnerEvent {
 		this.newLevel = newLevel;
 	}
 
+	/**
+	 * @return the price
+	 */
+	public double getPrice() {
+		return price;
+	}
+
+	/**
+	 * @param price the price to set
+	 */
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	
+	
 }

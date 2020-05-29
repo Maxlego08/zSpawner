@@ -11,10 +11,7 @@ import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import me.bukkit.mTokens.Inkzzz.Tokens;
 import me.realized.tokenmanager.api.TokenManager;
 
-public class EconomyUtils extends ZUtils {
-
-	private TokenManager tokenManager = (TokenManager) Bukkit.getPluginManager().getPlugin("TokenManager");
-
+public abstract class EconomyUtils extends ZUtils {
 
 	/**
 	 * @param economy
@@ -27,6 +24,7 @@ public class EconomyUtils extends ZUtils {
 		case MYSQLTOKEN:
 			return Tokens.getInstance().getAPI().getTokens(player) >= price;
 		case TOKENMANAGER:
+			TokenManager tokenManager = (TokenManager) Bukkit.getPluginManager().getPlugin("TokenManager");
 			return tokenManager.getTokens(player).getAsLong() >= price;
 		case PLAYERPOINT:
 			return ZPlugin.z().getPlayerPointsAPI().look(player.getUniqueId()) >= (int) price;
@@ -52,6 +50,7 @@ public class EconomyUtils extends ZUtils {
 			Tokens.getInstance().getAPI().giveTokens(player, (int) value);
 			break;
 		case TOKENMANAGER:
+			TokenManager tokenManager = (TokenManager) Bukkit.getPluginManager().getPlugin("TokenManager");
 			tokenManager.addTokens(player, (long) value);
 			break;
 		case PLAYERPOINT:
@@ -80,6 +79,7 @@ public class EconomyUtils extends ZUtils {
 			Tokens.getInstance().getAPI().takeTokens(player, (int) value);
 			break;
 		case TOKENMANAGER:
+			TokenManager tokenManager = (TokenManager) Bukkit.getPluginManager().getPlugin("TokenManager");
 			tokenManager.removeTokens(player, (long) value);
 			break;
 		case PLAYERPOINT:

@@ -64,10 +64,10 @@ import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
 import fr.maxlego08.zspawner.zcore.logger.Logger.LogType;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
-import fr.maxlego08.zspawner.zcore.utils.ZUtils;
+import fr.maxlego08.zspawner.zcore.utils.economy.EconomyUtils;
 import fr.maxlego08.zspawner.zcore.utils.storage.Persist;
 
-public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
+public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key {
 
 	private final transient Board board;
 	private transient FactionListener factionListener;
@@ -620,22 +620,32 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 	public void upgradeSpawner(Player player, Spawner object, PlayerSpawner playerSpawner) {
 
 		SimpleLevel currentLevel = object.getLevel();
-		SimpleLevel newLevel = currentLevel.next();
+		SimpleLevel newLevel = currentLevel == null ? levelManager.getLevel(1) : currentLevel.next();
 
-		SpawnerPreUpgradeEvent event = new SpawnerPreUpgradeEvent(object, currentLevel, newLevel, player,
-				playerSpawner);
+		SpawnerPreUpgradeEvent event = new SpawnerPreUpgradeEvent(object, currentLevel, newLevel, player, playerSpawner,
+				newLevel == null ? 0 : newLevel.getPrice());
 		event.callEvent();
 
 		if (event.isCancelled())
 			return;
+
+		newLevel = event.getNewLevel();
+		double price = event.getPrice();
 
 		if (newLevel == null) {
 			message(player, Message.SPAWNER_UPGRADE_ERROR);
 			return;
 		}
 
+		if (!hasMoney(newLevel.getEconomy(), player, price)) {
+			message(player, Message.SPAWNER_UPGRADE_ERROR_MONEY);
+			return;
+		}
+
+		withdrawMoney(newLevel.getEconomy(), player, price);
 		object.setLevel(newLevel.getId());
 		message(player,
 				Message.SPAWNER_UPGRADE_SUCCESS.getMessage().replace("%level%", String.valueOf(newLevel.getId())));
+		player.closeInventory();
 	}
 }

@@ -96,6 +96,7 @@ public class LevelManagerObject extends ZUtils implements LevelManager {
 
 	@Override
 	public Level getLevel(int level) {
+		level = level < 1 ? 1 : level;
 		return levels.getOrDefault(level, null);
 	}
 
