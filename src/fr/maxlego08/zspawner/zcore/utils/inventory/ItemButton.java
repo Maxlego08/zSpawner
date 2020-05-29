@@ -13,6 +13,7 @@ import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 public class ItemButton {
 
 	private final ItemStack displayItem;
+	private InventoryClickEvent event;
 	private Consumer<InventoryClickEvent> onClick;
 	private Consumer<InventoryClickEvent> onMiddleClick;
 	private Consumer<InventoryClickEvent> onLeftClick;
@@ -71,11 +72,19 @@ public class ItemButton {
 		return displayItem;
 	}
 
+	public InventoryClickEvent getEvent() {
+		return event;
+	}
+
 	/**
 	 * Permet de gérer le click du joueur
+	 * 
 	 * @param event
 	 */
 	public void onClick(InventoryClickEvent event) {
+
+		this.event = event;
+
 		if (onClick != null)
 			onClick.accept(event);
 		if (event.getClick().equals(ClickType.MIDDLE) && onMiddleClick != null)

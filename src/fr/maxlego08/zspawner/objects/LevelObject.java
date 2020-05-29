@@ -1,6 +1,7 @@
 package fr.maxlego08.zspawner.objects;
 
 import fr.maxlego08.zspawner.api.Level;
+import fr.maxlego08.zspawner.api.SimpleLevel;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.economy.Economy;
@@ -254,6 +255,11 @@ public class LevelObject extends ZUtils implements Level {
 		if (spawnRange != other.spawnRange)
 			return false;
 		return true;
+	}
+
+	@Override
+	public SimpleLevel next() {
+		return levelManager.getLevel(getId() + 1);
 	}
 
 }

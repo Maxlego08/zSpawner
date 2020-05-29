@@ -3,6 +3,7 @@ package fr.maxlego08.zspawner.inventory.inventories;
 import java.util.List;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
@@ -43,6 +44,14 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 			return;
 		}
 
+		if (Config.allowUpgradeSpawnerWithShiftClick && button.getEvent().getAction().equals(InventoryAction.MOVE_TO_OTHER_INVENTORY)){
+			
+			manager.upgradeSpawner(player, object, playerSpawner);
+			
+			return;
+		}
+		
+
 		SpawnerPrePlaceEvent event = new SpawnerPrePlaceEvent(player, object, playerSpawner);
 		event.callEvent();
 
@@ -72,7 +81,7 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 				createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
 			});
 		}
-		
+
 		if (Config.displayRemoveAllButton) {
 			Button button = Config.buttonRemoveAll;
 			int slot1 = button.getSlot() > inventorySize ? removeAllSlot : button.getSlot();

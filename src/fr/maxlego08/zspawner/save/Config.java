@@ -32,6 +32,7 @@ public class Config implements Saveable {
 	public static boolean useSilkPickaxeOnPlayerSpawner = false;
 	public static int defaultMaxUsePickaxe = 1;
 
+	public static boolean allowUpgradeSpawnerWithShiftClick = true;
 	public static boolean autoSave = true;
 	public static int autoSaveTime = 60;
 	

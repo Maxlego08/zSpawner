@@ -58,4 +58,10 @@ public interface SimpleLevel extends Cloneable{
 	 */
 	int getRequiredPlayerRange();
 
+	/**
+	 * 
+	 * @return
+	 */
+	SimpleLevel next();
+
 }

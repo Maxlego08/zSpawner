@@ -29,6 +29,7 @@ import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerGiveEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerOpenInventoryEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerPreUpgradeEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveAllEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
@@ -613,5 +614,28 @@ public class ZSpawnerManager extends ZUtils implements SpawnerManager, Key {
 
 		}
 
+	}
+
+	@Override
+	public void upgradeSpawner(Player player, Spawner object, PlayerSpawner playerSpawner) {
+
+		SimpleLevel currentLevel = object.getLevel();
+		SimpleLevel newLevel = currentLevel.next();
+
+		SpawnerPreUpgradeEvent event = new SpawnerPreUpgradeEvent(object, currentLevel, newLevel, player,
+				playerSpawner);
+		event.callEvent();
+
+		if (event.isCancelled())
+			return;
+
+		if (newLevel == null) {
+			message(player, Message.SPAWNER_UPGRADE_ERROR);
+			return;
+		}
+
+		object.setLevel(newLevel.getId());
+		message(player,
+				Message.SPAWNER_UPGRADE_SUCCESS.getMessage().replace("%level%", String.valueOf(newLevel.getId())));
 	}
 }
