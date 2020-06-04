@@ -69,7 +69,7 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 						"§cYou are not using the latest version of the plugin, remember to update the plugin quickly.");
 			}
 
-			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("pre")) {
+			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("pre") && !Config.disablePreReleaseMessage) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
 						+ " §eCeci n'est pas une version final du plugin mais une pre release !");
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
