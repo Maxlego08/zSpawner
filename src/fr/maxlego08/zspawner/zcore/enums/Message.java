@@ -22,11 +22,11 @@ public enum Message {
 	TIME_MINUTE("%02d minute(s) %02d seconde(s)", true),
 	TIME_SECOND("%02d seconde(s)", true),
 	
-	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this §7: §a%command%", true),
-	COMMAND_NO_PERMISSION("§cYou don't have permission !", true),
-	COMMAND_NO_CONSOLE("§cOnly player can execute this command", true),
-	COMMAND_NO_ARG("§cThis argument does not exist!", true),
-	COMMAND_SYNTAXE_HELP("§f%s §7» §b%s", true),
+	COMMAND_SYNTAXE_ERROR("§cYou must execute the command like this§7: §2%command%"),
+	COMMAND_NO_PERMISSION("§cYou don't have permission !"),
+	COMMAND_NO_CONSOLE("§cOnly player can execute this command"),
+	COMMAND_NO_ARG("§cThis argument does not exist!"),
+	COMMAND_SYNTAXE_HELP("§f%s §7» §b%s"),
 	
 	
 	DESCRIPTION_HELP("Show commands"),
