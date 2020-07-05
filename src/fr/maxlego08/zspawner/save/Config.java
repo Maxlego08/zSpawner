@@ -30,6 +30,8 @@ public class Config implements Saveable {
 	public static boolean dropSpawnerOnExplose = false;
 	public static boolean sendMessageWhenSpawnerExplose = true;
 	
+	public static boolean disableInteractEggWithSpawner = false;
+	
 	public static boolean useSilkPickaxe = true;
 	public static boolean useSilkPickaxeOnPlayerSpawner = false;
 	public static int defaultMaxUsePickaxe = 1;

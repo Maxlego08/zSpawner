@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -69,7 +70,8 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 						"§cYou are not using the latest version of the plugin, remember to update the plugin quickly.");
 			}
 
-			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("pre") && !Config.disablePreReleaseMessage) {
+			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("pre")
+					&& !Config.disablePreReleaseMessage) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
 						+ " §eCeci n'est pas une version final du plugin mais une pre release !");
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
@@ -179,7 +181,7 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 				} else
 					message(player, Message.SPAWNER_BREAK_OWNER_ERROR);
 
-			} else 
+			} else
 				manager.breakSilkSpawner(player, block);
 
 		} else {
@@ -195,6 +197,25 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 		if (itemInHand.getType().equals(getMaterial(52))) {
 
 			manager.placeSpawner(event, player, itemInHand, event.getBlock());
+
+		}
+
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	protected void onInteract(PlayerInteractEvent event, Player player) {
+
+		if (event.getClickedBlock() != null && Config.disableInteractEggWithSpawner) {
+
+			Block block = event.getClickedBlock();
+			if (block.getType().equals(getMaterial(52))) {
+
+				if (player.getItemInHand() != null && player.getItemInHand().getType().equals(getMaterial(383))) {
+					event.setCancelled(true);
+				}
+
+			}
 
 		}
 

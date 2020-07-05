@@ -52,6 +52,7 @@ import fr.maxlego08.zspawner.nms.NMS_1_12;
 import fr.maxlego08.zspawner.nms.NMS_1_13;
 import fr.maxlego08.zspawner.nms.NMS_1_14;
 import fr.maxlego08.zspawner.nms.NMS_1_15;
+import fr.maxlego08.zspawner.nms.NMS_1_16;
 import fr.maxlego08.zspawner.nms.NMS_1_7;
 import fr.maxlego08.zspawner.nms.NMS_1_8;
 import fr.maxlego08.zspawner.nms.NMS_1_9;
@@ -129,6 +130,8 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 		if (version == 1.8) {
 			nms = new NMS_1_8();
+		} else if (version == 1.16) {
+			nms = new NMS_1_16();
 		} else if (version == 1.15) {
 			nms = new NMS_1_15();
 		} else if (version == 1.14) {
