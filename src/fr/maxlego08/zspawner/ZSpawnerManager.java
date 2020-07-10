@@ -616,7 +616,7 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 			block.getWorld().dropItem(block.getLocation(), spawner);
 
 			return true;
-			
+
 		}
 		return false;
 
@@ -653,5 +653,11 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 		message(player,
 				Message.SPAWNER_UPGRADE_SUCCESS.getMessage().replace("%level%", String.valueOf(newLevel.getId())));
 		player.closeInventory();
+	}
+
+	@Override
+	public void openConfig(Player player) {
+		if (player != null)
+			createInventory(player, Inventory.INVENTORY_SPAWNER_CONFIG);
 	}
 }

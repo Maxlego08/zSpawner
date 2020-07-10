@@ -29,7 +29,7 @@ public class InventorySendSpawner extends PaginateInventory<Spawner> {
 	}
 
 	@Override
-	public void onClick(Spawner object, ItemButton button) {
+	public void onClick(int slot, Spawner object, ItemButton button) {
 		player.closeInventory();
 		manager.sendSpawner(player, receiver, object);
 	}

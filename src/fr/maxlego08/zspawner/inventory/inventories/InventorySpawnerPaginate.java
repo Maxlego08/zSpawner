@@ -33,7 +33,7 @@ public class InventorySpawnerPaginate extends PaginateInventory<Spawner> {
 	}
 
 	@Override
-	public void onClick(Spawner object, ItemButton button) {
+	public void onClick(int slot, Spawner object, ItemButton button) {
 
 		if (object.isPlace()) {
 

@@ -185,4 +185,10 @@ public interface SpawnerManager extends Saveable{
 	 */
 	void upgradeSpawner(Player player, Spawner object, PlayerSpawner playerSpawner);
 	
+	/**
+	 * 
+	 * @param player
+	 */
+	void openConfig(Player player);
+	
 }

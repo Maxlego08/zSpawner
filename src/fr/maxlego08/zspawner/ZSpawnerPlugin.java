@@ -12,6 +12,7 @@ import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.command.CommandManager;
 import fr.maxlego08.zspawner.command.commands.CommandSpawner;
 import fr.maxlego08.zspawner.inventory.InventoryManager;
+import fr.maxlego08.zspawner.inventory.inventories.InventoryConfig;
 import fr.maxlego08.zspawner.inventory.inventories.InventorySendSpawner;
 import fr.maxlego08.zspawner.inventory.inventories.InventorySpawner;
 import fr.maxlego08.zspawner.inventory.inventories.InventorySpawnerPaginate;
@@ -67,6 +68,7 @@ public class ZSpawnerPlugin extends ZPlugin {
 		registerInventory(Inventory.INVENTORY_SPAWNER, new InventorySpawner());
 		registerInventory(Inventory.INVENTORY_SPAWNER_PAGINATE, new InventorySpawnerPaginate());
 		registerInventory(Inventory.INVENTORY_SPAWNER_SEND, new InventorySendSpawner());
+		registerInventory(Inventory.INVENTORY_SPAWNER_CONFIG, new InventoryConfig());
 
 		/* Add Listener */
 		addListener(new AdapterListener(this));

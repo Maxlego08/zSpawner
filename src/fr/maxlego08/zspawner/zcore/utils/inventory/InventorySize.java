@@ -2,7 +2,7 @@ package fr.maxlego08.zspawner.zcore.utils.inventory;
 
 public enum InventorySize {
 
-	FULL_INVENTORY(53, 45, 50, 48, 0),
+	FULL_INVENTORY(54, 45, 50, 48, 0),
 	FULL_45_INVENTORY(45, 36, 42, 40, 0),
 	
 	;

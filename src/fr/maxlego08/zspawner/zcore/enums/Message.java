@@ -50,6 +50,7 @@ public enum Message {
 	DESCRIPTION_LEVEL_EDIT_PLAYER("Change required player range"),
 	DESCRIPTION_PICKAXE("Give pickaxe to player"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
+	DESCRIPTION_CONFIG("Config plugin in game"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
 	NO_SPAWNER_TARGET("§f%s §chave no spawners !"), 

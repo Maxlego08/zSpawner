@@ -181,8 +181,8 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 				} else
 					message(player, Message.SPAWNER_BREAK_OWNER_ERROR);
 
-			} else
-				manager.breakSilkSpawner(player, block);
+			} else if (Config.useSilkPickaxe && manager.breakSilkSpawner(player, block))
+				event.setExpToDrop(0);
 
 		} else {
 			manager.placeSpawner(event, block, player);
@@ -214,11 +214,8 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 				if (player.getItemInHand() != null && player.getItemInHand().getType().equals(getMaterial(383))) {
 					event.setCancelled(true);
 				}
-
 			}
-
 		}
-
 	}
 
 }
