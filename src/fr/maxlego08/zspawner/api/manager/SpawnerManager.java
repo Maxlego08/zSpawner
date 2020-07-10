@@ -175,7 +175,7 @@ public interface SpawnerManager extends Saveable{
 	 * @param player
 	 * @param block
 	 */
-	void breakSilkSpawner(Player player, Block block);
+	boolean breakSilkSpawner(Player player, Block block);
 
 	/**
 	 * 

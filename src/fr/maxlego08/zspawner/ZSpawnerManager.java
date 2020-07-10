@@ -581,11 +581,11 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void breakSilkSpawner(Player player, Block block) {
+	public boolean breakSilkSpawner(Player player, Block block) {
 
 		ItemStack itemStack = player.getItemInHand();
 		if (itemStack == null)
-			return;
+			return false;
 
 		if (pickaxeManager.isPickaxe(itemStack)) {
 
@@ -597,7 +597,7 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 			event.callEvent();
 
 			if (event.isCancelled())
-				return;
+				return false;
 
 			int newDura = event.getNewDura();
 			spawner = event.getItemStack();
@@ -615,7 +615,10 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 			block.getWorld().dropItem(block.getLocation(), spawner);
 
+			return true;
+			
 		}
+		return false;
 
 	}
 
