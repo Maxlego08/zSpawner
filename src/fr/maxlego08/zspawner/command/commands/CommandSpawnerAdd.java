@@ -3,9 +3,9 @@ package fr.maxlego08.zspawner.command.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.command.VCommand;
@@ -31,7 +31,7 @@ public class CommandSpawnerAdd extends VCommand {
 	@Override
 	protected CommandType perform(ZSpawnerPlugin main) {
 
-		Player player = argAsPlayer(0);
+		OfflinePlayer player = argAsOfflinePlayer(0);
 		EntityType entityType = argAsEntityType(1);
 
 		if (!entityType.isAlive())
