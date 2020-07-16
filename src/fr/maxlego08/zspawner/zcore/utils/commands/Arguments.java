@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.material.MaterialData;
 
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
@@ -120,6 +121,16 @@ public abstract class Arguments extends ZUtils {
 		return Bukkit.getPlayer(argAsString(index));
 	}
 
+	
+	/**
+	 * 
+	 * @param index
+	 * @return
+	 */
+	protected OfflinePlayer argAsOfflinePlayer(int index) {
+		return Bukkit.getOfflinePlayer(argAsString(index));
+	}
+	
 	/**
 	 * 
 	 * @param index
@@ -134,6 +145,21 @@ public abstract class Arguments extends ZUtils {
 		}
 	}
 
+
+	/**
+	 * 
+	 * @param index
+	 * @param defaultValue
+	 * @return
+	 */
+	protected OfflinePlayer argAsOffPlayer(int index, OfflinePlayer defaultValue) {
+		try {
+			return Bukkit.getOfflinePlayer(argAsString(index));
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}	
+	
 	/**
 	 * 
 	 * @param index
