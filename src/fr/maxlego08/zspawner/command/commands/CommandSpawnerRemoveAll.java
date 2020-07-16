@@ -1,6 +1,6 @@
 package fr.maxlego08.zspawner.command.commands;
 
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.command.VCommand;
@@ -24,7 +24,7 @@ public class CommandSpawnerRemoveAll extends VCommand {
 	@Override
 	protected CommandType perform(ZSpawnerPlugin main) {
 
-		Player player = argAsPlayer(0);
+		OfflinePlayer player = argAsOffPlayer(0);
 		manager.removeSpawnerAll(sender, player);
 
 		return CommandType.SUCCESS;
