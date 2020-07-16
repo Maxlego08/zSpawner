@@ -2,6 +2,7 @@ package fr.maxlego08.zspawner.api.manager;
 
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -92,7 +93,7 @@ public interface SpawnerManager extends Saveable{
 	 * @param type
 	 * @param number
 	 */
-	void removeSpawner(CommandSender sender, Player target, EntityType type, int number);
+	void removeSpawner(CommandSender sender, OfflinePlayer target, EntityType type, int number);
 	
 	/**
 	 * 
@@ -153,7 +154,7 @@ public interface SpawnerManager extends Saveable{
 	 * @param sender
 	 * @param player
 	 */
-	void removeSpawnerAll(CommandSender sender, Player player);
+	void removeSpawnerAll(CommandSender sender, OfflinePlayer player);
 
 	/**
 	 * 

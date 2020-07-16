@@ -1,20 +1,20 @@
 package fr.maxlego08.zspawner.api.event;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import fr.maxlego08.zspawner.api.PlayerSpawner;
 
 public class SpawnerRemoveEvent extends SpawnerEvent {
 
 	private final CommandSender sender;
-	private final Player player;
+	private final OfflinePlayer player;
 	private final PlayerSpawner playerSpawner;
 	private EntityType type;
 	private int amount;
 
-	public SpawnerRemoveEvent(CommandSender sender, Player player, PlayerSpawner playerSpawner, EntityType type,
+	public SpawnerRemoveEvent(CommandSender sender, OfflinePlayer player, PlayerSpawner playerSpawner, EntityType type,
 			int amount) {
 		super();
 		this.sender = sender;
@@ -34,7 +34,7 @@ public class SpawnerRemoveEvent extends SpawnerEvent {
 	/**
 	 * @return the player
 	 */
-	public Player getPlayer() {
+	public OfflinePlayer getPlayer() {
 		return player;
 	}
 

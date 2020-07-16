@@ -152,7 +152,7 @@ public abstract class Arguments extends ZUtils {
 	 * @param defaultValue
 	 * @return
 	 */
-	protected OfflinePlayer argAsOffPlayer(int index, OfflinePlayer defaultValue) {
+	protected OfflinePlayer argAsOfflinePlayer(int index, OfflinePlayer defaultValue) {
 		try {
 			return Bukkit.getOfflinePlayer(argAsString(index));
 		} catch (Exception e) {

@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.command.CommandSender;
@@ -378,7 +379,7 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 	}
 
 	@Override
-	public void removeSpawnerAll(CommandSender sender, Player target) {
+	public void removeSpawnerAll(CommandSender sender, OfflinePlayer target) {
 
 		UUID uuid = target.getUniqueId();
 
@@ -402,13 +403,15 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 		message(sender, message);
 
-		message = Message.REMOVE_ALL_SPAWNER_RECEIVER.getMessage();
-		message(target, message);
+		if (target.isOnline()) {
+			message = Message.REMOVE_ALL_SPAWNER_RECEIVER.getMessage();
+			message(target.getPlayer(), message);
+		}
 
 	}
 
 	@Override
-	public void removeSpawner(CommandSender sender, Player target, EntityType type, int number) {
+	public void removeSpawner(CommandSender sender, OfflinePlayer target, EntityType type, int number) {
 
 		UUID uuid = target.getUniqueId();
 
@@ -440,11 +443,14 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 		message(sender, message);
 
-		message = Message.REMOVE_SPAWNER_RECEIVER.getMessage();
-		message = message.replace("%how%", String.valueOf(number));
-		message = message.replace("%type%", name(type.name()));
+		if (target.isOnline()) {
 
-		message(target, message);
+			message = Message.REMOVE_SPAWNER_RECEIVER.getMessage();
+			message = message.replace("%how%", String.valueOf(number));
+			message = message.replace("%type%", name(type.name()));
+
+			message(target.getPlayer(), message);
+		}
 
 	}
 

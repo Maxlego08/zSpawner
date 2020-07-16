@@ -24,7 +24,7 @@ public class CommandSpawnerRemoveAll extends VCommand {
 	@Override
 	protected CommandType perform(ZSpawnerPlugin main) {
 
-		OfflinePlayer player = argAsOffPlayer(0);
+		OfflinePlayer player = argAsOfflinePlayer(0);
 		manager.removeSpawnerAll(sender, player);
 
 		return CommandType.SUCCESS;
