@@ -38,6 +38,9 @@ public class Config implements Saveable {
 	public static boolean useSilkPickaxe = true;
 	public static boolean useSilkPickaxeOnPlayerSpawner = false;
 	public static int defaultMaxUsePickaxe = 1;
+	
+	public static boolean limitSpawnerPerChunk = true;
+	public static int limitSpawnerPerChunkAmount = 16;
 
 	public static boolean allowUpgradeSpawnerWithShiftClick = true;
 	public static boolean autoSave = true;

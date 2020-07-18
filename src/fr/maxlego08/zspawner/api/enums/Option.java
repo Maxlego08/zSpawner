@@ -31,11 +31,17 @@ public enum Option {
 	AUTO_SAVE,
 
 	DISABLE_MOB_SPAWNING,
-	
+
 	ENABLE_DEBUG_MODE,
-	
+
+	LIMIT_SPAWNER_PER_CHUNK,
+
 	;
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean getValue() {
 		switch (this) {
 		case ALLOW_UPGRADE_SPAWNER_WITH_SHIFT_CLICK:
@@ -70,11 +76,17 @@ public enum Option {
 			return Config.disableMobSpawning;
 		case ENABLE_DEBUG_MODE:
 			return Config.enableDebugMode;
+		case LIMIT_SPAWNER_PER_CHUNK:
+			return Config.limitSpawnerPerChunk;
 		default:
 			return false;
 		}
 	}
 
+	/**
+	 * 
+	 * @param value
+	 */
 	public void setValue(boolean value) {
 		switch (this) {
 		case ALLOW_UPGRADE_SPAWNER_WITH_SHIFT_CLICK:
@@ -124,6 +136,9 @@ public enum Option {
 			break;
 		case ENABLE_DEBUG_MODE:
 			Config.enableDebugMode = value;
+			break;
+		case LIMIT_SPAWNER_PER_CHUNK:
+			Config.limitSpawnerPerChunk = value;
 			break;
 		default:
 			break;

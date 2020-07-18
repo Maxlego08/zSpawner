@@ -477,6 +477,11 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 				message(player, Message.PLACE_SPAWNER_ERROR_BLACKLIST);
 				return;
 			}
+			
+			if (Config.limitSpawnerPerChunk && board.countSpawners(block.getChunk()) > Config.limitSpawnerPerChunkAmount){
+				message(player, Message.PLACE_SPAWNER_ERROR_LIMIT);
+				return;
+			}
 
 			Spawner spawner = playerSpawner.getCurrentPlacingSpawner();
 			SpawnerPlaceEvent placeEvent = new SpawnerPlaceEvent(player, playerSpawner, spawner, block.getLocation());
@@ -535,7 +540,7 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 		}
 
 		if (nms.has(itemInHand, KEY_TYPE)) {
-
+			
 			EntityType entityType = nms.get(itemInHand, KEY_TYPE);
 
 			int level = 0;

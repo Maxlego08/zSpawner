@@ -16,6 +16,7 @@ public class InventorySpawner extends VInventory {
 	public InventoryResult openInventory(ZSpawnerPlugin main, Player player, int page, Object... args)
 			throws InventoryOpenException {
 		
+		@SuppressWarnings("unused")
 		PlayerSpawner playerSpawner = (PlayerSpawner) args[0];
 		
 		createInventory("§eMy inventory");

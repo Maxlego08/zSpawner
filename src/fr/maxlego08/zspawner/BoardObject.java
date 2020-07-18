@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 
 import fr.maxlego08.zspawner.api.Board;
@@ -59,6 +60,16 @@ public class BoardObject implements Board {
 	public void removeSpawner(Spawner spawner) {
 		if (spawner.isPlace())
 			removeSpawner(spawner.getLocation());
+	}
+
+	@Override
+	public List<Spawner> getSpawners(Chunk chunk) {
+		return getSpawners(chunk.getX(), chunk.getZ());
+	}
+
+	@Override
+	public int countSpawners(Chunk chunk) {
+		return countSpawners(chunk.getX(), chunk.getZ());
 	}
 
 }
