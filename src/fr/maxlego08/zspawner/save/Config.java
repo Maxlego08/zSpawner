@@ -17,6 +17,7 @@ public class Config implements Saveable {
 	public static int inventorySize = 54;
 
 	public static boolean disablePreReleaseMessage = false;
+	public static boolean enableDebugMode = true;
 	
 	public static boolean ownerCanBreakSpawner = false;
 	public static boolean glowPlaceSpawner = true;
@@ -41,6 +42,7 @@ public class Config implements Saveable {
 	public static int autoSaveTime = 60;
 	
 	public static String inventoryName = "§ezSpawner §6%p%§7/§6%mp%";
+	public static String inventoryNameShow = "§e%player% §6%p%§7/§6%mp%";
 	public static String timeFormat = "dd/MM/yyyy hh:mm";
 
 	public static Button buttonPrevious = new Button(48, "§6» §ePrevious", Material.ARROW);

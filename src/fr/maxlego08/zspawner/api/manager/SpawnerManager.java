@@ -23,36 +23,43 @@ public interface SpawnerManager extends Saveable{
 	/**
 	 * 
 	 * @param uuid
-	 * @return
+	 * @return PlayerSpawner from uuid
 	 */
 	PlayerSpawner getPlayer(UUID uuid);
 	
 	/**
 	 * 
 	 * @param uuid
-	 * @return
+	 * @return true is uuid exist
 	 */
 	boolean exit(UUID uuid);
 	
 	/**
 	 * 
 	 * @param uuid
-	 * @return
+	 * @return true if uuid has spawner
 	 */
 	boolean hasSpawner(UUID uuid);
 	
 	/**
 	 * 
-	 * @return
+	 * @return board
 	 */
 	Board getBoard();
 	
 	/**
-	 * 
+	 * Open player inventory
 	 * @param player
 	 */
 	void openInventory(Player player);
 
+	/**
+	 * Show player inventory
+	 * @param player
+	 * @param target
+	 */
+	void showInventory(Player player, OfflinePlayer target);
+	
 	/**
 	 * 
 	 * @param player

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import fr.maxlego08.zspawner.ZSpawnerPlugin;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
+import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
 import fr.maxlego08.zspawner.zcore.enums.Tab;
@@ -50,7 +51,7 @@ public abstract class VCommand extends Arguments {
 	 */
 	private boolean ignoreParent = false;
 	private boolean ignoreArgs = false;
-	protected boolean DEBUG = true;
+	protected boolean DEBUG = Config.enableDebugMode;
 	protected boolean runAsync = false;
 	protected CommandType tabCompleter = CommandType.DEFAULT;
 

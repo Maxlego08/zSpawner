@@ -51,6 +51,7 @@ public enum Message {
 	DESCRIPTION_PICKAXE("Give pickaxe to player"),
 	DESCRIPTION_HEADER("§8[§b?§8] §7Commands lists:"),
 	DESCRIPTION_CONFIG("Config plugin in game"),
+	DESCRIPTION_SHOW("Show player spawner"),
 	
 	NO_SPAWNER("§cYou have no spawners !"), 
 	NO_SPAWNER_TARGET("§f%s §chave no spawners !"), 

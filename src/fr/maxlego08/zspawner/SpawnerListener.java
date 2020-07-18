@@ -50,7 +50,7 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 	@Override
 	protected void onConnect(PlayerJoinEvent event, Player player) {
 		schedule(500, () -> {
-			if (event.getPlayer().getName().startsWith("Maxlego") || event.getPlayer().getName().startsWith("Sak")) {
+			if (event.getPlayer().getName().startsWith("Maxlego08") || event.getPlayer().getName().startsWith("Sak")) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " §aLe serveur utilise §2"
 						+ ZPlugin.z().getDescription().getFullName() + " §a!");
 				String name = "%%__USER__%%";

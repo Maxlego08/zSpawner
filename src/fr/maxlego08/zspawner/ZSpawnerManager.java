@@ -29,6 +29,7 @@ import fr.maxlego08.zspawner.api.enums.InventoryType;
 import fr.maxlego08.zspawner.api.event.SpawnerAddEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerGiveEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerOpenInventoryEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerOpenShowInventoryEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerPlaceEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerPreUpgradeEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
@@ -665,5 +666,31 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 	public void openConfig(Player player) {
 		if (player != null)
 			createInventory(player, Inventory.INVENTORY_SPAWNER_CONFIG);
+	}
+
+	@Override
+	public void showInventory(Player player, OfflinePlayer target) {
+
+		UUID uuid = target.getUniqueId();
+
+		if (!exit(uuid))
+			message(player, Message.NO_SPAWNER_TARGET, target.getName());
+		else if (!hasSpawner(uuid))
+			message(player, Message.NO_SPAWNER_TARGET, target.getName());
+		else {
+
+			PlayerSpawner playerSpawner = getPlayer(uuid);
+
+			Inventory inventory = Inventory.INVENTORY_SPAWNER_SHOW;
+			SpawnerOpenShowInventoryEvent event = new SpawnerOpenShowInventoryEvent(inventory, playerSpawner, player);
+			event.callEvent();
+
+			if (event.isCancelled())
+				return;
+
+			createInventory(player, inventory, 1, playerSpawner);
+
+		}
+
 	}
 }

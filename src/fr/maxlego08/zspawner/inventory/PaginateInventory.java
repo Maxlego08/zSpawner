@@ -19,7 +19,7 @@ import fr.maxlego08.zspawner.zcore.utils.inventory.Pagination;
 public abstract class PaginateInventory<T> extends VInventory {
 
 	protected List<T> collections;
-	protected final String inventoryName;
+	protected String inventoryName;
 	protected final int inventorySize;
 	protected int paginationSize = 45;
 	protected int nextSlot = 50;

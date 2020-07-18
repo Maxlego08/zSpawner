@@ -13,8 +13,6 @@ public class CommandSpawner extends VCommand {
 		this.setPermission(Permission.ZSPAWNER_USE);
 		this.setConsoleCanUse(false);
 
-		this.DEBUG = true;
-
 		this.addSubCommand(new CommandSpawnerAdd());
 		this.addSubCommand(new CommandSpawnerRemove());
 		this.addSubCommand(new CommandSpawnerRemoveAll());
@@ -22,6 +20,7 @@ public class CommandSpawner extends VCommand {
 		this.addSubCommand(new CommandSpawnerVersion());
 		this.addSubCommand(new CommandSpawnerReload());
 		this.addSubCommand(new CommandSpawnerSend());
+		this.addSubCommand(new CommandSpawnerShow());
 		this.addSubCommand(new CommandSpawnerHelp());
 		this.addSubCommand(new CommandSpawnerInfo());
 		this.addSubCommand(new CommandSpawnerPickaxe());
