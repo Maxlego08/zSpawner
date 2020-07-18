@@ -20,6 +20,8 @@ public class CommandSpawnerLevel extends VCommand {
 	@Override
 	protected CommandType perform(ZSpawnerPlugin main) {
 
+		messageWO(sender, Message.DESCRIPTION_HEADER);
+		
 		this.subVCommands.forEach(command -> {
 			if (command.getDescription() != null
 					&& (command.getPermission() == null || hasPermission(sender, command.getPermission())))

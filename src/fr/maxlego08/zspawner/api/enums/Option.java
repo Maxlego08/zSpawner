@@ -30,6 +30,10 @@ public enum Option {
 
 	AUTO_SAVE,
 
+	DISABLE_MOB_SPAWNING,
+	
+	ENABLE_DEBUG_MODE,
+	
 	;
 
 	public boolean getValue() {
@@ -62,6 +66,10 @@ public enum Option {
 			return Config.useSilkPickaxe;
 		case USE_SILK_PICKAXE_ON_SPAWNER:
 			return Config.useSilkPickaxeOnPlayerSpawner;
+		case DISABLE_MOB_SPAWNING:
+			return Config.disableMobSpawning;
+		case ENABLE_DEBUG_MODE:
+			return Config.enableDebugMode;
 		default:
 			return false;
 		}
@@ -110,6 +118,12 @@ public enum Option {
 			break;
 		case USE_SILK_PICKAXE_ON_SPAWNER:
 			Config.useSilkPickaxeOnPlayerSpawner = value;
+			break;
+		case DISABLE_MOB_SPAWNING:
+			Config.disableMobSpawning = value;
+			break;
+		case ENABLE_DEBUG_MODE:
+			Config.enableDebugMode = value;
 			break;
 		default:
 			break;

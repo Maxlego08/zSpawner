@@ -20,7 +20,7 @@ import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 public class ItemBuilder extends ZUtils implements Cloneable {
 
 	private ItemStack item;
-	private final Material material;
+	private Material material;
 	private ItemMeta meta;
 	private int data;
 	private int amount;
@@ -74,6 +74,14 @@ public class ItemBuilder extends ZUtils implements Cloneable {
 		this(material, 0, 1, null, Arrays.asList(lore), null, null);
 	}
 
+	/**
+	 * 
+	 * @param material
+	 */
+	public void setMaterial(Material material) {
+		this.material = material;
+	}
+	
 	public ItemBuilder addEnchant(Enchantment enchantment, int value) {
 		if (enchantments == null)
 			enchantments = new HashMap<Enchantment, Integer>();

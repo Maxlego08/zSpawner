@@ -53,16 +53,7 @@ public class InventorySpawnerShowPaginate extends PaginateInventory<Spawner> {
 			int slot1 = button.getSlot() > inventorySize ? infoSlot : button.getSlot();
 			addItem(slot1, button.toItemStack(playerSpawner)).setClick(event -> {
 				playerSpawner.toggleShort();
-				createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
-			});
-		}
-
-		if (Config.displayRemoveAllButton) {
-			Button button = Config.buttonRemoveAll;
-			int slot1 = button.getSlot() > inventorySize ? removeAllSlot : button.getSlot();
-			addItem(slot1, button.toItemStack(playerSpawner)).setClick(event -> {
-				playerSpawner.deleteAllSpawners(manager.getBoard());
-				createInventory(player, Inventory.INVENTORY_SPAWNER_PAGINATE, getPage(), playerSpawner);
+				createInventory(player, Inventory.INVENTORY_SPAWNER_SHOW, getPage(), playerSpawner);
 			});
 		}
 

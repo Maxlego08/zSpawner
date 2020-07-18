@@ -13,6 +13,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -216,6 +217,14 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onMobSpawn(CreatureSpawnEvent event) {
+
+		if (Config.disableMobSpawning)
+			event.setCancelled(true);
+
 	}
 
 }
