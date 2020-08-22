@@ -601,6 +601,9 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 		if (pickaxeManager.isPickaxe(itemStack)) {
 
+			if (!factionListener.preBuild(player, block.getLocation())) 
+				return false;
+			
 			int dura = nms.getInteger(itemStack, KEY_DURA);
 			int maxDura = nms.getInteger(itemStack, KEY_MAX_DURA);
 			ItemStack spawner = nms.getLevelFromSpawnBlock(levelManager, block);
