@@ -30,12 +30,12 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
 
 		Material material = null;
 
-		int value = configuration.getInt(path + "material", 0);
+		int value = configuration.getInt(path + "id", 0);
 		if (value != 0)
 			material = getMaterial(value);
 
 		if (material == null) {
-			String str = configuration.getString(path + "material", null);
+			String str = configuration.getString(path + "id", null);
 			if (str == null)
 				return null;
 			material = Material.getMaterial(str.toUpperCase());
@@ -146,7 +146,7 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
 			return;
 		}
 
-		configuration.set(path + "id", item.getType().getId());
+		configuration.set(path + "id", item.getType().name());
 		configuration.set(path + "data", item.getData().getData());
 		configuration.set(path + "amount", item.getAmount());
 		configuration.set(path + "durability", item.getDurability());

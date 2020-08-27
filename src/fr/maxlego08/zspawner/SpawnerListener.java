@@ -53,29 +53,29 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 	protected void onConnect(PlayerJoinEvent event, Player player) {
 		schedule(500, () -> {
 			if (event.getPlayer().getName().startsWith("Maxlego08") || event.getPlayer().getName().startsWith("Sak")) {
-				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " Â§aLe serveur utilise Â§2"
-						+ ZPlugin.z().getDescription().getFullName() + " Â§a!");
+				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " §aLe serveur utilise §2"
+						+ ZPlugin.z().getDescription().getFullName() + " §a!");
 				String name = "%%__USER__%%";
 				event.getPlayer()
-						.sendMessage(Message.PREFIX_END.getMessage() + " ï¿½aUtilisateur spigot ï¿½2" + name + " ï¿½a!");
+						.sendMessage(Message.PREFIX_END.getMessage() + " §aUtilisateur spigot §2" + name + " §a!");
 			}
 			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("dev")) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
-						+ " Â§eCeci est une version de dÃ©veloppement et non de production.");
+						+ " §eCeci est une version de dÃ©veloppement et non de production.");
 			}
 			if (!useLastVersion && ((player.hasPermission(Permission.ZSPAWNER_RELOAD.getPermission())
 					|| event.getPlayer().getName().startsWith("Maxlego")
 					|| event.getPlayer().getName().startsWith("Sak"))) && !Config.disableMessageVersion) {
 				message(player,
-						"Â§cYou are not using the latest version of the plugin, remember to update the plugin quickly.");
+						"§cYou are not using the latest version of the plugin, remember to update the plugin quickly.");
 			}
 
 			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("pre")
 					&& !Config.disablePreReleaseMessage) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
-						+ " Â§eCeci n'est pas une version final du plugin mais une pre release !");
+						+ " §eCeci n'est pas une version final du plugin mais une pre release !");
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
-						+ " Â§eThis is not a final version of the plugin but a pre release !");
+						+ " §eThis is not a final version of the plugin but a pre release !");
 			}
 
 		});

@@ -69,6 +69,8 @@ public class PickaxeManagerObject extends ZUtils implements PickaxeManager {
 
 		pickaxe = loader.load(configuration, "pickaxe.");
 
+		System.out.println("Pickaxe: " + pickaxe);
+		
 		Logger.info(file.getAbsolutePath() + " loaded successfully !", LogType.SUCCESS);
 
 	}

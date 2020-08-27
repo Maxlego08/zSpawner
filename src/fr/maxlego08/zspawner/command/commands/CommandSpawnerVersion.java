@@ -17,11 +17,12 @@ public class CommandSpawnerVersion extends VCommand {
 	@Override
 	protected CommandType perform(ZSpawnerPlugin main) {
 		
-		message(sender, "§eVersion du plugin§7: §a" + main.getDescription().getVersion());
-		message(sender, "§eAuteur§7: §aMaxlego08");
-		message(sender, "§eDiscord§7: §ahttps://discord.gg/p9Mdste");
+		sender.sendMessage("§7(§bzSpawner§7) §aVersion du plugin§7: §2" + main.getDescription().getVersion());
+		sender.sendMessage("§7(§bzSpawner§7) §aAuteur§7: §2Maxlego08");
+		sender.sendMessage("§7(§bzSpawner§7) §aDiscord§7: §2http://discord.groupez.xyz/");
+		sender.sendMessage("§7(§bzSpawner§7) §aBuy it for §d8€§7: §2https://www.spigotmc.org/resources/69465/");
 		String user = "%%__USER__%%";
-		message(sender, "§eUser account§7: §ahttps://www.spigotmc.org/members/" + user);
+		sender.sendMessage("§7(§bzSpawner§7) §aUser account§7: §2https://www.spigotmc.org/members/" + user);
 		
 		return CommandType.SUCCESS;
 	}
