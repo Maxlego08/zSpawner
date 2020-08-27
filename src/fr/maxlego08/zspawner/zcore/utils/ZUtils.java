@@ -26,6 +26,7 @@ import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -37,6 +38,7 @@ import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
 import fr.maxlego08.zspawner.zcore.utils.builder.CooldownBuilder;
+import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 import fr.maxlego08.zspawner.zcore.utils.builder.TimerBuilder;
 import fr.maxlego08.zspawner.zcore.utils.players.ActionBar;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -234,14 +236,18 @@ public abstract class ZUtils {
 
 	private static transient Material[] byId;
 
+	private static transient boolean isNewVersion = ItemDecoder.isNewVersion();
+
 	static {
-		byId = new Material[0];
-		for (Material material : Material.values()) {
-			if (byId.length > material.getId()) {
-				byId[material.getId()] = material;
-			} else {
-				byId = Arrays.copyOfRange(byId, 0, material.getId() + 2);
-				byId[material.getId()] = material;
+		if (!isNewVersion) {
+			byId = new Material[0];
+			for (Material material : Material.values()) {
+				if (byId.length > material.getId()) {
+					byId[material.getId()] = material;
+				} else {
+					byId = Arrays.copyOfRange(byId, 0, material.getId() + 2);
+					byId[material.getId()] = material;
+				}
 			}
 		}
 	}
@@ -250,8 +256,19 @@ public abstract class ZUtils {
 	 * @param id
 	 * @return the material according to his id
 	 */
-	protected Material getMaterial(int id) {
+	public Material getMaterial(int id) {
 		return byId.length > id && id >= 0 ? byId[id] : null;
+	}
+
+	protected Material getSpawner() {
+		return isNewVersion ? Material.SPAWNER : Material.matchMaterial("MOB_SPAWNER");
+
+	}
+
+	protected ItemStack getEgg(EntityType type) {
+		if (!isNewVersion)
+			return new ItemBuilder(getMaterial(383), 1, type.getTypeId()).build();
+		return new ItemStack(Material.matchMaterial(type.name().toUpperCase() + "_SPAWN_EGG"));
 	}
 
 	/**

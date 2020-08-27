@@ -126,4 +126,9 @@ public class ItemDecoder {
 		String var3 = arrayOfString[1];
 		return version = Double.parseDouble(var2 + "." + var3);
 	}
+
+	public static boolean isNewVersion() {
+		double version = getNMSVersion();
+		return version == 1.13 || version == 1.14 || version == 1.15 || version == 1.16;
+	}
 }

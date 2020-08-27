@@ -232,26 +232,4 @@ public abstract class Arguments extends ZUtils {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param index
-	 * @return
-	 */
-	protected MaterialData argAsMaterialData(int index) {
-		String str = argAsString(index);
-		if (str == null)
-			return null;
-		MaterialData data;
-		try {
-			if (str.contains(":")) {
-				String[] split = str.split(":");
-				data = new MaterialData(getMaterial(Integer.valueOf(split[0])), Byte.valueOf(split[1]));
-			} else
-				data = new MaterialData(getMaterial(Integer.valueOf(str)));
-			return data;
-		} catch (Exception e) {
-			return null;
-		}
-	}
-
 }

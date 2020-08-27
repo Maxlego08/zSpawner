@@ -3,6 +3,7 @@ package fr.maxlego08.zspawner.inventory.inventories;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -25,11 +26,10 @@ public class InventoryConfig extends PaginateInventory<Option> {
 	@Override
 	public ItemStack buildItem(Option object) {
 		String isBuild = object.getValue() ? "§aenable" : "§cdisable";
-		ItemBuilder itemStack = new ItemBuilder(getMaterial(340),
-				"§e" + name(object.name()) + " §8(" + isBuild + "§8)");
+		ItemBuilder itemStack = new ItemBuilder(Material.BOOK, "§e" + name(object.name()) + " §8(" + isBuild + "§8)");
 		if (object.getValue()) {
 			itemStack.glow();
-			itemStack.setMaterial(getMaterial(403));
+			itemStack.setMaterial(Material.ENCHANTED_BOOK);
 		}
 		return itemStack.build();
 	}
@@ -39,11 +39,10 @@ public class InventoryConfig extends PaginateInventory<Option> {
 		object.setValue(!object.getValue());
 
 		String isBuild = object.getValue() ? "§aenable" : "§cdisable";
-		ItemBuilder itemStack = new ItemBuilder(getMaterial(340),
-				"§e" + name(object.name()) + " §8(" + isBuild + "§8)");
+		ItemBuilder itemStack = new ItemBuilder(Material.BOOK, "§e" + name(object.name()) + " §8(" + isBuild + "§8)");
 		if (object.getValue()) {
 			itemStack.glow();
-			itemStack.setMaterial(getMaterial(403));
+			itemStack.setMaterial(Material.ENCHANTED_BOOK);
 		}
 		inventory.setItem(slot, itemStack.build());
 

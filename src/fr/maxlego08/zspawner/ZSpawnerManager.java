@@ -547,7 +547,7 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 			if (nms.has(itemInHand, KEY_LEVEL))
 				level = nms.getInteger(itemInHand, KEY_LEVEL);
 
-			block.setType(getMaterial(52));
+			block.setType(getSpawner());
 			CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
 			creatureSpawner.setSpawnedType(entityType);
 			if (version != 1.8 && version != 1.7)

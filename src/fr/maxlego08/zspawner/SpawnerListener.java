@@ -30,6 +30,7 @@ import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.ZPlugin;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.enums.Permission;
+import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
 import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
 public class SpawnerListener extends ListenerAdapter implements Key {
@@ -57,8 +58,6 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 				String name = "%%__USER__%%";
 				event.getPlayer()
 						.sendMessage(Message.PREFIX_END.getMessage() + " §aUtilisateur spigot §2" + name + " §a!");
-				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage() + " §aAdresse du serveur §2"
-						+ Bukkit.getServer().getIp().toString() + ":" + Bukkit.getServer().getPort() + " §a!");
 			}
 			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("dev")) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
@@ -93,7 +92,7 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 
 				Block block2 = iterator.next();
 
-				if (block2.getType().equals(getMaterial(52))) {
+				if (block2.getType().equals(getSpawner())) {
 
 					if (board.isSpawner(block2.getLocation())) {
 
@@ -131,7 +130,7 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 							CreatureSpawner creatureSpawner = (CreatureSpawner) block2.getState();
 							EntityType finalType = creatureSpawner.getSpawnedType();
 
-							ItemBuilder builder = new ItemBuilder(getMaterial(52), 1,
+							ItemBuilder builder = new ItemBuilder(getSpawner(), 1,
 									Config.itemName.replace("%type%", name(finalType.name())));
 							List<String> lore = Config.itemLore.stream()
 									.map(str -> str.replace("%type%", name(finalType.name())))
@@ -164,7 +163,7 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 
 		Block block = event.getBlock();
 
-		if (block.getType().equals(getMaterial(52))) {
+		if (block.getType().equals(getSpawner())) {
 
 			if (board.isSpawner(block.getLocation())) {
 
@@ -195,7 +194,7 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 	protected void onBlockPlace(BlockPlaceEvent event, Player player) {
 
 		ItemStack itemInHand = event.getItemInHand();
-		if (itemInHand.getType().equals(getMaterial(52))) {
+		if (itemInHand.getType().equals(getSpawner())) {
 
 			manager.placeSpawner(event, player, itemInHand, event.getBlock());
 
@@ -210,13 +209,21 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 		if (event.getClickedBlock() != null && Config.disableInteractEggWithSpawner) {
 
 			Block block = event.getClickedBlock();
-			if (block.getType().equals(getMaterial(52))) {
+			if (block.getType().equals(getSpawner())) {
 
-				if (player.getItemInHand() != null && player.getItemInHand().getType().equals(getMaterial(383))) {
+				if (player.getItemInHand() != null && isMonsterEgg(player.getItemInHand())) {
+
 					event.setCancelled(true);
+
 				}
 			}
 		}
+	}
+
+	private boolean isMonsterEgg(ItemStack itemStack) {
+		if (ItemDecoder.isNewVersion())
+			return itemStack.getType().name().contentEquals("_SPAWN_EGG");
+		return itemStack.getType().equals(getMaterial(383));
 	}
 
 	@Override

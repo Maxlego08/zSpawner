@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.maxlego08.zspawner.exceptions.ItemEnchantException;
@@ -23,19 +24,35 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
 	@SuppressWarnings("deprecation")
 	public ItemStack load(YamlConfiguration configuration, String path) {
 
-		int id = configuration.getInt(path + "id", 0);
 		int data = configuration.getInt(path + ".data", 0);
 		int amount = configuration.getInt(path + ".amount", 1);
 		short durability = (short) configuration.getInt(path + ".durability", 0);
 
-		if (id == 0)
-			return null;
+		Material material = null;
 
-		Material material = getMaterial(id);
+		int value = configuration.getInt(path + "material", 0);
+		if (value != 0)
+			material = getMaterial(value);
+
+		if (material == null) {
+			String str = configuration.getString(path + "material", null);
+			if (str == null)
+				return null;
+			material = Material.getMaterial(str.toUpperCase());
+		}
+
+		if (material == null) {
+			return null;
+		}
+
+		if (material.equals(Material.AIR)) {
+			return null;
+		}
 
 		ItemStack item = new ItemStack(material, amount, (byte) data);
 
-		item.setDurability(durability);
+		if (durability != 0)
+			item.setDurability(durability);
 
 		ItemMeta meta = item.getItemMeta();
 
@@ -79,7 +96,12 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
 						throw new ItemEnchantException(
 								"an error occurred while loading the enchantment " + enchantString);
 
-					meta.addEnchant(enchantment, level, true);
+					if (material.equals(Material.ENCHANTED_BOOK)) {
+
+						((EnchantmentStorageMeta) meta).addStoredEnchant(enchantment, level, true);
+
+					} else
+						meta.addEnchant(enchantment, level, true);
 
 				} catch (ItemEnchantException e) {
 					e.printStackTrace();
@@ -114,7 +136,6 @@ public class ItemStackYAMLoader extends ZUtils implements Loader<ItemStack>{
 		item.setItemMeta(meta);
 
 		return item;
-
 	}
 
 	@SuppressWarnings("deprecation")

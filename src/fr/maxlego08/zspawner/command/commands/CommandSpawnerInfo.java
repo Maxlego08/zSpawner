@@ -38,7 +38,7 @@ public class CommandSpawnerInfo extends VCommand {
 			return CommandType.DEFAULT;
 		}
 
-		if (!block.getType().equals(getMaterial(52))) {
+		if (!block.getType().equals(getSpawner())) {
 			message(sender, Message.INFO_ERROR);
 			return CommandType.DEFAULT;
 		}

@@ -1,15 +1,20 @@
 package fr.maxlego08.zspawner.objects;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.SimpleLevel;
@@ -18,7 +23,6 @@ import fr.maxlego08.zspawner.api.event.SpawnerDeleteEvent;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ItemDecoder;
-import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
 
 public class SpawnerObject extends FakeSpawnerObject implements Spawner {
 
@@ -103,14 +107,17 @@ public class SpawnerObject extends FakeSpawnerObject implements Spawner {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public ItemStack getItemStack() {
 
-		ItemBuilder builder = new ItemBuilder(getMaterial(383), 1, type.getTypeId());
-		
-		if (Config.glowPlaceSpawner && location != null && ItemDecoder.getNMSVersion() != 1.7)
-			builder.glow();
-		
+		ItemStack builder = getEgg(type);
+		ItemMeta itemMeta = builder.getItemMeta();
+
+		if (Config.glowPlaceSpawner && location != null && ItemDecoder.getNMSVersion() != 1.7) {
+			itemMeta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
+			itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		}
+
+		List<String> lore = new ArrayList<String>();
 		Config.infos.forEach(string -> {
 
 			SimpleDateFormat format = new SimpleDateFormat(Config.timeFormat);
@@ -121,9 +128,11 @@ public class SpawnerObject extends FakeSpawnerObject implements Spawner {
 			string = string.replace("%create%", format.format(new Date(createAt)));
 			string = string.replace("%placed%", location == null ? "non placé" : format.format(new Date(placedAt)));
 
-			builder.addLine(string);
+			lore.add(string);
 		});
-		return builder.build();
+		itemMeta.setLore(lore);
+		builder.setItemMeta(itemMeta);
+		return builder;
 	}
 
 	public String toLocation() {
@@ -160,7 +169,7 @@ public class SpawnerObject extends FakeSpawnerObject implements Spawner {
 	@Override
 	public void place(Location location) {
 
-		location.getBlock().setType(getMaterial(52));
+		location.getBlock().setType(getSpawner());
 		CreatureSpawner creatureSpawner = (CreatureSpawner) location.getBlock().getState();
 		creatureSpawner.setSpawnedType(type);
 		if (ItemDecoder.getNMSVersion() != 1.8 && ItemDecoder.getNMSVersion() != 1.7)

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -74,7 +75,7 @@ public class PickaxeManagerObject extends ZUtils implements PickaxeManager {
 
 	public void saveDefault() {
 
-		ItemBuilder builder = new ItemBuilder(getMaterial(285));
+		ItemBuilder builder = new ItemBuilder(Material.IRON_PICKAXE);
 
 		builder.glow();
 		builder.setName("§c§kII§4 Spawner Pickaxe §c§kII");

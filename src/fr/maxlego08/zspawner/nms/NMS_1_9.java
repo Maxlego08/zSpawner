@@ -92,7 +92,7 @@ public class NMS_1_9 extends ZUtils implements NMS {
 		String name = Config.itemName.replace("%type%", name(finalType.name()));
 		name = name.replace("%level%", String.valueOf(spawner.getLevelId()));
 
-		ItemBuilder builder = new ItemBuilder(getMaterial(52), 1, name);
+		ItemBuilder builder = new ItemBuilder(getSpawner(), 1, name);
 
 		List<String> tmpList = spawner.getLevelId() == 0 ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
 		List<String> lore = tmpList.stream().map(str -> {
@@ -123,7 +123,7 @@ public class NMS_1_9 extends ZUtils implements NMS {
 		Location location = spawner.getLocation();
 		SimpleLevel level = spawner.getLevel();
 		
-		if (!location.getBlock().getType().equals(getMaterial(52)))
+		if (!location.getBlock().getType().equals(getSpawner()))
 			return;
 		
 		if (level == null)
@@ -181,7 +181,7 @@ public class NMS_1_9 extends ZUtils implements NMS {
 		if (level != null)
 			name = name.replace("%level%", String.valueOf(level.getId()));
 
-		ItemBuilder builder = new ItemBuilder(getMaterial(52), 1, name);
+		ItemBuilder builder = new ItemBuilder(getSpawner(), 1, name);
 
 		List<String> tmpList = level == null ? Config.itemLoreSpawner : Config.itemLoreSpawnerLevel;
 		List<String> lore = tmpList.stream().map(str -> {
