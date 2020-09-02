@@ -5,6 +5,8 @@ import java.util.TimerTask;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.bukkit.plugin.ServicePriority;
+
 import fr.maxlego08.zspawner.api.Board;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.api.manager.PickaxeManager;
@@ -55,6 +57,10 @@ public class ZSpawnerPlugin extends ZPlugin {
 		if (!isEnabled())
 			return;
 		inventoryManager = InventoryManager.getInstance();
+
+		getServer().getServicesManager().register(SpawnerManager.class, spawner, this, ServicePriority.High);
+		getServer().getServicesManager().register(PickaxeManager.class, pickaxeManager, this, ServicePriority.High);
+		getServer().getServicesManager().register(LevelManager.class, levelManager, this, ServicePriority.High);
 
 		board = new BoardObject();
 		levelManager = new LevelManagerObject();
