@@ -58,10 +58,6 @@ public class ZSpawnerPlugin extends ZPlugin {
 			return;
 		inventoryManager = InventoryManager.getInstance();
 
-		getServer().getServicesManager().register(SpawnerManager.class, spawner, this, ServicePriority.High);
-		getServer().getServicesManager().register(PickaxeManager.class, pickaxeManager, this, ServicePriority.High);
-		getServer().getServicesManager().register(LevelManager.class, levelManager, this, ServicePriority.High);
-
 		board = new BoardObject();
 		levelManager = new LevelManagerObject();
 		pickaxeManager = new PickaxeManagerObject();
@@ -89,6 +85,10 @@ public class ZSpawnerPlugin extends ZPlugin {
 		addSave(spawner);
 		addSave(levelManager);
 		addSave(pickaxeManager);
+
+		getServer().getServicesManager().register(SpawnerManager.class, spawner, this, ServicePriority.High);
+		getServer().getServicesManager().register(PickaxeManager.class, pickaxeManager, this, ServicePriority.High);
+		getServer().getServicesManager().register(LevelManager.class, levelManager, this, ServicePriority.High);
 
 		getSavers().forEach(saver -> saver.load(getPersist()));
 
