@@ -61,7 +61,7 @@ public class SpawnerListener extends ListenerAdapter implements Key {
 			}
 			if (ZPlugin.z().getDescription().getFullName().toLowerCase().contains("dev")) {
 				event.getPlayer().sendMessage(Message.PREFIX_END.getMessage()
-						+ " §eCeci est une version de dÃ©veloppement et non de production.");
+						+ " §eCeci est une version de développement et non de production.");
 			}
 			if (!useLastVersion && ((player.hasPermission(Permission.ZSPAWNER_RELOAD.getPermission())
 					|| event.getPlayer().getName().startsWith("Maxlego")

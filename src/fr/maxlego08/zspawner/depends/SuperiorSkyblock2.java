@@ -28,6 +28,9 @@ public class SuperiorSkyblock2 extends FactionListener {
 		Island island = plugin.getGrid().getIslandAt(location);
 		Island playerIsland = getIsland(player);
 
+		if (island == null || playerIsland == null)
+			return false;
+		
 		return island.getOwner().getUniqueId().equals(playerIsland.getOwner().getUniqueId());
 	}
 

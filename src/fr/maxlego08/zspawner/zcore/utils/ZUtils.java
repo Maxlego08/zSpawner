@@ -268,7 +268,13 @@ public abstract class ZUtils {
 	protected ItemStack getEgg(EntityType type) {
 		if (!isNewVersion)
 			return new ItemBuilder(getMaterial(383), 1, type.getTypeId()).build();
-		return new ItemStack(Material.matchMaterial(type.name().toUpperCase() + "_SPAWN_EGG"));
+
+		if (type.equals(EntityType.SNOWMAN))
+			return new ItemStack(Material.SNOWBALL);
+		else if (type.equals(EntityType.IRON_GOLEM))
+			return new ItemStack(Material.IRON_INGOT);
+		else
+			return new ItemStack(Material.matchMaterial(type.name().toUpperCase() + "_SPAWN_EGG"));
 	}
 
 	/**
