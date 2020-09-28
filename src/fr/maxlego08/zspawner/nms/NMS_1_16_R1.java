@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.craftbukkit.v1_16_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,14 +19,14 @@ import fr.maxlego08.zspawner.objects.LevelObject;
 import fr.maxlego08.zspawner.save.Config;
 import fr.maxlego08.zspawner.zcore.utils.ZUtils;
 import fr.maxlego08.zspawner.zcore.utils.builder.ItemBuilder;
-import net.minecraft.server.v1_16_R2.NBTTagCompound;
+import net.minecraft.server.v1_16_R1.NBTTagCompound;
 
-public class NMS_1_16 extends ZUtils implements NMS {
+public class NMS_1_16_R1 extends ZUtils implements NMS {
 
 	@Override
 	public ItemStack set(ItemStack itemStack, String key, EntityType type) {
 
-		net.minecraft.server.v1_16_R2.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_16_R1.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = itemStackNMS.getTag();
 		compound.setString(key, type.name());
 		itemStackNMS.setTag(compound);
@@ -37,7 +37,7 @@ public class NMS_1_16 extends ZUtils implements NMS {
 	@Override
 	public EntityType get(ItemStack itemStack, String key) {
 
-		net.minecraft.server.v1_16_R2.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_16_R1.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = itemStackNMS.getTag();
 		String typeAsString = compound.getString(key);
 
@@ -47,7 +47,7 @@ public class NMS_1_16 extends ZUtils implements NMS {
 	@Override
 	public boolean has(ItemStack itemStack, String key) {
 
-		net.minecraft.server.v1_16_R2.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_16_R1.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
 		
 		if (itemStackNMS == null)
 			return false;
@@ -60,7 +60,7 @@ public class NMS_1_16 extends ZUtils implements NMS {
 
 	@Override
 	public ItemStack set(ItemStack itemStack, String key, boolean value) {
-		net.minecraft.server.v1_16_R2.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_16_R1.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = itemStackNMS.getTag();
 		compound.setBoolean(key, value);
 		itemStackNMS.setTag(compound);
@@ -70,7 +70,7 @@ public class NMS_1_16 extends ZUtils implements NMS {
 
 	@Override
 	public ItemStack set(ItemStack itemStack, String key, int value) {
-		net.minecraft.server.v1_16_R2.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_16_R1.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = itemStackNMS.getTag();
 		compound.setInt(key, value);
 		itemStackNMS.setTag(compound);
@@ -79,7 +79,7 @@ public class NMS_1_16 extends ZUtils implements NMS {
 
 	@Override
 	public int getInteger(ItemStack itemStack, String key) {
-		net.minecraft.server.v1_16_R2.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
+		net.minecraft.server.v1_16_R1.ItemStack itemStackNMS = CraftItemStack.asNMSCopy(itemStack);
 		NBTTagCompound compound = itemStackNMS.getTag();
 		return compound.getInt(key);
 	}

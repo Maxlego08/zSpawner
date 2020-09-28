@@ -54,7 +54,8 @@ import fr.maxlego08.zspawner.nms.NMS_1_12;
 import fr.maxlego08.zspawner.nms.NMS_1_13;
 import fr.maxlego08.zspawner.nms.NMS_1_14;
 import fr.maxlego08.zspawner.nms.NMS_1_15;
-import fr.maxlego08.zspawner.nms.NMS_1_16;
+import fr.maxlego08.zspawner.nms.NMS_1_16_R1;
+import fr.maxlego08.zspawner.nms.NMS_1_16_R2;
 import fr.maxlego08.zspawner.nms.NMS_1_7;
 import fr.maxlego08.zspawner.nms.NMS_1_8;
 import fr.maxlego08.zspawner.nms.NMS_1_9;
@@ -62,6 +63,7 @@ import fr.maxlego08.zspawner.objects.FakeSpawnerObject;
 import fr.maxlego08.zspawner.objects.PlayerObject;
 import fr.maxlego08.zspawner.objects.SpawnerObject;
 import fr.maxlego08.zspawner.save.Config;
+import fr.maxlego08.zspawner.zcore.enums.EnumVersion;
 import fr.maxlego08.zspawner.zcore.enums.Inventory;
 import fr.maxlego08.zspawner.zcore.enums.Message;
 import fr.maxlego08.zspawner.zcore.logger.Logger;
@@ -133,7 +135,7 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 		if (version == 1.8) {
 			nms = new NMS_1_8();
 		} else if (version == 1.16) {
-			nms = new NMS_1_16();
+			nms = ItemDecoder.getVersion().equals(EnumVersion.V_16_R1) ? new NMS_1_16_R1() : new NMS_1_16_R2();
 		} else if (version == 1.15) {
 			nms = new NMS_1_15();
 		} else if (version == 1.14) {
@@ -477,8 +479,9 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 				message(player, Message.PLACE_SPAWNER_ERROR_BLACKLIST);
 				return;
 			}
-			
-			if (Config.limitSpawnerPerChunk && board.countSpawners(block.getChunk()) > Config.limitSpawnerPerChunkAmount){
+
+			if (Config.limitSpawnerPerChunk
+					&& board.countSpawners(block.getChunk()) > Config.limitSpawnerPerChunkAmount) {
 				message(player, Message.PLACE_SPAWNER_ERROR_LIMIT);
 				return;
 			}
@@ -540,7 +543,7 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 		}
 
 		if (nms.has(itemInHand, KEY_TYPE)) {
-			
+
 			EntityType entityType = nms.get(itemInHand, KEY_TYPE);
 
 			int level = 0;
@@ -601,9 +604,9 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 		if (pickaxeManager.isPickaxe(itemStack)) {
 
-			if (!factionListener.preBuild(player, block.getLocation())) 
+			if (!factionListener.preBuild(player, block.getLocation()))
 				return false;
-			
+
 			int dura = nms.getInteger(itemStack, KEY_DURA);
 			int maxDura = nms.getInteger(itemStack, KEY_MAX_DURA);
 			ItemStack spawner = nms.getLevelFromSpawnBlock(levelManager, block);
