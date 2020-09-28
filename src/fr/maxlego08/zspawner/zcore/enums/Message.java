@@ -82,6 +82,7 @@ public enum Message {
 	PLACE_SPAWNER_SUCCESS("§aYou have just placed a spawner"), 
 	PLACE_SPAWNER_START("§eYou have §f1 §eminute to place the spawner in your land !"),
 	PLACE_SPAWNER_ERROR("§cYou do not have permission to place the spawner here."),
+	BREAK_SPAWNER_ERROR("§cYou do not have permission to break the spawner here."),
 	PLACE_SPAWNER_ERROR_BLACKLIST("§cYou cannot place a spawner on this block"),
 	PLACE_SPAWNER_ERROR_LIMIT("§cYou cannot place more than §f16 §cspawners in a chunk."),
 	

@@ -596,12 +596,19 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean breakSilkSpawner(Player player, Block block) {
+	public boolean breakSilkSpawner(BlockBreakEvent event, Player player, Block block) {
 
 		ItemStack itemStack = player.getItemInHand();
 		if (itemStack == null)
 			return false;
+		
 
+		if (!factionListener.preBuild(player, block.getLocation())) {
+			event.setCancelled(true);
+			message(player, Message.BREAK_SPAWNER_ERROR);
+			return false;
+		}
+		
 		if (pickaxeManager.isPickaxe(itemStack)) {
 
 			if (!factionListener.preBuild(player, block.getLocation()))
@@ -611,14 +618,14 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 			int maxDura = nms.getInteger(itemStack, KEY_MAX_DURA);
 			ItemStack spawner = nms.getLevelFromSpawnBlock(levelManager, block);
 
-			SpawnerSilkEvent event = new SpawnerSilkEvent(dura, maxDura, player, block, spawner, dura - 1);
-			event.callEvent();
+			SpawnerSilkEvent spawnerEvent = new SpawnerSilkEvent(dura, maxDura, player, block, spawner, dura - 1);
+			spawnerEvent.callEvent();
 
-			if (event.isCancelled())
+			if (spawnerEvent.isCancelled())
 				return false;
 
-			int newDura = event.getNewDura();
-			spawner = event.getItemStack();
+			int newDura = spawnerEvent.getNewDura();
+			spawner = spawnerEvent.getItemStack();
 
 			if (newDura <= 0)
 

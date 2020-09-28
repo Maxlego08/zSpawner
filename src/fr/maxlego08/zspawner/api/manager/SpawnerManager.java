@@ -180,10 +180,11 @@ public interface SpawnerManager extends Saveable{
 
 	/**
 	 * 
+	 * @param event 
 	 * @param player
 	 * @param block
 	 */
-	boolean breakSilkSpawner(Player player, Block block);
+	boolean breakSilkSpawner(BlockBreakEvent event, Player player, Block block);
 
 	/**
 	 * 

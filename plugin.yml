@@ -1,7 +1,7 @@
 name: zSpawner
 author: Maxlego08
 main: fr.maxlego08.zspawner.ZSpawnerPlugin
-version: PRE-3.0.1.2
+version: PRE-3.0.1.3
 api-version: 1.13
 softdepend: [Essentials, Factions, LegacyFaction, PlaceholderAPI, SuperiorSkyblock2, MassiveCore, Guilds]
 commands:
