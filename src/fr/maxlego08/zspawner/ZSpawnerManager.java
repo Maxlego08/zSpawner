@@ -642,7 +642,39 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 			return true;
 
+		} else if (Config.enableSilkPickaxeWithEnchant && pickaxeManager.isEnchantPickaxe(itemStack)){
+			if (!factionListener.preBuild(player, block.getLocation()))
+				return false;
+
+			int dura = nms.getInteger(itemStack, KEY_DURA);
+			int maxDura = nms.getInteger(itemStack, KEY_MAX_DURA);
+			ItemStack spawner = nms.getLevelFromSpawnBlock(levelManager, block);
+
+			SpawnerSilkEvent spawnerEvent = new SpawnerSilkEvent(dura, maxDura, player, block, spawner, dura - 1);
+			spawnerEvent.callEvent();
+
+			if (spawnerEvent.isCancelled())
+				return false;
+
+			int newDura = spawnerEvent.getNewDura();
+			spawner = spawnerEvent.getItemStack();
+
+			if (newDura <= 0)
+
+				removeItemInHand(player);
+
+			else {
+
+				itemStack = pickaxeManager.getPickaxe(newDura, maxDura);
+				player.setItemInHand(itemStack);
+
+			}
+
+			block.getWorld().dropItem(block.getLocation(), spawner);
+
+			return true;
 		}
+			
 		return false;
 
 	}
