@@ -35,8 +35,10 @@ public class Config implements Saveable {
 	
 	public static boolean disableInteractEggWithSpawner = false;
 	
+	
 	public static boolean useSilkPickaxe = true;
 	public static boolean useSilkPickaxeOnPlayerSpawner = false;
+	public static boolean enableSilkPickaxeWithEnchant = false;
 	public static int defaultMaxUsePickaxe = 1;
 	
 	public static boolean limitSpawnerPerChunk = true;

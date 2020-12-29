@@ -20,5 +20,12 @@ public interface PickaxeManager extends Saveable, Key{
 	 * @return
 	 */
 	boolean isPickaxe(ItemStack itemStack);
+
+	/**
+	 * 
+	 * @param itemStack
+	 * @return
+	 */
+	boolean isEnchantPickaxe(ItemStack itemStack);
 	
 }

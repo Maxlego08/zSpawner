@@ -36,6 +36,8 @@ public enum Option {
 
 	LIMIT_SPAWNER_PER_CHUNK,
 
+	ENABLE_SILK_PICKAXE_ENCHANT,
+
 	;
 
 	/**
@@ -78,6 +80,8 @@ public enum Option {
 			return Config.enableDebugMode;
 		case LIMIT_SPAWNER_PER_CHUNK:
 			return Config.limitSpawnerPerChunk;
+		case ENABLE_SILK_PICKAXE_ENCHANT:
+			return Config.enableSilkPickaxeWithEnchant;
 		default:
 			return false;
 		}
@@ -139,6 +143,9 @@ public enum Option {
 			break;
 		case LIMIT_SPAWNER_PER_CHUNK:
 			Config.limitSpawnerPerChunk = value;
+			break;
+		case ENABLE_SILK_PICKAXE_ENCHANT:
+			Config.enableSilkPickaxeWithEnchant = value;
 			break;
 		default:
 			break;

@@ -36,6 +36,7 @@ import fr.maxlego08.zspawner.api.event.SpawnerRegisterEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveAllEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerRemoveEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerSendEvent;
+import fr.maxlego08.zspawner.api.event.SpawnerSilkEnchantEvent;
 import fr.maxlego08.zspawner.api.event.SpawnerSilkEvent;
 import fr.maxlego08.zspawner.api.manager.LevelManager;
 import fr.maxlego08.zspawner.api.manager.PickaxeManager;
@@ -45,7 +46,6 @@ import fr.maxlego08.zspawner.api.utils.Key;
 import fr.maxlego08.zspawner.depends.LegacyFaction;
 import fr.maxlego08.zspawner.depends.MassiveFaction;
 import fr.maxlego08.zspawner.depends.NoFaction;
-import fr.maxlego08.zspawner.depends.PrideFaction;
 import fr.maxlego08.zspawner.depends.SuperiorSkyblock2;
 import fr.maxlego08.zspawner.depends.UUIDFaction;
 import fr.maxlego08.zspawner.nms.NMS_1_10;
@@ -101,9 +101,6 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 			} else if (pl.getName().equalsIgnoreCase("SuperiorSkyblock2")) {
 				factionListener = new SuperiorSkyblock2();
 				Logger.info("SuperiorSkyblock2 plugin detected successfully.", LogType.SUCCESS);
-			} else if (pl.getName().equalsIgnoreCase("PrideFaction")) {
-				factionListener = new PrideFaction();
-				Logger.info("PrideNetwork plugin detected successfully.", LogType.SUCCESS);
 			} else if (pl.getName().equalsIgnoreCase("Factions")) {
 				String author = pl.getDescription().getAuthors().toString();
 				if (author.contains("Driftay")) {
@@ -601,14 +598,13 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 		ItemStack itemStack = player.getItemInHand();
 		if (itemStack == null)
 			return false;
-		
 
 		if (!factionListener.preBuild(player, block.getLocation())) {
 			event.setCancelled(true);
 			message(player, Message.BREAK_SPAWNER_ERROR);
 			return false;
 		}
-		
+
 		if (pickaxeManager.isPickaxe(itemStack)) {
 
 			if (!factionListener.preBuild(player, block.getLocation()))
@@ -642,39 +638,24 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 
 			return true;
 
-		} else if (Config.enableSilkPickaxeWithEnchant && pickaxeManager.isEnchantPickaxe(itemStack)){
+		} else if (Config.enableSilkPickaxeWithEnchant && pickaxeManager.isEnchantPickaxe(itemStack)) {
 			if (!factionListener.preBuild(player, block.getLocation()))
 				return false;
 
-			int dura = nms.getInteger(itemStack, KEY_DURA);
-			int maxDura = nms.getInteger(itemStack, KEY_MAX_DURA);
 			ItemStack spawner = nms.getLevelFromSpawnBlock(levelManager, block);
 
-			SpawnerSilkEvent spawnerEvent = new SpawnerSilkEvent(dura, maxDura, player, block, spawner, dura - 1);
+			SpawnerSilkEnchantEvent spawnerEvent = new SpawnerSilkEnchantEvent(player, block, spawner);
 			spawnerEvent.callEvent();
 
 			if (spawnerEvent.isCancelled())
 				return false;
 
-			int newDura = spawnerEvent.getNewDura();
 			spawner = spawnerEvent.getItemStack();
-
-			if (newDura <= 0)
-
-				removeItemInHand(player);
-
-			else {
-
-				itemStack = pickaxeManager.getPickaxe(newDura, maxDura);
-				player.setItemInHand(itemStack);
-
-			}
-
 			block.getWorld().dropItem(block.getLocation(), spawner);
 
 			return true;
 		}
-			
+
 		return false;
 
 	}
