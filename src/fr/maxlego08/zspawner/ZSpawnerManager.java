@@ -43,6 +43,7 @@ import fr.maxlego08.zspawner.api.manager.PickaxeManager;
 import fr.maxlego08.zspawner.api.manager.SpawnerManager;
 import fr.maxlego08.zspawner.api.utils.FactionListener;
 import fr.maxlego08.zspawner.api.utils.Key;
+import fr.maxlego08.zspawner.depends.FactionXHook;
 import fr.maxlego08.zspawner.depends.LegacyFaction;
 import fr.maxlego08.zspawner.depends.MassiveFaction;
 import fr.maxlego08.zspawner.depends.NoFaction;
@@ -101,6 +102,9 @@ public class ZSpawnerManager extends EconomyUtils implements SpawnerManager, Key
 			} else if (pl.getName().equalsIgnoreCase("SuperiorSkyblock2")) {
 				factionListener = new SuperiorSkyblock2();
 				Logger.info("SuperiorSkyblock2 plugin detected successfully.", LogType.SUCCESS);
+			} else if (pl.getName().equalsIgnoreCase("FactionsX")) {
+				factionListener = new FactionXHook();
+				Logger.info("FactionsX plugin detected successfully.", LogType.SUCCESS);
 			} else if (pl.getName().equalsIgnoreCase("Factions")) {
 				String author = pl.getDescription().getAuthors().toString();
 				if (author.contains("Driftay")) {
