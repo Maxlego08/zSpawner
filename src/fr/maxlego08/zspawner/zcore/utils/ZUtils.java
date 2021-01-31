@@ -273,6 +273,8 @@ public abstract class ZUtils {
 			return new ItemStack(Material.SNOWBALL);
 		else if (type.equals(EntityType.IRON_GOLEM))
 			return new ItemStack(Material.IRON_INGOT);
+		else if (type.equals(EntityType.MUSHROOM_COW))
+			return new ItemStack(Material.RED_MUSHROOM);
 		else
 			return new ItemStack(Material.matchMaterial(type.name().toUpperCase() + "_SPAWN_EGG"));
 	}
