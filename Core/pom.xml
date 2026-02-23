@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.maxlego08.spawner</groupId>
         <artifactId>zSpawner</artifactId>
-        <version>4.2.0</version>
+        <version>4.2.1</version>
     </parent>
 
     <artifactId>Core</artifactId>

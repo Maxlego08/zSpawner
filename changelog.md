@@ -1,5 +1,9 @@
 # Unreleased
 
+# 4.2.1
+
+- Update to last zMenu and Sarah version
+
 # 4.2.0
 
 - Various code optimization and improvement
