@@ -62,7 +62,7 @@ public class ZServerDataManager extends ZUtils implements ServerDataManager {
         ServerProfile serverProfile = this.getOrCreate();
         for (SpawnerDTO spawnerDTO : spawners) {
             Spawner spawner = new ZSpawner(this.plugin, spawnerDTO.spawner_id(), spawnerDTO.owner(), spawnerDTO.type(),spawnerDTO.entity_type(), spawnerDTO.placed_at(), changeStringLocationToLocation(spawnerDTO.location()),spawnerDTO.amount(),spawnerDTO.block_face(),spawnerDTO.last_location_user(),spawnerDTO.last_location_time());
-            spawner.setLastLocationStartTime(spawnerDTO.last_location_time());
+            spawner.setLastLocationStartTime(spawnerDTO.last_location_start_time());
 
             List<SpawnerItem> spawnerItems = itemsBySpawnerId.getOrDefault(spawnerDTO.spawner_id(), Collections.emptyList());
             spawner.setItems(spawnerItems);

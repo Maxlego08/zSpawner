@@ -10,10 +10,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ZServerProfile implements ServerProfile {
     private final StorageManager storageManager;
-    private final Map<SpawnerType, Map<UUID, Spawner>> spawners = new HashMap<>();
+    private final Map<SpawnerType, Map<UUID, Spawner>> spawners = new ConcurrentHashMap<>();
 
     public ZServerProfile(StorageManager storageManager) {
         this.storageManager = storageManager;
@@ -155,7 +156,7 @@ public class ZServerProfile implements ServerProfile {
 
     @Override
     public void addSpawner(Spawner spawner) {
-        this.spawners.computeIfAbsent(spawner.getType(), k -> new HashMap<>()).put(spawner.getSpawnerId(), spawner);
+        this.spawners.computeIfAbsent(spawner.getType(), k -> new ConcurrentHashMap<>()).put(spawner.getSpawnerId(), spawner);
         this.storageManager.upsertSpawner(spawner);
     }
 
@@ -178,6 +179,6 @@ public class ZServerProfile implements ServerProfile {
 
     @Override
     public void loadSpawner(Spawner spawner) {
-        this.spawners.computeIfAbsent(spawner.getType(), k -> new HashMap<>()).put(spawner.getSpawnerId(), spawner);
+        this.spawners.computeIfAbsent(spawner.getType(), k -> new ConcurrentHashMap<>()).put(spawner.getSpawnerId(), spawner);
     }
 }
