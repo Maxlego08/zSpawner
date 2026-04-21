@@ -44,6 +44,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SpawnerManager extends YamlUtils implements Savable, Runnable {
 
@@ -53,7 +54,7 @@ public class SpawnerManager extends YamlUtils implements Savable, Runnable {
     private final NamespacedKey spawnerEntityKey;
     private final NamespacedKey spawnerTypeKey;
     private final NamespacedKey spawnerUuidKey;
-    private final Map<UUID, PlayerSpawner> playerSpawners = new HashMap<>();
+    private final Map<UUID, PlayerSpawner> playerSpawners = new ConcurrentHashMap<>();
     private final Map<SpawnerType, MenuItemStack> spawnerTypeItemStacks = new HashMap<>();
     private final Map<EntityType, VirtualDrop> customVirtualDrops = new HashMap<>();
     private Map<EntityType, String> entitiesMaterials = new HashMap<>();
@@ -110,6 +111,7 @@ public class SpawnerManager extends YamlUtils implements Savable, Runnable {
 
     public Optional<SpawnerResult> getSpawnerResult(ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) return Optional.empty();
         PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
         if (persistentDataContainer.has(this.spawnerEntityKey) && persistentDataContainer.has(this.spawnerTypeKey)) {
             SpawnerType spawnerType = SpawnerType.valueOf(persistentDataContainer.get(this.spawnerTypeKey, PersistentDataType.STRING));

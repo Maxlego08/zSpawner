@@ -62,12 +62,11 @@ public class SpawnerPlugin extends ZPlugin {
         placeholder.setPrefix("zspawner");
 
         this.preEnable();
+        this.saveDefaultConfig();
 
         this.storageManager.loadDatabase();
 
         this.spawnerKey = new NamespacedKey(this, "zspawner");
-
-        this.saveDefaultConfig();
 
         this.registerCommand("zspawner", new CommandSpawner(this), "spawner", "sp", "spawners");
 
