@@ -385,8 +385,16 @@ public class ZSpawner extends Updatable implements Spawner {
 
     @Override
     public void disable() {
-        if (this.stackArmorstand != null) stackArmorstand.remove();
-        if (this.livingEntity != null) livingEntity.remove();
+        if (this.stackArmorstand != null) {
+            ArmorStand armorStand = this.stackArmorstand;
+            this.stackArmorstand = null;
+            this.plugin.getFoliaManager().runAtEntity(armorStand, armorStand::remove);
+        }
+        if (this.livingEntity != null) {
+            LivingEntity entity = this.livingEntity;
+            this.livingEntity = null;
+            this.plugin.getFoliaManager().runAtEntity(entity, entity::remove);
+        }
     }
 
     @Override
