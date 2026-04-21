@@ -1,5 +1,10 @@
 # Unreleased
 
+# 4.2.2
+
+- Fix loading of default configuration
+- Fix error with default spawner option
+
 # 4.2.1
 
 - Update to last zMenu and Sarah version
