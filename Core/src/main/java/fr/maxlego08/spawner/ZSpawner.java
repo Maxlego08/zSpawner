@@ -184,10 +184,8 @@ public class ZSpawner extends Updatable implements Spawner {
         this.amount = amount;
         this.canUpdate();
 
-        if (amount <= 1) disable();
+        if (amount <= 1) removeHologram();
         else this.spawnHologram();
-
-        this.updateHologram();
     }
 
     @Override
@@ -347,24 +345,96 @@ public class ZSpawner extends Updatable implements Spawner {
         this.updateEntity();
     }
 
+    private Location getHologramLocation() {
+        return this.location.clone().add(0.5, 1.0, 0.5);
+    }
+
+    /**
+     * Récupère les armor stands qui servent réellement d'hologramme à ce spawner.
+     * La référence {@link #stackArmorstand} est uniquement en mémoire : après un redémarrage
+     * ou un rechargement de chunk elle est nulle ou périmée alors que l'entité, elle, existe
+     * toujours dans le monde. Sans cette relecture on crée un doublon et on n'arrive plus
+     * jamais à supprimer l'ancien hologramme.
+     */
+    private List<ArmorStand> getHologramCandidates() {
+
+        // Un spawner VIRTUAL n'a pas d'hologramme et son mob occupe exactement cette position.
+        if (!isPlace() || this.spawnerType == SpawnerType.VIRTUAL) return Collections.emptyList();
+
+        World world = this.location.getWorld();
+        if (world == null) return Collections.emptyList();
+        if (!world.isChunkLoaded(this.location.getBlockX() >> 4, this.location.getBlockZ() >> 4))
+            return Collections.emptyList();
+        // Sur Folia la lecture des entités n'est possible que depuis le thread de la région.
+        if (!this.plugin.getFoliaManager().isOwnedByCurrentRegion(this.location)) return Collections.emptyList();
+
+        List<ArmorStand> armorStands = new ArrayList<>();
+        for (Entity entity : world.getNearbyEntities(getHologramLocation(), 0.5, 0.5, 0.5)) {
+
+            if (!(entity instanceof ArmorStand armorStand)) continue;
+
+            String spawnerId = armorStand.getPersistentDataContainer().get(this.plugin.getSpawnerKey(), PersistentDataType.STRING);
+            if (spawnerId != null) {
+                if (spawnerId.equals(this.uniqueId.toString())) armorStands.add(armorStand);
+                continue;
+            }
+
+            // Hologrammes créés avant l'ajout du tag : la signature exacte de spawnHologram()
+            // est le seul moyen de les reconnaitre pour nettoyer les serveurs existants.
+            if (armorStand.isMarker() && armorStand.isInvisible() && armorStand.isCustomNameVisible()) {
+                armorStands.add(armorStand);
+            }
+        }
+        return armorStands;
+    }
+
     private void spawnHologram() {
 
-        if (this.stackArmorstand != null) {
+        StackableManager stackableManager = this.plugin.getStackableManager();
+        if (!stackableManager.isEnable() || this.amount <= 1 || !isPlace()) return;
+
+        if (this.stackArmorstand != null && this.stackArmorstand.isValid()) {
             this.updateHologram();
             return;
         }
 
-        StackableManager stackableManager = this.plugin.getStackableManager();
-        if (this.amount > 1 && stackableManager.isEnable()) {
-            Location spawnLocation = this.location.clone().add(0.5, 1.0, 0.5);
-            this.stackArmorstand = location.getWorld().spawn(spawnLocation, ArmorStand.class, armorStand -> {
+        this.stackArmorstand = null;
+        for (ArmorStand armorStand : getHologramCandidates()) {
+            if (this.stackArmorstand == null) this.stackArmorstand = armorStand;
+            else armorStand.remove(); // doublons laissés par les versions précédentes
+        }
+
+        if (this.stackArmorstand == null) {
+            Location spawnLocation = getHologramLocation();
+            this.stackArmorstand = spawnLocation.getWorld().spawn(spawnLocation, ArmorStand.class, armorStand -> {
                 armorStand.setInvisible(true);
                 armorStand.setGravity(false);
                 armorStand.setMarker(true);
                 armorStand.setCustomNameVisible(true);
                 armorStand.setCustomName("");
+                armorStand.getPersistentDataContainer().set(this.plugin.getSpawnerKey(), PersistentDataType.STRING, this.uniqueId.toString());
             });
-            this.updateHologram();
+        } else {
+            // On retague l'hologramme récupéré pour ne plus dépendre de la signature.
+            this.stackArmorstand.getPersistentDataContainer().set(this.plugin.getSpawnerKey(), PersistentDataType.STRING, this.uniqueId.toString());
+        }
+
+        this.updateHologram();
+    }
+
+    private void removeHologram() {
+
+        ArmorStand armorStand = this.stackArmorstand;
+        this.stackArmorstand = null;
+
+        if (armorStand != null && armorStand.isValid()) {
+            this.plugin.getFoliaManager().runAtEntity(armorStand, armorStand::remove);
+        }
+
+        // La référence en mémoire peut être périmée : on supprime aussi ce qui traine
+        // réellement au dessus du spawner, sinon l'hologramme reste après la casse.
+        for (ArmorStand orphan : getHologramCandidates()) {
+            this.plugin.getFoliaManager().runAtEntity(orphan, orphan::remove);
         }
     }
 
@@ -372,9 +442,10 @@ public class ZSpawner extends Updatable implements Spawner {
         StackableManager stackableManager = this.plugin.getStackableManager();
         if (this.stackArmorstand == null || !stackableManager.isEnable()) return;
 
-        if (this.stackArmorstand != null) {
-            this.stackArmorstand.setCustomName(color(getMessage(stackableManager.getHologram(), "%amount%", this.amount, "%entity%", name(this.entityType.name()))));
-        }
+        String hologram = stackableManager.getHologram();
+        if (hologram == null) return;
+
+        this.stackArmorstand.setCustomName(color(getMessage(hologram, "%amount%", this.amount, "%entity%", name(this.entityType.name()))));
     }
 
     private void updateEntity() {
@@ -385,11 +456,7 @@ public class ZSpawner extends Updatable implements Spawner {
 
     @Override
     public void disable() {
-        if (this.stackArmorstand != null) {
-            ArmorStand armorStand = this.stackArmorstand;
-            this.stackArmorstand = null;
-            this.plugin.getFoliaManager().runAtEntity(armorStand, armorStand::remove);
-        }
+        removeHologram();
         if (this.livingEntity != null) {
             LivingEntity entity = this.livingEntity;
             this.livingEntity = null;
@@ -402,12 +469,18 @@ public class ZSpawner extends Updatable implements Spawner {
         if (!this.isPlace()) return;
 
         this.location.getBlock().setType(Material.AIR);
+
+        // Avant de perdre la position : elle est nécessaire pour retrouver l'hologramme.
+        removeHologram();
+        if (this.livingEntity != null) {
+            LivingEntity entity = this.livingEntity;
+            this.livingEntity = null;
+            this.plugin.getFoliaManager().runAtEntity(entity, entity::remove);
+        }
+
         this.location = null;
         this.cuboid = null;
         this.placedAt = 0;
-
-        if (this.stackArmorstand != null) stackArmorstand.remove();
-        if (this.livingEntity != null) livingEntity.remove();
 
         this.canUpdate();
     }

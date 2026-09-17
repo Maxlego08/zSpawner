@@ -174,15 +174,21 @@ public class SpawnerListener extends ListenerAdapter {
 
                 if (Config.enableSilkSpawner) {
                     if (cantSilkSpawner(player)) {
+                        spawner.disable();
                         this.serverProfile.deleteSpawner(spawner.getLocation());
                         event.setCancelled(false);
                         return;
                     }
                 }
 
-                block.getWorld().dropItemNaturally(block.getLocation(), this.plugin.getManager().getSpawnerItemStack(player, spawner.getType(), spawner.getEntityType(), spawner));
+                // Le spawner ne disparait que si c'est le dernier de la pile. Tant qu'il reste
+                // en place il garde son identité : recopier son UUID sur l'item lâché rendrait
+                // celui-ci impossible à poser (PLACE_ERROR_EXIST).
+                boolean keepSpawner = stackableManager.isEnable() && spawner.getAmount() > 1;
 
-                if (stackableManager.isEnable() && spawner.getAmount() > 1) {
+                block.getWorld().dropItemNaturally(block.getLocation(), this.plugin.getManager().getSpawnerItemStack(player, spawner.getType(), spawner.getEntityType(), keepSpawner ? null : spawner));
+
+                if (keepSpawner) {
                     spawner.setAmount(spawner.getAmount() - 1);
                     return;
                 }

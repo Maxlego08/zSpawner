@@ -1,5 +1,10 @@
 # Unreleased
 
+- Fix stacked spawner holograms not being removed when the spawner is broken
+- Fix duplicated holograms after a server restart or a chunk reload
+- Fix spawners taken from a stack being impossible to place back ("The spawner already exists, you can't place it")
+- Fix the hologram being left behind when a stacked spawner is broken without silk touch
+
 # 4.2.2
 
 - Fix loading of default configuration
