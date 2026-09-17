@@ -4,6 +4,12 @@
 - Fix duplicated holograms after a server restart or a chunk reload
 - Fix spawners taken from a stack being impossible to place back ("The spawner already exists, you can't place it")
 - Fix the hologram being left behind when a stacked spawner is broken without silk touch
+- Fix chunks holding a virtual spawner never being able to unload
+- Fix pending spawner data being silently dropped: only one save out of five was queued, and writes landing during a batch flush were discarded
+- Fix deleted spawners reappearing after a restart when the deletion overlapped a batch flush
+- Fix an invalid material or entity name in the config aborting the whole plugin load
+- Improve performance of entity events (damage, combustion, death, drops), which no longer scan every spawner on the server
+- Improve performance of auto-kill, loot storage and spawner GUI refreshes
 
 # 4.2.2
 

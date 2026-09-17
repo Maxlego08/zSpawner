@@ -377,6 +377,8 @@ public class SpawnerListener extends ListenerAdapter {
                 }
 
                 LivingEntity clonedEntity = (LivingEntity) entity.getWorld().spawn(entity.getLocation(), entityClass, e -> {
+                    // Tag indispensable pour que getSpawnerByDeadEntity retrouve le spawner en O(1).
+                    e.getPersistentDataContainer().set(this.plugin.getSpawnerKey(), PersistentDataType.STRING, spawner.getSpawnerId().toString());
                     if (e instanceof LivingEntity living) {
 
                         living.setAI(false);

@@ -32,7 +32,7 @@ public class ZServerDataManager extends ZUtils implements ServerDataManager {
 
     @Override
     public @NotNull ServerProfile getOrCreate() {
-        return this.profile == null ? this.profile = new ZServerProfile(this.plugin.getStorageManager()) : this.profile;
+        return this.profile == null ? this.profile = new ZServerProfile(this.plugin, this.plugin.getStorageManager()) : this.profile;
     }
 
     @Override

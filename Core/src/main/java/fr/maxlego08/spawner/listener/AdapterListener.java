@@ -159,7 +159,7 @@ public class AdapterListener extends ZUtils implements Listener {
         this.plugin.getListenerAdapters().forEach(adapter -> adapter.onBlockExplode(event.blockList()));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPower(CreeperPowerEvent event) {
         this.plugin.getListenerAdapters().forEach(adapter -> adapter.onPower(event, event.getCause(), event.getEntity(), event.getLightning()));
     }
@@ -169,12 +169,12 @@ public class AdapterListener extends ZUtils implements Listener {
         this.plugin.getListenerAdapters().forEach(adapter -> adapter.onPlayerInteractAtEntity(event, event.getPlayer(), event.getRightClicked()));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onCombust(EntityCombustEvent event) {
         this.plugin.getListenerAdapters().forEach(adapter -> adapter.onCombust(event, event.getEntity()));
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof LivingEntity) {
             this.plugin.getListenerAdapters().forEach(adapter -> adapter.onEntityDamage(event, (LivingEntity) event.getEntity(), event.getCause(), event.getFinalDamage()));

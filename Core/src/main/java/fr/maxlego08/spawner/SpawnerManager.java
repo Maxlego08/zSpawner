@@ -26,6 +26,7 @@ import fr.maxlego08.spawner.materials.SpawnerOptionItemLoader;
 import fr.maxlego08.spawner.zcore.enums.Message;
 import fr.maxlego08.spawner.zcore.enums.Permission;
 import fr.maxlego08.spawner.zcore.logger.Logger;
+import fr.maxlego08.spawner.zcore.utils.OfflinePlayerCache;
 import fr.maxlego08.spawner.zcore.utils.compatibility.FoliaCompatibilityManager;
 import fr.maxlego08.spawner.zcore.utils.storage.Persist;
 import fr.maxlego08.spawner.zcore.utils.storage.Savable;
@@ -147,7 +148,7 @@ public class SpawnerManager extends YamlUtils implements Savable, Runnable {
 
         if (spawner != null) {
             placeholders.register("entity-type", name(spawner.getEntityType().name()));
-            placeholders.register("spawner-owner", this.plugin.getServer().getOfflinePlayer(spawner.getOwner()).getName());
+            placeholders.register("spawner-owner", OfflinePlayerCache.getOfflinePlayer(spawner.getOwner()).getName());
             placeholders.register("spawner-key", spawner.getSpawnerKey());
             int nbRentals = 0;
             double rentalAmount = 0;
@@ -477,9 +478,27 @@ public class SpawnerManager extends YamlUtils implements Savable, Runnable {
 
         for (Map<?, ?> map : customDrops) {
 
-            var entity = EntityType.valueOf((String) map.get("entity"));
-            var cancelDefaultDrop = map.containsKey("cancel-default-drop") && (boolean) map.get("cancel-default-drop");
+            // Une entrée mal écrite ne doit pas faire échouer le chargement du plugin entier.
+            Object entityName = map.get("entity");
+            if (entityName == null) {
+                plugin.getLogger().warning("Missing 'entity' in custom-virtual-drops, entry ignored.");
+                continue;
+            }
+
+            EntityType entity;
+            try {
+                entity = EntityType.valueOf(entityName.toString().toUpperCase());
+            } catch (IllegalArgumentException exception) {
+                plugin.getLogger().warning("Unknown entity type '" + entityName + "' in custom-virtual-drops, entry ignored.");
+                continue;
+            }
+
+            var cancelDefaultDrop = Boolean.TRUE.equals(map.get("cancel-default-drop"));
             List<Map<?, ?>> mapDrops = (List<Map<?, ?>>) map.get("drops");
+            if (mapDrops == null) {
+                plugin.getLogger().warning("Missing 'drops' for " + entity + " in custom-virtual-drops, entry ignored.");
+                continue;
+            }
             List<CustomVirtualDrop> customVirtualDrops = new ArrayList<>();
             for (Map<?, ?> mapDrop : mapDrops) {
                 TypedMapAccessor accessor = new TypedMapAccessor((Map<String, Object>) mapDrop);

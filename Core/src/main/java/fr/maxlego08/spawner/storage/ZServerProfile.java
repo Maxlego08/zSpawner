@@ -1,5 +1,6 @@
 package fr.maxlego08.spawner.storage;
 
+import fr.maxlego08.spawner.SpawnerPlugin;
 import fr.maxlego08.spawner.api.Spawner;
 import fr.maxlego08.spawner.api.SpawnerType;
 import fr.maxlego08.spawner.api.storage.ServerProfile;
@@ -8,37 +9,49 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ZServerProfile implements ServerProfile {
+    private final SpawnerPlugin plugin;
     private final StorageManager storageManager;
     private final Map<SpawnerType, Map<UUID, Spawner>> spawners = new ConcurrentHashMap<>();
 
-    public ZServerProfile(StorageManager storageManager) {
+    public ZServerProfile(SpawnerPlugin plugin, StorageManager storageManager) {
+        this.plugin = plugin;
         this.storageManager = storageManager;
     }
 
     @Override
     public Optional<Spawner> getSpawner(UUID uuid, SpawnerType spawnerType) {
-        if (this.spawners.containsKey(spawnerType)) {
-            Map<UUID, Spawner> typeMap = this.spawners.get(spawnerType);
-            if (typeMap != null && typeMap.containsKey(uuid)) {
-                return Optional.of(typeMap.get(uuid));
-            }
-        }
-        return Optional.empty();
+        Map<UUID, Spawner> typeMap = this.spawners.get(spawnerType);
+        return typeMap == null ? Optional.empty() : Optional.ofNullable(typeMap.get(uuid));
     }
 
     @Override
     public Optional<Spawner> getSpawner(UUID uuid) {
         for (Map<UUID, Spawner> typeMap : this.spawners.values()) {
-            if (typeMap.containsKey(uuid)) {
-                return Optional.of(typeMap.get(uuid));
-            }
+            Spawner spawner = typeMap.get(uuid);
+            if (spawner != null) return Optional.of(spawner);
         }
         return Optional.empty();
+    }
+
+    /**
+     * Retrouve le spawner propriétaire d'une entité via le tag écrit dans son
+     * PersistentDataContainer. Sort immédiatement pour toutes les entités qui ne viennent
+     * pas d'un spawner, ce qui est le cas de l'écrasante majorité des mobs du serveur.
+     */
+    private Optional<Spawner> getSpawnerFromTag(Entity entity) {
+        String spawnerId = entity.getPersistentDataContainer().get(this.plugin.getSpawnerKey(), PersistentDataType.STRING);
+        if (spawnerId == null) return Optional.empty();
+        try {
+            return getSpawner(UUID.fromString(spawnerId));
+        } catch (IllegalArgumentException exception) {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -54,10 +67,13 @@ public class ZServerProfile implements ServerProfile {
 
     @Override
     public Optional<Spawner> getSpawner(Location location) {
-        Collection<Spawner> spawnerCollection = this.getSpawners();
-        for  (Spawner spawner : spawnerCollection) {
-            if (spawner.isPlace() && spawner.getCuboid().contains(location)) {
-                return Optional.of(spawner);
+        // Itération directe sur les maps : getSpawners() allouait une copie complète de tous
+        // les spawners du serveur à chaque event bloc (pose, casse, piston, explosion...).
+        for (Map<UUID, Spawner> typeMap : this.spawners.values()) {
+            for (Spawner spawner : typeMap.values()) {
+                if (spawner.isPlace() && spawner.getCuboid().contains(location)) {
+                    return Optional.of(spawner);
+                }
             }
         }
         return Optional.empty();
@@ -65,22 +81,12 @@ public class ZServerProfile implements ServerProfile {
 
     @Override
     public Optional<Spawner> getSpawnerByEntity(LivingEntity entity) {
-        for (Spawner spawner : this.getSpawners()) {
-            if (spawner.getLivingEntity() != null && spawner.getLivingEntity() == entity) {
-                return Optional.of(spawner);
-            }
-        }
-        return Optional.empty();
+        return getSpawnerFromTag(entity).filter(spawner -> spawner.getLivingEntity() == entity);
     }
 
     @Override
     public Optional<Spawner> getSpawnerByDeadEntity(Entity entity) {
-        for (Spawner spawner : this.getSpawners()) {
-            if (spawner.getDeadEntities().contains(entity)) {
-                return Optional.of(spawner);
-            }
-        }
-        return Optional.empty();
+        return getSpawnerFromTag(entity).filter(spawner -> spawner.getDeadEntities().contains(entity));
     }
 
     @Override
@@ -135,9 +141,9 @@ public class ZServerProfile implements ServerProfile {
     @Override
     public long getSpawnersInChunkCount(int x, int z) {
         int count = 0;
-        for (Spawner spawner : this.getSpawners()) {
-            if (spawner.sameChunk(x, z)) {
-                count++;
+        for (Map<UUID, Spawner> typeMap : this.spawners.values()) {
+            for (Spawner spawner : typeMap.values()) {
+                if (spawner.sameChunk(x, z)) count++;
             }
         }
         return count;
@@ -146,9 +152,9 @@ public class ZServerProfile implements ServerProfile {
     @Override
     public long getSpawnersInChunkCount(int x, int z, EntityType entityType) {
         int count = 0;
-        for (Spawner spawner : this.getSpawners()) {
-            if (spawner.sameChunk(x, z) && spawner.getEntityType().equals(entityType)) {
-                count++;
+        for (Map<UUID, Spawner> typeMap : this.spawners.values()) {
+            for (Spawner spawner : typeMap.values()) {
+                if (spawner.sameChunk(x, z) && spawner.getEntityType() == entityType) count++;
             }
         }
         return count;

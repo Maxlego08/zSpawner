@@ -536,9 +536,19 @@ public class ZSpawner extends Updatable implements Spawner {
 
         this.canUpdate();
 
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            this.plugin.getInventoryManager().updateInventory(onlinePlayer, plugin);
-        }
+        updateViewers();
+    }
+
+    /**
+     * Rafraichit uniquement les joueurs qui ont ce spawner ouvert. La boucle précédente
+     * reconstruisait le GUI de tous les joueurs connectés à chaque insertion de loot.
+     */
+    private void updateViewers() {
+        this.plugin.getManager().getPlayerSpawners().forEach((uuid, playerSpawner) -> {
+            if (playerSpawner.getVirtualSpawner() != this) return;
+            Player viewer = Bukkit.getPlayer(uuid);
+            if (viewer != null) this.plugin.getInventoryManager().updateInventory(viewer, this.plugin);
+        });
     }
 
     @Override
@@ -546,7 +556,9 @@ public class ZSpawner extends Updatable implements Spawner {
         if (this.location == null) return false;
         World world = this.location.getWorld();
         if (world == null) return false;
-        return world.isChunkLoaded(this.location.getChunk());
+        // Location#getChunk() charge le chunk s'il ne l'est pas : il faut passer par les
+        // coordonnées, sinon la méthode renvoie toujours true et empêche tout déchargement.
+        return world.isChunkLoaded(this.location.getBlockX() >> 4, this.location.getBlockZ() >> 4);
     }
 
     @Override
@@ -644,29 +656,39 @@ public class ZSpawner extends Updatable implements Spawner {
 
     private void killEntity(int count) {
 
-        if (this.amount <= 0 || count <= 0 || this.isInValid()) {
-            return;
-        }
+        if (count <= 0 || this.amount <= 0 || this.isInValid()) return;
 
+        // Bukkit#getPlayer est un lookup direct : getOfflinePlayer peut bloquer sur un accès
+        // disque/réseau, et on ne pose le killer que si le propriétaire est connecté.
+        Player owner = Bukkit.getPlayer(this.ownerId);
         World world = this.location.getWorld();
-        LivingEntity clonedEntity = (LivingEntity) world.spawn(getSpawnedEntityLocation(), Objects.requireNonNull(this.livingEntity.getType().getEntityClass()));
-        clonedEntity.setAI(false);
 
-        if (clonedEntity instanceof Slime slime) {
-            slime.setSize(1);
+        // Itératif : à plusieurs dizaines de kills par seconde la récursion empilait autant
+        // de frames par tick et par spawner.
+        while (count-- > 0) {
+
+            if (this.amount <= 0 || this.isInValid()) return;
+
+            LivingEntity clonedEntity = (LivingEntity) world.spawn(getSpawnedEntityLocation(), Objects.requireNonNull(this.livingEntity.getType().getEntityClass()), e -> {
+                // Tag indispensable pour que getSpawnerByDeadEntity retrouve le spawner en O(1).
+                e.getPersistentDataContainer().set(this.plugin.getSpawnerKey(), PersistentDataType.STRING, this.uniqueId.toString());
+            });
+            clonedEntity.setAI(false);
+
+            if (clonedEntity instanceof Slime slime) {
+                slime.setSize(1);
+            }
+
+            this.getDeadEntities().add(clonedEntity);
+
+            if (owner != null) {
+                clonedEntity.setKiller(owner);
+            }
+
+            clonedEntity.damage(this.livingEntity.getHealth() * 2);
+
+            this.entityDeath();
         }
-
-        this.getDeadEntities().add(clonedEntity);
-
-        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(this.ownerId);
-        if (offlinePlayer.isOnline()) {
-            clonedEntity.setKiller(offlinePlayer.getPlayer());
-        }
-
-        clonedEntity.damage(livingEntity.getHealth() * 2);
-
-        this.entityDeath();
-        this.killEntity(count - 1);
     }
 
     @Override

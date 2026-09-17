@@ -76,11 +76,12 @@ public class ItemsButton extends PaginateButton {
             manager.removeStackLoot(player, spawner, spawnerItem, 64);
         }
 
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if (onlinePlayer != player) {
-                this.plugin.getInventoryManager().updateInventory(onlinePlayer, plugin);
-            }
-        }
+        // Seuls les autres joueurs regardant ce même spawner ont besoin d'un rafraichissement.
+        manager.getPlayerSpawners().forEach((uuid, playerSpawner) -> {
+            if (playerSpawner.getVirtualSpawner() != spawner || uuid.equals(player.getUniqueId())) return;
+            Player viewer = Bukkit.getPlayer(uuid);
+            if (viewer != null) this.plugin.getInventoryManager().updateInventory(viewer, this.plugin);
+        });
         manager.openVirtualSpawner(player, spawner, page);
     }
 

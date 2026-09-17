@@ -8,7 +8,6 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Config {
 
@@ -28,8 +27,10 @@ public class Config {
     public static boolean enableSilkSpawner = false;
     public static boolean needSilkTouchEnchant = false;
     public static boolean silkNaturalSpawner = false;
-    public static List<Material> whitelistMaterialSilkSpawner = new ArrayList<>();
-    public static List<Material> blacklistMaterials = new ArrayList<>();
+    // EnumSet : ces deux collections sont interrogées par item dropé et à chaque casse de
+    // spawner, un contains() linéaire sur ArrayList y était inutilement coûteux.
+    public static Set<Material> whitelistMaterialSilkSpawner = EnumSet.noneOf(Material.class);
+    public static Set<Material> blacklistMaterials = EnumSet.noneOf(Material.class);
     public static SpawnerType naturelSpawnerInto = SpawnerType.CLASSIC;
     public static boolean breakUpVirtualSpawner;
     public static boolean givePlayerExperience;
@@ -114,12 +115,29 @@ public class Config {
         enableSilkSpawner = configuration.getBoolean("silkSpawner.enable", false);
         silkNaturalSpawner = configuration.getBoolean("silkSpawner.silkNaturalSpawner", false);
         needSilkTouchEnchant = configuration.getBoolean("silkSpawner.needSilkTouchEnchant", false);
-        whitelistMaterialSilkSpawner = configuration.getStringList("silkSpawner.whitelistMaterial").stream().map(Material::valueOf).collect(Collectors.toList());
-        blacklistMaterials = configuration.getStringList("blacklist-materials").stream().map(Material::valueOf).collect(Collectors.toList());
+        whitelistMaterialSilkSpawner = loadMaterials(plugin, configuration, "silkSpawner.whitelistMaterial");
+        blacklistMaterials = loadMaterials(plugin, configuration, "blacklist-materials");
         naturelSpawnerInto = SpawnerType.valueOf(configuration.getString("silkSpawner.naturelSpawnerInto", "CLASSIC").toUpperCase());
 
         enableSpawnerLocation = configuration.getBoolean("spawner-location.enable", true);
         minLocationPrice = configuration.getDouble("spawner-location.minPrice", 1000);
         maxLocationPrice = configuration.getDouble("spawner-location.maxPrice", 10000);
+    }
+
+    /**
+     * Un nom de matériau inconnu ne doit pas faire échouer tout le chargement de la config :
+     * on ignore l'entrée en la signalant.
+     */
+    private static Set<Material> loadMaterials(SpawnerPlugin plugin, FileConfiguration configuration, String path) {
+        Set<Material> materials = EnumSet.noneOf(Material.class);
+        for (String name : configuration.getStringList(path)) {
+            Material material = Material.matchMaterial(name);
+            if (material == null) {
+                plugin.getLogger().warning("Unknown material '" + name + "' in " + path + ", entry ignored.");
+                continue;
+            }
+            materials.add(material);
+        }
+        return materials;
     }
 }

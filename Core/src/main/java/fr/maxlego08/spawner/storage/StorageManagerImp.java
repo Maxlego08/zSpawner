@@ -37,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class StorageManagerImp extends ZUtils implements StorageManager {
     private final SpawnerPlugin plugin;
     private final TypeSafeCache cache = new TypeSafeCache();
+    private final Object flushLock = new Object();
     private final FoliaCompatibilityManager foliaManager;
     private RequestHelper requestHelper;
     private boolean isEnable = true;
@@ -98,16 +99,36 @@ public class StorageManagerImp extends ZUtils implements StorageManager {
         }, seconds, seconds, TimeUnit.SECONDS);
     }
 
+    private static Object itemKey(UUID spawnerId, UUID itemId) {
+        return List.of(spawnerId, itemId);
+    }
+
+    private static Object historyKey(UUID spawnerId, long startTime) {
+        return List.of(spawnerId, startTime);
+    }
+
+    /**
+     * Sérialise les suppressions avec le flush du cache : les deux touchent les mêmes lignes.
+     */
+    private void runLocked(Runnable runnable) {
+        synchronized (this.flushLock) {
+            runnable.run();
+        }
+    }
+
     private void storeData() {
+        synchronized (this.flushLock) {
+            storeDataLocked();
+        }
+    }
+
+    private void storeDataLocked() {
         List<Schema> schemas = new ArrayList<>();
         List<Schema> schemasWithLocation = new ArrayList<>();
-        List<SpawnerDTO> spawnerDTOList = new ArrayList<>(this.cache.get(SpawnerDTO.class));
-        this.cache.clear(SpawnerDTO.class);
-        for (SpawnerDTO spawnerDTO : spawnerDTOList) {
-            if (spawnerDTO != null) {
-                if (spawnerDTO.owner() == null || spawnerDTO.spawner_id() == null) continue;
-                spawnerToSchema(spawnerDTO.last_location_user() != null ? schemasWithLocation : schemas, spawnerDTO);
-            }
+        for (Spawner spawner : this.cache.drain(Spawner.class)) {
+            if (spawner == null || spawner.getOwner() == null || spawner.getSpawnerId() == null) continue;
+            SpawnerDTO spawnerDTO = toSpawnerDTO(spawner);
+            spawnerToSchema(spawnerDTO.last_location_user() != null ? schemasWithLocation : schemas, spawnerDTO);
         }
         if (!schemas.isEmpty()) {
             upsertMultiple(schemas);
@@ -115,8 +136,7 @@ public class StorageManagerImp extends ZUtils implements StorageManager {
         if (!schemasWithLocation.isEmpty()) {
             upsertMultiple(schemasWithLocation);
         }
-        List<OptionDTO> optionDTOList = new ArrayList<>(this.cache.get(OptionDTO.class));
-        this.cache.clear(OptionDTO.class);
+        List<OptionDTO> optionDTOList = this.cache.drain(OptionDTO.class);
         for (OptionDTO optionDTO : optionDTOList) {
             if (optionDTO != null) {
                 if (optionDTO.spawner_id() == null) continue;
@@ -143,10 +163,9 @@ public class StorageManagerImp extends ZUtils implements StorageManager {
             }
         }
         upsertMultiple(schemas);
-        List<ItemDTO> itemDTOList = new ArrayList<>(this.cache.get(ItemDTO.class));
-        this.cache.clear(ItemDTO.class);
-        for (ItemDTO itemDTO : itemDTOList) {
-            if (itemDTO != null) {
+        for (SpawnerItem spawnerItem : this.cache.drain(SpawnerItem.class)) {
+            if (spawnerItem != null) {
+                ItemDTO itemDTO = new ItemDTO(spawnerItem.getUniqueId(), spawnerItem.getSpawnerUUID(), Base64ItemStack.encode(spawnerItem.getItemStack()), spawnerItem.getAmount());
                 if (itemDTO.item_stack() == null || itemDTO.item_stack().isEmpty()) continue;
                 schemas.add(SchemaBuilder.upsert(Tables.ITEMS.getTableName(), table -> {
                     table.uuid("unique_id", itemDTO.unique_id()).primary();
@@ -158,8 +177,7 @@ public class StorageManagerImp extends ZUtils implements StorageManager {
         }
         upsertMultiple(schemas);
 
-        List<SpawnerLocationHistoryDTO> locationHistoryDTOList = new ArrayList<>(this.cache.get(SpawnerLocationHistoryDTO.class));
-        this.cache.clear(SpawnerLocationHistoryDTO.class);
+        List<SpawnerLocationHistoryDTO> locationHistoryDTOList = this.cache.drain(SpawnerLocationHistoryDTO.class);
         for (SpawnerLocationHistoryDTO locationHistoryDTO : locationHistoryDTOList) {
             if (locationHistoryDTO != null) {
                 if (locationHistoryDTO.spawner_id() == null) continue;
@@ -173,6 +191,10 @@ public class StorageManagerImp extends ZUtils implements StorageManager {
             }
         }
         upsertMultiple(schemas);
+    }
+
+    private SpawnerDTO toSpawnerDTO(Spawner spawner) {
+        return new SpawnerDTO(spawner.getOwner(), spawner.getSpawnerId(), spawner.getLocation() == null ? null : changeLocationToString(spawner.getLocation()), spawner.getType(), spawner.getPlacedAt(), spawner.getEntityType(), spawner.getAmount(), spawner.getLastLocationUser(), spawner.getLastLocationTime(), spawner.getLastLocationStartTime(), spawner.getBlockFace());
     }
 
     private void spawnerToSchema(List<Schema> schemasList, SpawnerDTO spawnerDTO) {
@@ -228,32 +250,32 @@ public class StorageManagerImp extends ZUtils implements StorageManager {
     public void upsertSpawner(Spawner spawner) {
         if (!this.isEnable) return;
 
-        this.cache.get(SpawnerDTO.class).removeIf(spawnerDTO -> spawnerDTO.spawner_id().equals(spawner.getSpawnerId()) && spawnerDTO.owner().equals(spawner.getOwner()));
-        this.cache.add(new SpawnerDTO(spawner.getOwner(), spawner.getSpawnerId(), spawner.getLocation() == null ? null : changeLocationToString(spawner.getLocation()), spawner.getType(), spawner.getPlacedAt(), spawner.getEntityType(), spawner.getAmount(), spawner.getLastLocationUser() == null ? null : spawner.getLastLocationUser(), spawner.getLastLocationTime(), spawner.getLastLocationStartTime(), spawner.getBlockFace()));
+        // On mémorise le spawner lui-même : le DTO n'est construit qu'au flush, ce qui replie
+        // les N mutations d'un même spawner sur une seule sérialisation.
+        this.cache.put(Spawner.class, spawner.getSpawnerId(), spawner);
     }
 
     @Override
     public void upsertOption(SpawnerOption spawnerOption, UUID spawnerId) {
         if (!this.isEnable) return;
 
-        this.cache.get(OptionDTO.class).removeIf(spawnerOptionDTO -> spawnerOptionDTO.spawner_id().equals(spawnerId));
-        this.cache.add(new OptionDTO(spawnerId, spawnerOption.getDistance(), spawnerOption.getExperienceMultiplier(), spawnerOption.getLootMultiplier(), spawnerOption.enableAutoKill(), spawnerOption.enableAutoSell(), spawnerOption.getMaxEntity(), spawnerOption.getMinDelay(), spawnerOption.getMaxDelay(), spawnerOption.getMinSpawn(), spawnerOption.getMaxSpawn(), spawnerOption.getMobPerMinute(), spawnerOption.dropLoots(), spawnerOption.isLocationEnabled(), spawnerOption.getMinLocationTime(), spawnerOption.getMaxLocationTime(), spawnerOption.getLocationPrice(), spawnerOption.getRemainingEntity()));
+        this.cache.put(OptionDTO.class, spawnerId, new OptionDTO(spawnerId, spawnerOption.getDistance(), spawnerOption.getExperienceMultiplier(), spawnerOption.getLootMultiplier(), spawnerOption.enableAutoKill(), spawnerOption.enableAutoSell(), spawnerOption.getMaxEntity(), spawnerOption.getMinDelay(), spawnerOption.getMaxDelay(), spawnerOption.getMinSpawn(), spawnerOption.getMaxSpawn(), spawnerOption.getMobPerMinute(), spawnerOption.dropLoots(), spawnerOption.isLocationEnabled(), spawnerOption.getMinLocationTime(), spawnerOption.getMaxLocationTime(), spawnerOption.getLocationPrice(), spawnerOption.getRemainingEntity()));
     }
 
     @Override
     public void upsertItem(SpawnerItem spawnerItem, UUID spawnerId) {
         if (!this.isEnable) return;
 
-        this.cache.get(ItemDTO.class).removeIf(itemDTO -> itemDTO.spawner_id().equals(spawnerId) && itemDTO.unique_id().equals(spawnerItem.getUniqueId()));
-        this.cache.add(new ItemDTO(spawnerItem.getUniqueId(), spawnerId, Base64ItemStack.encode(spawnerItem.getItemStack()), spawnerItem.getAmount()));
+        // Idem : l'encodage Base64 de l'ItemStack est différé au flush au lieu d'être refait
+        // à chaque ajout de loot.
+        this.cache.put(SpawnerItem.class, itemKey(spawnerId, spawnerItem.getUniqueId()), spawnerItem);
     }
 
     @Override
     public void upsertLocationHistory(SpawnerLocationHistory spawnerLocationHistory, UUID spawnerId) {
         if (!this.isEnable) return;
 
-        this.cache.get(SpawnerLocationHistoryDTO.class).removeIf(locationHistoryDTO -> locationHistoryDTO.spawner_id().equals(spawnerId));
-        this.cache.add(new SpawnerLocationHistoryDTO(spawnerId, spawnerLocationHistory.getStartTime(), spawnerLocationHistory.getDuration(), spawnerLocationHistory.getRentalPlayer(), spawnerLocationHistory.getPrice()));
+        this.cache.put(SpawnerLocationHistoryDTO.class, historyKey(spawnerId, spawnerLocationHistory.getStartTime()), new SpawnerLocationHistoryDTO(spawnerId, spawnerLocationHistory.getStartTime(), spawnerLocationHistory.getDuration(), spawnerLocationHistory.getRentalPlayer(), spawnerLocationHistory.getPrice()));
     }
 
     @Override
@@ -270,36 +292,39 @@ public class StorageManagerImp extends ZUtils implements StorageManager {
     public void deleteSpawner(Spawner spawner) {
         if (!this.isEnable) return;
 
-        this.cache.get(SpawnerDTO.class).removeIf(spawnerDTO -> spawnerDTO.spawner_id().equals(spawner.getSpawnerId()) && spawnerDTO.owner().equals(spawner.getOwner()));
-        this.foliaManager.runAsync(() -> {
+        this.cache.remove(Spawner.class, spawner.getSpawnerId());
+        this.cache.remove(OptionDTO.class, spawner.getSpawnerId());
+        // Le verrou empêche la suppression de s'intercaler dans un flush en cours : sans lui
+        // un upsert déjà extrait du cache pouvait être réécrit après le DELETE, et le spawner
+        // supprimé réapparaissait au redémarrage.
+        this.foliaManager.runAsync(() -> runLocked(() -> {
             this.requestHelper.delete(Tables.SPAWNER_LOCATION_HISTORY.getTableName(), table -> table.where("spawner_id", spawner.getSpawnerId()));
             this.requestHelper.delete(Tables.OPTIONS.getTableName(), table -> table.where("spawner_id", spawner.getSpawnerId()));
             this.requestHelper.delete(Tables.ITEMS.getTableName(), table -> table.where("spawner_id", spawner.getSpawnerId()));
             this.requestHelper.delete(Tables.SPAWNERS.getTableName(), table -> table.where("spawner_id", spawner.getSpawnerId()));
-        });
+        }));
     }
 
     @Override
     public void deleteOption(SpawnerOption spawnerOption, UUID spawnerId) {
         if (!this.isEnable) return;
 
-        this.cache.get(OptionDTO.class).removeIf(optionDTO -> optionDTO.spawner_id().equals(spawnerId));
-        this.foliaManager.runAsync(() -> this.requestHelper.delete(Tables.OPTIONS.getTableName(), table -> table.where("spawner_id", spawnerId)));
+        this.cache.remove(OptionDTO.class, spawnerId);
+        this.foliaManager.runAsync(() -> runLocked(() -> this.requestHelper.delete(Tables.OPTIONS.getTableName(), table -> table.where("spawner_id", spawnerId))));
     }
 
     @Override
     public void deleteItem(SpawnerItem spawnerItem, UUID spawnerId) {
         if (!this.isEnable) return;
 
-        this.cache.get(ItemDTO.class).removeIf(itemDTO -> itemDTO.spawner_id().equals(spawnerId) && itemDTO.unique_id().equals(spawnerItem.getUniqueId()));
-        this.foliaManager.runAsync(() -> this.requestHelper.delete(Tables.ITEMS.getTableName(), table -> table.where("spawner_id", spawnerId).where("unique_id", spawnerItem.getUniqueId())));
+        this.cache.remove(SpawnerItem.class, itemKey(spawnerId, spawnerItem.getUniqueId()));
+        this.foliaManager.runAsync(() -> runLocked(() -> this.requestHelper.delete(Tables.ITEMS.getTableName(), table -> table.where("spawner_id", spawnerId).where("unique_id", spawnerItem.getUniqueId()))));
     }
 
     @Override
     public void saveAllNow() {
         if (!this.isEnable) return;
         this.storeData();
-        this.cache.clearAll();
     }
 
 
