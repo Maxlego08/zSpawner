@@ -63,11 +63,25 @@ public class StackableManager extends YamlUtils implements Savable {
             for (Object levelObject : levelsList) {
                 if (levelObject instanceof Map<?, ?>) {
                     Map<?, ?> levelMap = (Map<?, ?>) levelObject;
-                    StackLevel level = new StackLevel(((Number) levelMap.get("stackAmount")).intValue(), ((Number) levelMap.get("delay")).intValue(), ((Number) levelMap.get("minSpawnDelay")).intValue(), ((Number) levelMap.get("maxSpawnDelay")).intValue(), ((Number) levelMap.get("spawnCount")).intValue(), ((Number) levelMap.get("maxNearbyEntities")).intValue(), ((Number) levelMap.get("requiredPlayerRange")).intValue(), ((Number) levelMap.get("spawnRange")).intValue());
+                    StackLevel level = new StackLevel(readInt(levelMap, "stackAmount", 1), readInt(levelMap, "delay", 20), readInt(levelMap, "minSpawnDelay", 200), readInt(levelMap, "maxSpawnDelay", 800), readInt(levelMap, "spawnCount", 4), readInt(levelMap, "maxNearbyEntities", 16), readInt(levelMap, "requiredPlayerRange", 16), readInt(levelMap, "spawnRange", 4));
                     this.levels.add(level);
                 }
             }
         }
+
+        // getLevel() parcourt la liste dans l'ordre : la configuration peut déclarer les
+        // paliers dans n'importe quel ordre.
+        this.levels.sort(Comparator.comparingInt(StackLevel::getStackAmount));
+    }
+
+    /**
+     * Une clé absente ou d'un autre type levait une NullPointerException qui interrompait
+     * tout le chargement et laissait la liste des paliers vide : le spawner retombait alors
+     * silencieusement sur les valeurs vanilla. Les valeurs par défaut sont celles de vanilla.
+     */
+    private int readInt(Map<?, ?> map, String key, int defaultValue) {
+        Object value = map.get(key);
+        return value instanceof Number number ? number.intValue() : defaultValue;
     }
 
 
@@ -96,8 +110,22 @@ public class StackableManager extends YamlUtils implements Savable {
         return whitelist;
     }
 
+    /**
+     * Renvoie le palier applicable à une pile de {@code amount} spawners : le plus haut
+     * palier dont le stackAmount est atteint. L'égalité stricte utilisée auparavant ne
+     * renvoyait rien dès que la configuration sautait des paliers (1, 5, 10 comme dans la
+     * documentation) ou que la pile dépassait le dernier palier, et le bloc gardait alors
+     * ses réglages vanilla.
+     */
     public Optional<StackLevel> getLevel(int amount) {
-        return this.levels.stream().filter(e -> e.getStackAmount() == amount).findFirst();
+        StackLevel result = null;
+        for (StackLevel level : this.levels) { // trié par stackAmount croissant
+            if (level.getStackAmount() > amount) break;
+            result = level;
+        }
+        // En dessous du premier palier configuré on applique quand même le plus petit.
+        if (result == null && !this.levels.isEmpty()) result = this.levels.get(0);
+        return Optional.ofNullable(result);
     }
 
     public void updateSpawner(CreatureSpawner spawner, int amount) {

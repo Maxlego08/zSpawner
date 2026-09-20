@@ -1,5 +1,14 @@
 # Unreleased
 
+- Fix stacked spawners counting one short: a freshly placed spawner started at 0, so the second spawner placed on it was lost and a stack of 5 only reached 4
+- Fix the stack level (spawnCount, delays, ranges) never being written onto the spawner block: a placed spawner kept the vanilla settings instead of the ones from `stackableSpawner.levels`
+- Fix the stack level being ignored when the configuration skips amounts (levels 1, 5, 10) or when the stack goes past the last configured level
+- Fix stacked spawners losing their level and their hologram after a server restart
+- Fix a stack level with a missing option aborting the whole stackable configuration load
+- Fix a stack level whose `minSpawnDelay` is above the block's current `maxSpawnDelay` throwing while placing the spawner
+- Fix `stackableSpawner.whitelist` having no effect: any entity outside the blacklist could be stacked even when a whitelist was set
+- Fix `/zspawner reload` not re-applying `stackableSpawner.levels` to the spawners already placed
+- Fix every pending change being lost on shutdown: removing a hologram or a virtual mob scheduled a task while the plugin was already disabled, which aborted the final save
 - Fix stacked spawner holograms not being removed when the spawner is broken
 - Fix duplicated holograms after a server restart or a chunk reload
 - Fix spawners taken from a stack being impossible to place back ("The spawner already exists, you can't place it")

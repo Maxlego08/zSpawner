@@ -113,8 +113,12 @@ public class SpawnerListener extends ListenerAdapter {
                     int limit = stackableManager.getLimit(entityType);
                     if (spawner.getAmount() < limit) {
 
+                        // Un whitelist non vide restreint l'empilement à ces entités, sinon
+                        // c'est le blacklist qui décide. Le || précédent laissait passer toute
+                        // entité absente du blacklist même quand un whitelist était configuré.
                         List<EntityType> whitelist = stackableManager.getWhitelist();
-                        if (!stackableManager.getBlacklist().contains(entityType) || (!whitelist.isEmpty() && whitelist.contains(entityType))) {
+                        boolean canStack = whitelist.isEmpty() ? !stackableManager.getBlacklist().contains(entityType) : whitelist.contains(entityType);
+                        if (canStack) {
 
                             spawner.setAmount(spawner.getAmount() + 1);
                             event.setCancelled(true);
@@ -550,6 +554,19 @@ public class SpawnerListener extends ListenerAdapter {
         for (Spawner spawner : spawners) {
             if (spawner.sameChunk(chunk.getX(), chunk.getZ())) {
                 spawner.load();
+            }
+        }
+
+        // Les spawners posés (CLASSIC/GUI) n'étaient jamais rechargés : leur palier et leur
+        // hologramme ne revenaient donc jamais après un redémarrage. On passe par le
+        // scheduler pour que les entités du chunk soient déjà là, sinon spawnHologram() ne
+        // retrouve pas l'armor stand existant et en crée un doublon.
+        for (SpawnerType spawnerType : SpawnerType.values()) {
+            if (spawnerType == SpawnerType.VIRTUAL) continue;
+            for (Spawner spawner : this.serverProfile.getSpawners(spawnerType)) {
+                if (spawner.sameChunk(chunk.getX(), chunk.getZ())) {
+                    this.foliaManager.runAtLocation(spawner.getLocation(), spawner::load);
+                }
             }
         }
     }

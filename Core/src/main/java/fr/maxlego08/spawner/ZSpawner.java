@@ -53,7 +53,10 @@ public class ZSpawner extends Updatable implements Spawner {
         this.entityType = entityType;
         this.placedAt = placedAt;
         this.location = location;
-        this.amount = amount;
+        // Un spawner CLASSIC compte les spawners empilés : le premier vaut déjà 1, sinon la
+        // deuxième pose ne fait que passer de 0 à 1 et se perd. Les lignes enregistrées avant
+        // ce correctif valent 0, elles sont normalisées ici plutôt que par une migration.
+        this.amount = spawnerType == SpawnerType.CLASSIC ? Math.max(1, amount) : amount;
         this.blockFace = blockFace;
         this.lastLocationUser = lastLocationUser;
         this.lastLocationTime = lastLocationTime;
@@ -168,6 +171,9 @@ public class ZSpawner extends Updatable implements Spawner {
 
             CreatureSpawner spawner = (CreatureSpawner) block.getState();
             spawner.setSpawnedType(this.entityType);
+            // Sans cet appel le bloc garde les réglages vanilla : le spawnCount configuré
+            // dans stackableSpawner.levels n'était jamais écrit sur un spawner fraîchement posé.
+            applyStackLevel(spawner);
             spawner.update(true);
         }
 
@@ -186,6 +192,10 @@ public class ZSpawner extends Updatable implements Spawner {
 
         if (amount <= 1) removeHologram();
         else this.spawnHologram();
+
+        // Le palier dépend de la taille de la pile : sans cette mise à jour le bloc conserve
+        // les valeurs du palier précédent, ou celles de vanilla si rien n'a jamais été écrit.
+        if (this.spawnerType != SpawnerType.VIRTUAL) this.updateSpawner();
     }
 
     @Override
@@ -193,23 +203,33 @@ public class ZSpawner extends Updatable implements Spawner {
 
         if (!isPlace()) return;
 
-        Block block = this.location.getBlock();
-
         if (this.spawnerType == SpawnerType.VIRTUAL) {
-
             this.spawnEntity();
-        } else {
-
-            CreatureSpawner spawner = (CreatureSpawner) block.getState();
-
-            StackableManager stackableManager = this.plugin.getStackableManager();
-            if (stackableManager.isEnable()) {
-                stackableManager.updateSpawner(spawner, this.amount);
-                this.spawnHologram();
-            }
-
-            spawner.update(true);
+            return;
         }
+
+        // Block#getState() chargerait le chunk au besoin : on ne met à jour que ce qui est déjà là.
+        if (!isChunkLoaded()) return;
+
+        // Le bloc peut avoir été remplacé (WorldEdit, explosion, restauration) : le cast
+        // direct levait une ClassCastException.
+        if (!(this.location.getBlock().getState() instanceof CreatureSpawner spawner)) return;
+
+        if (applyStackLevel(spawner)) this.spawnHologram();
+
+        spawner.update(true);
+    }
+
+    /**
+     * Écrit sur le bloc le palier configuré pour la taille actuelle de la pile.
+     * Renvoie false si les spawners empilables sont désactivés, auquel cas le bloc garde
+     * volontairement ses réglages vanilla.
+     */
+    private boolean applyStackLevel(CreatureSpawner spawner) {
+        StackableManager stackableManager = this.plugin.getStackableManager();
+        if (!stackableManager.isEnable()) return false;
+        stackableManager.updateSpawner(spawner, this.amount);
+        return true;
     }
 
     @Override
@@ -226,14 +246,22 @@ public class ZSpawner extends Updatable implements Spawner {
                 block.setType(Config.virtualMaterial);
             }
         } else {
+
+            // Block#getType() chargerait le chunk : un spawner d'un chunk déchargé sera
+            // restauré par le ChunkLoadEvent, il n'y a rien à faire ici.
+            if (!isChunkLoaded()) return;
+
             spawnHologram();
             if (block.getType() != Material.SPAWNER) {
                 block.setType(Material.SPAWNER, true);
-                CreatureSpawner spawner = (CreatureSpawner) block.getState();
-                spawner.setSpawnedType(this.entityType);
-                spawner.update(true);
-                this.updateSpawner();
+                if (block.getState() instanceof CreatureSpawner spawner) {
+                    spawner.setSpawnedType(this.entityType);
+                    spawner.update(true);
+                }
             }
+            // Réappliqué à chaque chargement : le palier n'était écrit que lorsque le bloc
+            // avait disparu, donc jamais sur un serveur qui redémarre normalement.
+            this.updateSpawner();
         }
     }
 

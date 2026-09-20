@@ -58,8 +58,17 @@ public class StackLevel {
     public void updateSpawner(CreatureSpawner spawner) {
 
         spawner.setDelay(this.delay);
-        spawner.setMinSpawnDelay(this.minSpawnDelay);
-        spawner.setMaxSpawnDelay(this.maxSpawnDelay);
+
+        // Bukkit valide min <= max à chaque appel : écrire directement un minSpawnDelay
+        // supérieur au maxSpawnDelay actuel du bloc (800 en vanilla) lève une
+        // IllegalArgumentException en plein BlockPlaceEvent. On passe donc par 0, qui est
+        // toujours accepté, avant d'écrire la fenêtre définitive.
+        int minDelay = Math.min(this.minSpawnDelay, this.maxSpawnDelay);
+        int maxDelay = Math.max(this.minSpawnDelay, this.maxSpawnDelay);
+        spawner.setMinSpawnDelay(0);
+        spawner.setMaxSpawnDelay(maxDelay);
+        spawner.setMinSpawnDelay(minDelay);
+
         spawner.setSpawnCount(this.spawnCount);
         spawner.setMaxNearbyEntities(this.maxNearbyEntities);
         spawner.setRequiredPlayerRange(this.requiredPlayerRange);

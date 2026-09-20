@@ -22,6 +22,7 @@ public class CommandSpawnerReload extends VCommand {
         plugin.reloadConfig();
         Config.getInstance().load(plugin);
         plugin.reloadFiles();
+        plugin.loadPlacedSpawners();
         message(this.plugin, sender, Message.RELOAD);
 
         return CommandType.SUCCESS;

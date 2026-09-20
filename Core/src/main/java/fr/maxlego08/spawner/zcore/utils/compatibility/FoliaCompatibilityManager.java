@@ -14,9 +14,24 @@ import java.util.function.Consumer;
 
 public class FoliaCompatibilityManager {
     private final FoliaLib foliaLib;
+    private final Plugin plugin;
 
     public FoliaCompatibilityManager(Plugin plugin) {
+        this.plugin = plugin;
         this.foliaLib = new FoliaLib(plugin);
+    }
+
+    /**
+     * Bukkit marque le plugin comme désactivé <b>avant</b> d'appeler onDisable() et refuse
+     * alors tout nouveau task ({@code IllegalPluginAccessException}). Une tache planifiée
+     * pendant l'extinction ne s'exécuterait de toute façon jamais : on l'exécute directement.
+     *
+     * @return true si la tache a déjà été exécutée et qu'il ne faut rien planifier.
+     */
+    private boolean runNowIfDisabled(Runnable task) {
+        if (this.plugin.isEnabled()) return false;
+        task.run();
+        return true;
     }
 
     /**
@@ -53,6 +68,7 @@ public class FoliaCompatibilityManager {
      * On Paper/Spigot: Uses main thread scheduler
      */
     public void runNextTick(Runnable task) {
+        if (runNowIfDisabled(task)) return;
         foliaLib.getScheduler().runNextTick(wrappedTask -> task.run());
     }
 
@@ -164,6 +180,7 @@ public class FoliaCompatibilityManager {
      * @param task The task to run
      */
     public void runAtLocation(Location location, Runnable task) {
+        if (runNowIfDisabled(task)) return;
         foliaLib.getScheduler().runAtLocation(location, wrappedTask -> task.run());
     }
 
@@ -176,6 +193,7 @@ public class FoliaCompatibilityManager {
      * @param task The task to run
      */
     public void runAtEntity(Entity entity, Runnable task) {
+        if (runNowIfDisabled(task)) return;
         foliaLib.getScheduler().runAtEntity(entity, wrappedTask -> task.run());
     }
 

@@ -3,10 +3,10 @@ plugins {
     id("com.gradleup.shadow") version "8.3.6"
 }
 
-allprojects {
-    group = "fr.maxlego08.spawner"
-    version = rootProject.version
+group = "fr.maxlego08.spawner"
+version = "4.2.2"
 
+allprojects {
     repositories {
         mavenCentral()
         maven("https://jitpack.io")
@@ -25,6 +25,9 @@ allprojects {
 subprojects {
     apply(plugin = "java-library")
     apply(plugin = "com.gradleup.shadow")
+
+    group = rootProject.group
+    version = rootProject.version
 
     dependencies {
         compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")

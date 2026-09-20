@@ -89,6 +89,10 @@ public class SpawnerPlugin extends ZPlugin {
         this.loadFiles();
         this.serverDataManager.loadServerData();
 
+        // Les chunks déjà chargés au démarrage n'émettent pas de ChunkLoadEvent : sans ce
+        // rattrapage le palier et l'hologramme des spawners posés ne sont jamais réappliqués.
+        this.foliaManager.runNextTick(this::loadPlacedSpawners);
+
         this.spawnerPlaceholders.register();
 
         this.foliaManager.runTimer(this.manager, 20, 20);
@@ -115,6 +119,19 @@ public class SpawnerPlugin extends ZPlugin {
         this.postEnable();
     }
 
+    /**
+     * Réapplique le palier et l'hologramme des spawners posés. Appelé au démarrage et par
+     * /zspawner reload, sinon une modification de stackableSpawner.levels n'a aucun effet
+     * sur les spawners déjà en place.
+     */
+    public void loadPlacedSpawners() {
+        for (Spawner spawner : this.serverDataManager.getOrCreate().getSpawners()) {
+            if (spawner.getType() == SpawnerType.VIRTUAL) continue;
+            if (!spawner.isPlace() || !spawner.isChunkLoaded()) continue;
+            this.foliaManager.runAtLocation(spawner.getLocation(), spawner::load);
+        }
+    }
+
     @Override
     public void onDisable() {
 
@@ -124,14 +141,20 @@ public class SpawnerPlugin extends ZPlugin {
         Logger.info("Saving spawners...");
         Collection<Spawner> spawners = this.serverDataManager.getOrCreate().getSpawners();
         for (Spawner spawner : spawners) {
-            spawner.disable();
-            spawner.save();
-            for (SpawnerItem spawnerItem : spawner.getItems()) {
-                spawnerItem.save();
-            }
-            spawner.getOption().save();
-            for (SpawnerLocationHistory spawnerLocationHistory : spawner.getLocationHistory()){
-                spawnerLocationHistory.save();
+            // Une seule exception ici faisait sauter tout le reste de la boucle et surtout
+            // le saveAllNow() final : toutes les données en attente étaient perdues.
+            try {
+                spawner.disable();
+                spawner.save();
+                for (SpawnerItem spawnerItem : spawner.getItems()) {
+                    spawnerItem.save();
+                }
+                spawner.getOption().save();
+                for (SpawnerLocationHistory spawnerLocationHistory : spawner.getLocationHistory()) {
+                    spawnerLocationHistory.save();
+                }
+            } catch (Exception exception) {
+                Logger.showException(Config.enableDebug, "saving spawner " + spawner.getSpawnerKey(), exception);
             }
         }
         this.storageManager.saveAllNow();
