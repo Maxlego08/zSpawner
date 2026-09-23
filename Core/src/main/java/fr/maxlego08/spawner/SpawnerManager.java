@@ -117,7 +117,9 @@ public class SpawnerManager extends YamlUtils implements Savable, Runnable {
         if (persistentDataContainer.has(this.spawnerEntityKey) && persistentDataContainer.has(this.spawnerTypeKey)) {
             SpawnerType spawnerType = SpawnerType.valueOf(persistentDataContainer.get(this.spawnerTypeKey, PersistentDataType.STRING));
             EntityType entityType = EntityType.valueOf(persistentDataContainer.get(this.spawnerEntityKey, PersistentDataType.STRING));
-            UUID spawnerId = UUID.fromString(persistentDataContainer.getOrDefault(this.spawnerUuidKey, PersistentDataType.STRING, UUID.randomUUID().toString()));
+            // Un spawner CLASSIC est toujours posé comme un spawner neuf : l'UUID que portent encore
+            // les items lâchés par les versions précédentes appartient à un spawner supprimé.
+            UUID spawnerId = spawnerType == SpawnerType.CLASSIC ? UUID.randomUUID() : UUID.fromString(persistentDataContainer.getOrDefault(this.spawnerUuidKey, PersistentDataType.STRING, UUID.randomUUID().toString()));
             return Optional.of(new SpawnerResult(spawnerType, entityType, spawnerId));
         }
         return Optional.empty();
@@ -163,6 +165,12 @@ public class SpawnerManager extends YamlUtils implements Savable, Runnable {
     }
 
     public ItemStack getSpawnerItemStack(Player player, SpawnerType spawnerType, EntityType entityType, Spawner spawner) {
+
+        // Un spawner CLASSIC n'a rien à conserver d'une pose à l'autre (ses options ne servent
+        // qu'aux spawners virtuels et sont supprimées avec lui) : son item est toujours celui d'un
+        // spawner neuf. L'UUID rendait l'item du dernier spawner d'une pile différent des autres,
+        // et impossible à empiler avec eux.
+        if (spawnerType == SpawnerType.CLASSIC) spawner = null;
 
         MenuItemStack menuItemStack = this.spawnerTypeItemStacks.get(spawnerType);
         Placeholders placeholders = new Placeholders();

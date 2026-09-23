@@ -12,6 +12,7 @@
 - Fix stacked spawner holograms not being removed when the spawner is broken
 - Fix duplicated holograms after a server restart or a chunk reload
 - Fix spawners taken from a stack being impossible to place back ("The spawner already exists, you can't place it")
+- Fix broken classic spawners (silk touch or explosion, including the last spawner of a stack) dropping an item that kept the broken spawner's identity in a `zspawner:level` tag: it did not stack with the other spawners and was not a default spawner. Classic spawner items dropped by previous versions are now placed as new spawners
 - Fix the hologram being left behind when a stacked spawner is broken without silk touch
 - Fix chunks holding a virtual spawner never being able to unload
 - Fix pending spawner data being silently dropped: only one save out of five was queued, and writes landing during a batch flush were discarded

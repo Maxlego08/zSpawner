@@ -185,14 +185,11 @@ public class SpawnerListener extends ListenerAdapter {
                     }
                 }
 
-                // Le spawner ne disparait que si c'est le dernier de la pile. Tant qu'il reste
-                // en place il garde son identité : recopier son UUID sur l'item lâché rendrait
-                // celui-ci impossible à poser (PLACE_ERROR_EXIST).
-                boolean keepSpawner = stackableManager.isEnable() && spawner.getAmount() > 1;
+                // Tous les spawners d'une pile sont identiques : chaque item lâché, y compris celui
+                // du dernier, est un spawner neuf, sans l'UUID ni les options du spawner cassé.
+                block.getWorld().dropItemNaturally(block.getLocation(), this.plugin.getManager().getSpawnerItemStack(player, spawner.getType(), spawner.getEntityType(), null));
 
-                block.getWorld().dropItemNaturally(block.getLocation(), this.plugin.getManager().getSpawnerItemStack(player, spawner.getType(), spawner.getEntityType(), keepSpawner ? null : spawner));
-
-                if (keepSpawner) {
+                if (stackableManager.isEnable() && spawner.getAmount() > 1) {
                     spawner.setAmount(spawner.getAmount() - 1);
                     return;
                 }
