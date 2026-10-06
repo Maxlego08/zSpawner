@@ -343,23 +343,33 @@ public class SpawnerManager extends YamlUtils implements Savable, Runnable {
         }
 
         for (Spawner spawner : spawners) {
-            if (!spawner.isChunkLoaded()) continue;
             Location location = spawner.getLocation();
             World world = location == null ? null : location.getWorld();
-            if (world == null) continue;
+            if (world == null || !spawner.isChunkLoaded()) continue;
 
+            boolean playerNearby = false;
             List<Location> playerLocations = playerLocationsByWorld.get(world);
-            if (playerLocations != null && !playerLocations.isEmpty()) {
+            if (playerLocations != null) {
                 double maxDistanceSquared = spawner.getDistance() * spawner.getDistance();
                 for (Location playerLocation : playerLocations) {
                     if (playerLocation.distanceSquared(location) <= maxDistanceSquared) {
-                        spawner.tick();
+                        playerNearby = true;
                         break;
                     }
                 }
             }
 
-            if (spawner.getOption().enableAutoKill()) spawner.autoKill();
+            boolean autoKill = spawner.getOption().enableAutoKill();
+            if (!playerNearby && !autoKill) continue;
+
+            // Le timer tourne sur le thread global : sous Folia, les blocs et entités du spawner
+            // ne peuvent être manipulés que depuis le thread de la région qui possède la location.
+            boolean tick = playerNearby;
+            this.plugin.getFoliaManager().runAtLocation(location, () -> {
+                if (!spawner.isPlace() || !spawner.isChunkLoaded()) return;
+                if (tick) spawner.tick();
+                if (autoKill) spawner.autoKill();
+            });
         }
     }
 
