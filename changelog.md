@@ -20,6 +20,7 @@
 - Fix an invalid material or entity name in the config aborting the whole plugin load
 - Fix spawners located in worlds loaded after zSpawner (Multiverse, etc.) being broken: they are now kept aside and loaded when their world loads
 - Fix virtual spawners being ticked from the global thread on Folia: spawning and auto-kill now run on the region thread that owns the spawner
+- Fix `/zspawner give` and `/zspawner giveoption` throwing `Cannot read field "captureDrops"` on Folia when run from the console: the item is now given on the player's region thread
 - Improve performance of entity events (damage, combustion, death, drops), which no longer scan every spawner on the server
 - Improve performance of auto-kill, loot storage and spawner GUI refreshes
 

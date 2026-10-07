@@ -195,7 +195,15 @@ public class SpawnerPlugin extends ZPlugin {
     }
 
     public PlayerGive getPlayerGive() {
-        return playerGive;
+        // Sous Folia, donner/drop un item depuis la console (thread global) plante :
+        // l'inventaire et le monde du joueur ne sont accessibles que depuis le thread de sa région.
+        return (player, itemStack) -> {
+            if (this.foliaManager.isOwnedByCurrentRegion(player)) {
+                this.playerGive.give(player, itemStack);
+            } else {
+                this.foliaManager.runAtEntity(player, () -> this.playerGive.give(player, itemStack));
+            }
+        };
     }
 
     public NamespacedKey getSpawnerKey() {
